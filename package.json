@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git://github.com/globocom/loopback-jsonschema.git"
   },
-  "author": "Backstage <backstage@corp.globoi.com>",
+  "author": "Backstage <backstage@corp.globo.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/globocom/loopback-jsonschema/issues"
