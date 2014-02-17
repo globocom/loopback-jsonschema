@@ -2,6 +2,10 @@
   "name": "loopback-jsonschema",
   "version": "0.0.0",
   "description": "JSON Schema support for Loopback",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/globocom/loopback-jsonschema.git"
@@ -11,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/globocom/loopback-jsonschema/issues"
   },
-  "homepage": "https://github.com/globocom/loopback-jsonschema"
+  "homepage": "https://github.com/globocom/loopback-jsonschema",
+  "dependencies": {
+    "loopback": "globocom/loopback#gcom-master",
+    "loopback-explorer": ""
+  }
 }
