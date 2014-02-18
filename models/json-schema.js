@@ -10,7 +10,6 @@ JsonSchema.on('attached', function(app) {
         var JsonSchemaModel = db.createModel(this.title);
         app.model(JsonSchemaModel);
         loopbackExplorer(app);
-        app.clearHandlerCache('rest');
         done();
     }
 });
