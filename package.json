@@ -4,7 +4,7 @@
   "description": "JSON Schema support for Loopback",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
@@ -16,8 +16,15 @@
     "url": "https://github.com/globocom/loopback-jsonschema/issues"
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
+
   "dependencies": {
     "loopback": "globocom/loopback#gcom-master",
     "loopback-explorer": ""
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "loopback-testing": "~0.1.0",
+    "mocha": "~1.14.0",
+    "supertest": "~0.8.1"
   }
 }
