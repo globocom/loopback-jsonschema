@@ -23,8 +23,6 @@
   },
   "devDependencies": {
     "chai": "~1.8.1",
-    "loopback-testing": "~0.1.0",
-    "mocha": "~1.14.0",
-    "supertest": "~0.8.1"
+    "mocha": "~1.14.0"
   }
 }
