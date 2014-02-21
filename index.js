@@ -1,7 +1,7 @@
-module.exports = loopbackJsonSchema;
+module.exports = initLoopbackJsonSchema;
 
 var JsonSchema = require('./models/json-schema');
 
-function loopbackJsonSchema(app) {
+function initLoopbackJsonSchema(app) {
     app.model(JsonSchema);
 }
