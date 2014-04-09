@@ -27,6 +27,10 @@ describe('JsonSchema', function() {
     });
 
     describe('.afterSave', function() {
-        it('should create model defined by the json schema provided');
+        it('should create model defined by the json schema provided', function() {
+            JsonSchema.create({'title': 'test'}, function() {
+                expect(loopback.getModel('test')).to.exist;
+            });
+        });
     });
 });

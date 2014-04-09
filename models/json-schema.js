@@ -1,6 +1,7 @@
 var loopback = require('loopback');
 var loopbackExplorer = require('loopback-explorer');
 var db = loopback.memory('db');
+var debug = require('debug')('json-schema');
 
 
 var JsonSchema = module.exports = db.createModel('json-schema');

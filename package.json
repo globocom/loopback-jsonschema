@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
   "dependencies": {
+    "debug": "",
     "loopback": "",
     "loopback-explorer": ""
   },
