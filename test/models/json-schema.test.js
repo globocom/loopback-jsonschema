@@ -13,10 +13,10 @@ describe('JsonSchema', function() {
     });
 
     describe('.beforeSave', function() {
-        it('should add $schema property with draft-03 value', function() {
+        it('should set $schema property to hyper-schema draft-04', function() {
             var jsonSchema = {};
             JsonSchema.beforeSave(dummy, jsonSchema);
-            expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-03/hyper-schema#');
+            expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-04/hyper-schema#');
         });
     });
 });
