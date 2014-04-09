@@ -25,4 +25,8 @@ describe('JsonSchema', function() {
             expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-03/hyper-schema#');
         });
     });
+
+    describe('.afterSave', function() {
+        it('should create model defined by the json schema provided');
+    });
 });
