@@ -7,19 +7,19 @@ var JsonSchema = module.exports = db.createModel('json-schema');
 
 JsonSchema.on('attached', function(app) {
     JsonSchema.beforeSave = function(next, jsonSchema) {
-        beforeSave(jsonSchema, next)
+        beforeSave(next, jsonSchema)
     };
     JsonSchema.afterSave = function(done) {
-        afterSave(this, app, done);
+        afterSave(done, this, app);
     };
 });
 
-function beforeSave(jsonSchema, next) {
+function beforeSave(next, jsonSchema) {
     jsonSchema.$schema = "http://json-schema.org/draft-03/hyper-schema#";
     next();
 }
 
-function afterSave(jsonSchema, app, done) {
+function afterSave(done, jsonSchema, app) {
     var JsonSchemaModel = db.createModel(jsonSchema.title);
     app.model(JsonSchemaModel);
     loopbackExplorer(app);
