@@ -16,9 +16,8 @@
     "url": "https://github.com/globocom/loopback-jsonschema/issues"
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
-
   "dependencies": {
-    "loopback": "globocom/loopback#gcom-master",
+    "loopback": "",
     "loopback-explorer": ""
   },
   "devDependencies": {
