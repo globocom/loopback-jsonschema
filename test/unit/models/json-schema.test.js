@@ -2,8 +2,8 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var app = loopback();
-var initLoopbackJsonSchema = require('../../index');
-var JsonSchema = require('../../models/json-schema');
+var initLoopbackJsonSchema = require('../../../index');
+var JsonSchema = require('../../../models/json-schema');
 
 describe('JsonSchema', function() {
     var dummy = function() {};
