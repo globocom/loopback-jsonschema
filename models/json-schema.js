@@ -15,7 +15,9 @@ JsonSchema.on('attached', function(app) {
 });
 
 function beforeSave(next, jsonSchema) {
-    jsonSchema.$schema = "http://json-schema.org/draft-04/hyper-schema#";
+    if (!jsonSchema.$schema) {
+        jsonSchema.$schema = "http://json-schema.org/draft-04/hyper-schema#";
+    }
     next();
 }
 
