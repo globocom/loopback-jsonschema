@@ -1,6 +1,6 @@
 help:
 	@echo '    setup ............................ sets up project'
-	@echo '    clean ................... cleans project'
+	@echo '    clean ............................ cleans project'
 	@echo '    test ............................. runs tests'
 	@echo '    test-verbose ..................... runs tests with spec reporter'
 	@echo '    testing .......................... runs tests continuously on file changes'
