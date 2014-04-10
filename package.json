@@ -16,13 +16,13 @@
     "url": "https://github.com/globocom/loopback-jsonschema/issues"
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
-
   "dependencies": {
-    "loopback": "globocom/loopback#gcom-master",
+    "debug": "",
+    "loopback": "",
     "loopback-explorer": ""
   },
   "devDependencies": {
-    "chai": "~1.8.1",
-    "mocha": "~1.14.0"
+    "chai": "",
+    "mocha": ""
   }
 }
