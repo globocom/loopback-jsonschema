@@ -10,5 +10,7 @@ test-verbose:
 	$(TESTER) $(OPTS) --reporter spec $(TESTS)
 testing:
 	$(TESTER) $(OPTS) --watch $(TESTS)
+setup:
+	npm install
 
 .PHONY: test
