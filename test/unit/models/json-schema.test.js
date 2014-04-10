@@ -22,8 +22,7 @@ describe('JsonSchema', function() {
 
     describe('#createModel', function() {
         it('should create model defined by this json schema', function() {
-            var jsonSchema = new JsonSchema();
-            jsonSchema.title = 'test';
+            var jsonSchema = new JsonSchema({title: 'test'});
             jsonSchema.createModel(app);
             expect(loopback.getModel('test')).to.exist;
         });
