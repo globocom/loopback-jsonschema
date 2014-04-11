@@ -20,10 +20,10 @@ describe('JsonSchema', function() {
         });
     });
 
-    describe('#createModel', function() {
+    describe('#createLoopbackModel', function() {
         it('should create model defined by this json schema', function() {
             var jsonSchema = new JsonSchema({title: 'test'});
-            jsonSchema.createModel(app);
+            jsonSchema.createLoopbackModel(app);
             expect(loopback.getModel('test')).to.exist;
         });
     });

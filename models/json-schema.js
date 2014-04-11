@@ -15,7 +15,7 @@ JsonSchema.prototype.update$schema = function(properties) {
     }
 };
 
-JsonSchema.prototype.createModel = function(app) {
+JsonSchema.prototype.createLoopbackModel = function(app) {
     var JsonSchemaModel = db.createModel(this.title);
     app.model(JsonSchemaModel);
     loopbackExplorer(app);
@@ -28,7 +28,7 @@ JsonSchema.on('attached', function(app) {
         next();
     };
     JsonSchema.afterSave = function(done) {
-        this.createModel(app);
+        this.createLoopbackModel(app);
         done();
     };
 });
