@@ -12,13 +12,13 @@ describe('JsonSchema', function() {
 
     describe('.create', function() {
         it('should set $schema', function() {
-            JsonSchema.create({'title': 'test'}, function(_, jsonSchema) {
+            JsonSchema.create({modelName: 'test'}, function(_, jsonSchema) {
                 expect(jsonSchema.$schema).to.exist;
             });
         });
 
         it('should add links', function() {
-            JsonSchema.create({'title': 'test'}, function(_, jsonSchema) {
+            JsonSchema.create({modelName: 'test'}, function(_, jsonSchema) {
                 var rels = jsonSchema.links.map(function(link) {
                     return link.rel;
                 });
@@ -29,7 +29,7 @@ describe('JsonSchema', function() {
         });
 
         it('should create model defined by the json schema provided', function() {
-            JsonSchema.create({'title': 'test'}, function() {
+            JsonSchema.create({modelName: 'test'}, function() {
                 expect(loopback.getModel('test')).to.exist;
             });
         });

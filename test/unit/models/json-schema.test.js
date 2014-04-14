@@ -23,7 +23,7 @@ describe('JsonSchema', function() {
     describe('#addLinks', function() {
         it('should add default links', function() {
             JsonSchema.baseUrl = 'http://example.org/api';
-            var jsonSchema = new JsonSchema({title: 'person', collectionName: 'people'});
+            var jsonSchema = new JsonSchema({modelName: 'person', collectionName: 'people'});
             jsonSchema.addLinks();
             expect(jsonSchema.links[0]).to.eql({rel: 'self', href: 'http://example.org/api/people/{id}'});
             expect(jsonSchema.links[1]).to.eql({rel: 'item', href: 'http://example.org/api/people/{id}'});
@@ -34,7 +34,7 @@ describe('JsonSchema', function() {
 
     describe('#createLoopbackModel', function() {
         it('should create model defined by this json schema', function() {
-            var jsonSchema = new JsonSchema({title: 'test'});
+            var jsonSchema = new JsonSchema({modelName: 'test'});
             jsonSchema.createLoopbackModel(app);
             expect(loopback.getModel('test')).to.exist;
         });
