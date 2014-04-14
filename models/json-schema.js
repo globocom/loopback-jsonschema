@@ -26,7 +26,7 @@ JsonSchema.prototype.addLinks = function() {
 };
 
 JsonSchema.prototype.createLoopbackModel = function(app) {
-    var JsonSchemaModel = db.createModel(this.modelName);
+    var JsonSchemaModel = db.createModel(this.modelName, {}, {plural: this.collectionName});
     app.model(JsonSchemaModel);
     loopbackExplorer(app);
 };

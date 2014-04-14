@@ -33,10 +33,20 @@ describe('JsonSchema', function() {
     });
 
     describe('#createLoopbackModel', function() {
-        it('should create model defined by this json schema', function() {
-            var jsonSchema = new JsonSchema({modelName: 'test'});
+        var Test;
+
+        beforeEach(function() {
+            var jsonSchema = new JsonSchema({modelName: 'test', collectionName: 'testplural'});
             jsonSchema.createLoopbackModel(app);
-            expect(loopback.getModel('test')).to.exist;
+            Test = loopback.getModel('test');
+        });
+
+        it('should create model defined by this json schema', function() {
+            expect(Test).to.exist;
+        });
+
+        it("should use collectionName as model's plural", function() {
+            expect(Test.pluralModelName).to.equal('testplural');
         });
     });
 });
