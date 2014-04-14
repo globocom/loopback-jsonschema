@@ -22,12 +22,13 @@ describe('JsonSchema', function() {
 
     describe('#addLinks', function() {
         it('should add default links', function() {
+            JsonSchema.baseUrl = 'http://example.org'
             var jsonSchema = new JsonSchema({title: 'person'});
             jsonSchema.addLinks();
-            expect(jsonSchema.links[0]).to.eql({rel: 'self', href: 'http://localhost:3000/api/people/{id}'});
-            expect(jsonSchema.links[1]).to.eql({rel: 'item', href: 'http://localhost:3000/api/people/{id}'});
-            expect(jsonSchema.links[2]).to.eql({rel: 'update', method: 'PUT', href: 'http://localhost:3000/api/people/{id}'});
-            expect(jsonSchema.links[3]).to.eql({rel: 'delete', method: 'DELETE', href: 'http://localhost:3000/api/people/{id}'});
+            expect(jsonSchema.links[0]).to.eql({rel: 'self', href: 'http://example.org/api/people/{id}'});
+            expect(jsonSchema.links[1]).to.eql({rel: 'item', href: 'http://example.org/api/people/{id}'});
+            expect(jsonSchema.links[2]).to.eql({rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}'});
+            expect(jsonSchema.links[3]).to.eql({rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}'});
         });
     });
 

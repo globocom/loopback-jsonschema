@@ -18,10 +18,10 @@ JsonSchema.prototype.update$schema = function(properties) {
 JsonSchema.prototype.addLinks = function() {
     var entityPath = '/people/{id}';
     this.links = [
-        {rel: 'self', href: 'http://localhost:3000/api' + entityPath},
-        {rel: 'item', href: 'http://localhost:3000/api' + entityPath},
-        {rel: 'update', method: 'PUT', href: 'http://localhost:3000/api' + entityPath},
-        {rel: 'delete', method: 'DELETE', href: 'http://localhost:3000/api' + entityPath}
+        {rel: 'self', href: JsonSchema.baseUrl+ entityPath},
+        {rel: 'item', href: JsonSchema.baseUrl + entityPath},
+        {rel: 'update', method: 'PUT', href: JsonSchema.baseUrl + entityPath},
+        {rel: 'delete', method: 'DELETE', href: JsonSchema.baseUrl + entityPath}
     ];
 };
 
@@ -33,11 +33,17 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
 
 
 JsonSchema.on('attached', function(app) {
+    JsonSchema.beforeRemote('**', function(ctx, result, next) {
+        JsonSchema.baseUrl = ctx.req.protocol + '://' + ctx.req.get('Host') + app.get('restApiRoot');
+        next();
+    });
+
     JsonSchema.beforeSave = function(next, properties) {
         this.update$schema(properties);
         this.addLinks();
         next();
     };
+
     JsonSchema.afterSave = function(done) {
         this.createLoopbackModel(app);
         done();
