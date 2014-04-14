@@ -16,9 +16,9 @@ JsonSchema.prototype.update$schema = function(properties) {
 };
 
 JsonSchema.prototype.addLinks = function() {
-    var entityPath = '/people/{id}';
+    var entityPath = '/' + this.collectionName + '/{id}';
     this.links = [
-        {rel: 'self', href: JsonSchema.baseUrl+ entityPath},
+        {rel: 'self', href: JsonSchema.baseUrl + entityPath},
         {rel: 'item', href: JsonSchema.baseUrl + entityPath},
         {rel: 'update', method: 'PUT', href: JsonSchema.baseUrl + entityPath},
         {rel: 'delete', method: 'DELETE', href: JsonSchema.baseUrl + entityPath}

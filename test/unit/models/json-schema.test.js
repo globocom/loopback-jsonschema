@@ -22,8 +22,8 @@ describe('JsonSchema', function() {
 
     describe('#addLinks', function() {
         it('should add default links', function() {
-            JsonSchema.baseUrl = 'http://example.org'
-            var jsonSchema = new JsonSchema({title: 'person'});
+            JsonSchema.baseUrl = 'http://example.org/api';
+            var jsonSchema = new JsonSchema({title: 'person', collectionName: 'people'});
             jsonSchema.addLinks();
             expect(jsonSchema.links[0]).to.eql({rel: 'self', href: 'http://example.org/api/people/{id}'});
             expect(jsonSchema.links[1]).to.eql({rel: 'item', href: 'http://example.org/api/people/{id}'});
