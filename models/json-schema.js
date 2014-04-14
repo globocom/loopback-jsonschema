@@ -19,8 +19,8 @@ JsonSchema.prototype.addLinks = function() {
     this.links = [
         {rel: 'self'},
         {rel: 'item'},
-        {rel: 'update'},
-        {rel: 'delete'}
+        {rel: 'update', method: 'PUT'},
+        {rel: 'delete', method: 'DELETE'}
     ];
 };
 

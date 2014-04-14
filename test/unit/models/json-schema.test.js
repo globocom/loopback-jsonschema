@@ -20,6 +20,17 @@ describe('JsonSchema', function() {
         });
     });
 
+    describe('#addLinks', function() {
+        it('should add default links', function() {
+            var jsonSchema = new JsonSchema();
+            jsonSchema.addLinks();
+            expect(jsonSchema.links[0]).to.eql({rel: 'self'});
+            expect(jsonSchema.links[1]).to.eql({rel: 'item'});
+            expect(jsonSchema.links[2]).to.eql({rel: 'update', method: 'PUT'});
+            expect(jsonSchema.links[3]).to.eql({rel: 'delete', method: 'DELETE'});
+        });
+    });
+
     describe('#createLoopbackModel', function() {
         it('should create model defined by this json schema', function() {
             var jsonSchema = new JsonSchema({title: 'test'});
