@@ -15,6 +15,15 @@ JsonSchema.prototype.update$schema = function(properties) {
     }
 };
 
+JsonSchema.prototype.addLinks = function() {
+    this.links = [
+        {rel: 'self'},
+        {rel: 'item'},
+        {rel: 'update'},
+        {rel: 'delete'}
+    ];
+};
+
 JsonSchema.prototype.createLoopbackModel = function(app) {
     var JsonSchemaModel = db.createModel(this.title);
     app.model(JsonSchemaModel);
@@ -25,6 +34,7 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
 JsonSchema.on('attached', function(app) {
     JsonSchema.beforeSave = function(next, properties) {
         this.update$schema(properties);
+        this.addLinks();
         next();
     };
     JsonSchema.afterSave = function(done) {

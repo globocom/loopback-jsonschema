@@ -17,6 +17,17 @@ describe('JsonSchema', function() {
             });
         });
 
+        it('should add links', function() {
+            JsonSchema.create({'title': 'test'}, function(_, jsonSchema) {
+                var rels = jsonSchema.links.map(function(link) {
+                    return link.rel;
+                });
+                ['self', 'item', 'update', 'delete'].forEach(function(expectedRel) {
+                    expect(rels.indexOf(expectedRel)).to.be.at.least(0);
+                });
+            });
+        });
+
         it('should create model defined by the json schema provided', function() {
             JsonSchema.create({'title': 'test'}, function() {
                 expect(loopback.getModel('test')).to.exist;
