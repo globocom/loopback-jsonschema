@@ -16,11 +16,12 @@ JsonSchema.prototype.update$schema = function(properties) {
 };
 
 JsonSchema.prototype.addLinks = function() {
+    var entityPath = '/people/{id}';
     this.links = [
-        {rel: 'self'},
-        {rel: 'item'},
-        {rel: 'update', method: 'PUT'},
-        {rel: 'delete', method: 'DELETE'}
+        {rel: 'self', href: 'http://localhost:3000/api' + entityPath},
+        {rel: 'item', href: 'http://localhost:3000/api' + entityPath},
+        {rel: 'update', method: 'PUT', href: 'http://localhost:3000/api' + entityPath},
+        {rel: 'delete', method: 'DELETE', href: 'http://localhost:3000/api' + entityPath}
     ];
 };
 
