@@ -25,7 +25,7 @@ To dynamically define a new Loopback model just create a new instance of the Jso
 
 ```
 # Create a Person model from a JSON Schema
-curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -d '{"title": "person"}'
+curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -d '{"modelName": "person", "collectionName": "people"}'
 ```
 
 ## References
