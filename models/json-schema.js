@@ -8,8 +8,9 @@ var db = loopback.memory('db');
 var JsonSchema = module.exports = db.createModel('json-schema');
 
 
-JsonSchema.addLinks = function(body, baseUrl) {
-    var entityPath = '/' + body.collectionName + '/{id}';
+JsonSchema.addLinks = function(req, app) {
+    var baseUrl = req.protocol + '://' + req.get('Host') + app.get('restApiRoot');
+    var entityPath = '/' + req.body.collectionName + '/{id}';
     var defaultLinks = [
         {rel: 'self', href: baseUrl + entityPath},
         {rel: 'item', href: baseUrl + entityPath},
@@ -19,11 +20,11 @@ JsonSchema.addLinks = function(body, baseUrl) {
     var defaultRels = defaultLinks.map(function(link) {
         return link.rel;
     });
-    var customLinks = body.links || [];
+    var customLinks = req.body.links || [];
     customLinks = customLinks.filter(function(link) {
         return defaultRels.indexOf(link.rel) == -1;
     });
-    body.links = defaultLinks.concat(customLinks);
+    req.body.links = defaultLinks.concat(customLinks);
 };
 
 
@@ -42,8 +43,7 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
 
 JsonSchema.on('attached', function(app) {
     JsonSchema.beforeRemote('**', function(ctx, result, next) {
-        var baseUrl = req.protocol + '://' + req.get('Host') + app.get('restApiRoot');
-        JsonSchema.addLinks(ctx.req.body, baseUrl);
+        JsonSchema.addLinks(ctx.req, app);
         next();
     });
 
