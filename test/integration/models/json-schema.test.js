@@ -17,7 +17,7 @@ describe('JsonSchema', function() {
             });
         });
 
-        it('should add links', function() {
+        xit('should add links', function() {
             JsonSchema.create({modelName: 'test'}, function(_, jsonSchema) {
                 var rels = jsonSchema.links.map(function(link) {
                     return link.rel;
