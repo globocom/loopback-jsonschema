@@ -13,9 +13,8 @@ describe('JsonSchema', function() {
         });
 
         it('should allow overriding of $schema', function() {
-            var jsonSchemaProperties = {$schema: 'http://json-schema.org/draft-03/hyper-schema#'};
-            var jsonSchema = new JsonSchema();
-            jsonSchema.update$schema(jsonSchemaProperties);
+            var jsonSchema = new JsonSchema({$schema: 'http://json-schema.org/draft-03/hyper-schema#'});
+            jsonSchema.update$schema();
             expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-03/hyper-schema#');
         });
     });
