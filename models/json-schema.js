@@ -10,12 +10,20 @@ var JsonSchema = module.exports = db.createModel('json-schema');
 
 JsonSchema.addLinks = function(body, baseUrl) {
     var entityPath = '/' + body.collectionName + '/{id}';
-    body.links = [
+    var defaultLinks = [
         {rel: 'self', href: baseUrl + entityPath},
         {rel: 'item', href: baseUrl + entityPath},
         {rel: 'update', method: 'PUT', href: baseUrl + entityPath},
         {rel: 'delete', method: 'DELETE', href: baseUrl + entityPath}
     ];
+    var defaultRels = defaultLinks.map(function(link) {
+        return link.rel;
+    });
+    var customLinks = body.links || [];
+    customLinks = customLinks.filter(function(link) {
+        return defaultRels.indexOf(link.rel) == -1;
+    });
+    body.links = defaultLinks.concat(customLinks);
 };
 
 
