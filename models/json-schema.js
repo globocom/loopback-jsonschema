@@ -4,12 +4,14 @@ var loopback = require('loopback');
 var loopbackExplorer = require('loopback-explorer');
 var db = loopback.memory('db');
 
+var LJSRequest = require('./ljs-request');
+
 
 var JsonSchema = module.exports = db.createModel('json-schema');
 
 
 JsonSchema.addLinks = function(req, app) {
-    var baseUrl = req.protocol + '://' + req.get('Host') + app.get('restApiRoot');
+    var baseUrl = req.schemeAndAuthority() + app.get('restApiRoot');
     var entityPath = '/' + req.body.collectionName + '/{id}';
     var defaultLinks = [
         {rel: 'self', href: baseUrl + entityPath},
@@ -43,7 +45,7 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
 
 JsonSchema.on('attached', function(app) {
     JsonSchema.beforeRemote('**', function(ctx, result, next) {
-        JsonSchema.addLinks(ctx.req, app);
+        JsonSchema.addLinks(new LJSRequest(ctx.req), app);
         next();
     });
 

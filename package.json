@@ -23,6 +23,9 @@
   },
   "devDependencies": {
     "chai": "",
-    "mocha": ""
+    "mocha": "",
+    "mocha-sinon": "",
+    "sinon": "",
+    "sinon-chai": ""
   }
 }

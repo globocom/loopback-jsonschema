@@ -1,18 +1,27 @@
+require('../../support');
+
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
-var app = loopback();
 var JsonSchema = require('../../../models/json-schema');
+var LJSRequest = require('../../../models/ljs-request');
+
+var app = loopback();
 
 describe('JsonSchema', function() {
     describe('.addLinks', function() {
-        var req = {};
+        var req;
 
-        xdescribe('with no custom links', function() {
+        beforeEach(function() {
+            app.set('restApiRoot', '/api');
+        });
+
+        describe('with no custom links', function() {
             beforeEach(function() {
-                req.protocol = 'http';
-                req.body = { collectionName: 'people' };
-                JsonSchema.addLinks(req, app);
+                req = { body: { collectionName: 'people' } };
+                var ljsReq = new LJSRequest(req);
+                this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+                JsonSchema.addLinks(ljsReq, app);
             });
 
             it('should include default links', function() {
@@ -23,16 +32,20 @@ describe('JsonSchema', function() {
             });
         });
 
-        xdescribe('with custom links', function() {
+        describe('with custom links', function() {
             beforeEach(function() {
-                req.body = {
-                    collectionName: 'people',
-                    links: [
-                        { rel: 'custom', href: 'http://example.org/api/people/custom' },
-                        { rel: 'item', href: 'http://example.org/api/people/override/item' }
-                    ]
+                req = {
+                    body: {
+                        collectionName: 'people',
+                        links: [
+                            { rel: 'custom', href: 'http://example.org/api/people/custom' },
+                            { rel: 'item', href: 'http://example.org/api/people/override/item' }
+                        ]
+                    }
                 };
-                JsonSchema.addLinks(req, app);
+                var ljsReq = new LJSRequest(req);
+                this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+                JsonSchema.addLinks(ljsReq, app);
             });
 
             it('should include default links', function() {
