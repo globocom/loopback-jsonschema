@@ -13,8 +13,8 @@ npm install loopback-jsonschema
 Basically add the following code before calling `app.boot();`
 
 ```js
-var initLoopbackJsonSchema = require('loopback-jsonschema');
-initLoopbackJsonSchema(app);
+var loopbackJsonSchema = require('loopback-jsonschema');
+loopbackJsonSchema.initLoopbackJsonSchema(app);
 ```
 
 ## Using

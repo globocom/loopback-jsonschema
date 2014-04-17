@@ -1,7 +1,12 @@
-module.exports = initLoopbackJsonSchema;
+module.exports = loopbackJsonSchema = {};
 
 var JsonSchema = require('./models/json-schema');
+var jsonSchemaMiddleware = require('./middleware/json-schema.middleware');
 
-function initLoopbackJsonSchema(app) {
+loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
     app.model(JsonSchema);
-}
+
+    app.on('middleware:preprocessors', function() {
+        app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
+    });
+};

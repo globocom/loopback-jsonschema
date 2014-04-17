@@ -42,6 +42,20 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
     loopbackExplorer(app);
 };
 
+JsonSchema.registerLoopbackModelForCollection = function(collectionName, app, next) {
+    JsonSchema.findOne({ where: { collectionName: collectionName }}, function(err, jsonSchema) {
+        if (err) {
+            console.error("Error fetching JSON Schema for collectionName:", collectionName, "Error:", err);
+        } else if (jsonSchema === null) {
+            console.warn("JSON Schema for collectionName:", collectionName, "Not found.");
+        } else {
+            jsonSchema.createLoopbackModel(app);
+            console.info("Loopback Model created for JSON Schema collectionName:", collectionName);
+        }
+        next();
+    });
+};
+
 
 JsonSchema.on('attached', function(app) {
     JsonSchema.beforeRemote('**', function(ctx, result, next) {
