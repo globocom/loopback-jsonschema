@@ -27,6 +27,24 @@ describe('JsonSchema', function() {
         });
     });
 
+    describe('#createLoopbackModel', function() {
+        var Test;
+
+        beforeEach(function() {
+            var jsonSchema = new JsonSchema({modelName: 'test', collectionName: 'testplural'});
+            jsonSchema.createLoopbackModel(app);
+            Test = loopback.getModel('test');
+        });
+
+        it('should create model defined by this json schema', function() {
+            expect(Test).to.exist;
+        });
+
+        it("should use collectionName as model's plural", function() {
+            expect(Test.pluralModelName).to.equal('testplural');
+        });
+    });
+
     describe('.registerLoopbackModelForCollection', function() {
         it('should register loopback model for an existing collection JSON schema', function(done) {
             var jsonSchema = JsonSchema.create({ modelName: 'person', collectionName: 'people' });
