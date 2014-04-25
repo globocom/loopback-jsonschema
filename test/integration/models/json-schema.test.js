@@ -70,9 +70,5 @@ describe('JsonSchema', function() {
 
             JsonSchema.registerLoopbackModelForCollection("people", app, next);
         });
-
-        xit('should log error when some problem happened with the JSON schema query', function() {
-            // simulate error and assert log has been called
-        });
     });
 });
