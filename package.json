@@ -19,6 +19,7 @@
   "dependencies": {
     "debug": "",
     "loopback": "",
+    "loopback-connector-mongodb": "",
     "loopback-explorer": ""
   },
   "devDependencies": {

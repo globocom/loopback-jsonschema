@@ -15,13 +15,19 @@ describe('JsonSchema', function() {
 
     describe('.create', function() {
         it('should set $schema', function() {
-            JsonSchema.create({modelName: 'test'}, function(_, jsonSchema) {
+            JsonSchema.create({modelName: 'test'}, function(err, jsonSchema) {
+                if (err) {
+                    console.log(err);
+                };
                 expect(jsonSchema.$schema).to.exist;
             });
         });
 
         it('should create model defined by the json schema provided', function() {
-            JsonSchema.create({modelName: 'test'}, function() {
+            JsonSchema.create({modelName: 'test'}, function(err) {
+                if (err) {
+                    console.log(err);
+                };
                 expect(loopback.getModel('test')).to.exist;
             });
         });
