@@ -18,7 +18,7 @@ describe('JsonSchema', function() {
             JsonSchema.create({modelName: 'test'}, function(err, jsonSchema) {
                 if (err) {
                     console.log(err);
-                };
+                }
                 expect(jsonSchema.$schema).to.exist;
             });
         });
@@ -27,7 +27,7 @@ describe('JsonSchema', function() {
             JsonSchema.create({modelName: 'test'}, function(err) {
                 if (err) {
                     console.log(err);
-                };
+                }
                 expect(loopback.getModel('test')).to.exist;
             });
         });
