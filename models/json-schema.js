@@ -10,6 +10,20 @@ var LJSRequest = require('./ljs-request');
 var JsonSchema = module.exports = db.createModel('json-schema');
 
 
+JsonSchema.registerLoopbackModelForCollection = function(collectionName, app, next) {
+    JsonSchema.findOne({ where: { collectionName: collectionName }}, function(err, jsonSchema) {
+        if (err) {
+            console.error("Error fetching JSON Schema for collectionName:", collectionName, "Error:", err);
+        } else if (jsonSchema === null) {
+            console.warn("JSON Schema for collectionName:", collectionName, "Not found.");
+        } else {
+            jsonSchema.createLoopbackModel(app);
+            console.info("Loopback Model created for JSON Schema collectionName:", collectionName);
+        }
+        next();
+    });
+};
+
 JsonSchema.addLinks = function(req, app) {
     var baseUrl = req.schemeAndAuthority() + app.get('restApiRoot');
     var entityPath = '/' + req.body.collectionName + '/{id}';
@@ -40,20 +54,6 @@ JsonSchema.prototype.createLoopbackModel = function(app) {
     var JsonSchemaModel = db.createModel(this.modelName, {}, { plural: this.collectionName });
     app.model(JsonSchemaModel);
     loopbackExplorer(app);
-};
-
-JsonSchema.registerLoopbackModelForCollection = function(collectionName, app, next) {
-    JsonSchema.findOne({ where: { collectionName: collectionName }}, function(err, jsonSchema) {
-        if (err) {
-            console.error("Error fetching JSON Schema for collectionName:", collectionName, "Error:", err);
-        } else if (jsonSchema === null) {
-            console.warn("JSON Schema for collectionName:", collectionName, "Not found.");
-        } else {
-            jsonSchema.createLoopbackModel(app);
-            console.info("Loopback Model created for JSON Schema collectionName:", collectionName);
-        }
-        next();
-    });
 };
 
 
