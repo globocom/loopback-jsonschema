@@ -10,12 +10,18 @@ npm install loopback-jsonschema
 
 ## Setup
 
-Basically add the following code after calling `app.boot();`
+### Initializing
+
+Add the following code after calling `app.boot();`
 
 ```js
 var loopbackJsonSchema = require('loopback-jsonschema');
 loopbackJsonSchema.initLoopbackJsonSchema(app);
 ```
+
+### Configuring a DataSource
+
+Add a `loopbackJsonSchemaDb` entry to the `datasources.json` file with your data source configuration. If no `loopbackJsonSchemaDb` entry is found, we fallback to using the default memory data source.
 
 ## Using
 
