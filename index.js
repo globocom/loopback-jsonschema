@@ -17,5 +17,5 @@ loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
 
 
 function dataSource (app) {
-    return app.dataSources.jsonSchemaDb || loopback.memory();
+    return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
 };
