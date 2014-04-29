@@ -5,7 +5,7 @@ var JsonSchema = require('./lib/models/json-schema');
 var jsonSchemaMiddleware = require('./lib/middleware/json-schema.middleware');
 
 loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
-    var db = app.dataSources.jsonSchemaDb || loopback.memory();
+    var db = dataSource(app);
     JsonSchema.attachTo(db);
 
     app.model(JsonSchema);
@@ -13,4 +13,9 @@ loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
     app.on('middleware:preprocessors', function() {
         app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
     });
+};
+
+
+function dataSource (app) {
+    return app.dataSources.jsonSchemaDb || loopback.memory();
 };
