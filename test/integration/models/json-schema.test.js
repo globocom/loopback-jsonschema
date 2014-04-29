@@ -13,6 +13,23 @@ describe('JsonSchema', function() {
         loopbackJsonSchema.initLoopbackJsonSchema(app);
     });
 
+    describe('.findOne', function() {
+        beforeEach(function(done) {
+            JsonSchema.create({modelName: 'test'}, function() {
+                done();
+            });
+        });
+
+        it('should have $schema', function() {
+            JsonSchema.findOne({where: {modelName: 'test'}}, function(err, jsonSchema) {
+                if (err) {
+                    console.log(err);
+                }
+                expect(jsonSchema.$schema).to.exist;
+            });
+        });
+    });
+
     describe('.create', function() {
         it('should set $schema', function() {
             JsonSchema.create({modelName: 'test'}, function(err, jsonSchema) {
