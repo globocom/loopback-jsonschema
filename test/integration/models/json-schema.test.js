@@ -91,7 +91,7 @@ describe('JsonSchema', function() {
 
         it('should log when collection JSON schema was not found', function(done) {
             var next = function() {
-                expect(console.warn).to.have.been.calledWith('JSON Schema for collectionName:', 'people', 'Not found.');
+                expect(console.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
                 done();
             };
 
