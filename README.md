@@ -24,9 +24,24 @@ loopbackJsonSchema.initLoopbackJsonSchema(app);
 To dynamically define a new Loopback model just create a new instance of the JsonSchema model provided by loopback-jsonschema. Doing this via the REST interface is as simples as POSTing a valid JSON Schema, as follows:
 
 ```
-# Create a Person model from a JSON Schema
-curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -d '{"modelName": "person", "collectionName": "people"}'
+# person.json
+{
+  "type": "object",
+  "title": "Person",
+  "modelName": "person",
+  "collectionName": "people",
+  "properties": {
+    ...
+  }
+}
 ```
+
+```
+# Create a Person model from a JSON Schema
+curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -T person.json
+```
+
+The people collection will then be available at `http://example.org/api/people`.
 
 ## Disclaimer
 
