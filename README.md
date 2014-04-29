@@ -28,6 +28,10 @@ To dynamically define a new Loopback model just create a new instance of the Jso
 curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -d '{"modelName": "person", "collectionName": "people"}'
 ```
 
+## Disclaimer
+
+This project is very much in an alpha stage at the moment. But it is being actively developed. Contributions (code, documentation, issues, etc.) are very welcome.
+
 ## References
 
 http://json-schema.org/
