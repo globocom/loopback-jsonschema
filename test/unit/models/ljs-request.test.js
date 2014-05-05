@@ -30,4 +30,18 @@ describe('LJSRequest', function() {
             expect(ljsReq.schemeAndAuthority()).to.equal('http://example.org');
         });
     });
+
+    describe('#baseUrl', function() {
+        beforeEach(function() {
+            req = { protocol: 'http', app: {} };
+            req.app.get = this.sinon.stub().returns('/api');;
+            req.get = this.sinon.stub();
+            req.get.withArgs('Host').returns('example.org');
+            ljsReq = new LJSRequest(req);
+        });
+
+        it("should return inner request's scheme, authority and api rest concatenated together", function() {
+            expect(ljsReq.baseUrl()).to.equal('http://example.org/api');
+        });
+    });
 });
