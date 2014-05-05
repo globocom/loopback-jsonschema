@@ -17,12 +17,12 @@
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
   "dependencies": {
-    "debug": ""
+    "debug": "",
+    "underscore": "1.x"
   },
   "peerDependencies": {
     "loopback": "1.x",
-    "loopback-explorer": "1.x",
-    "underscore": "~1.6.0"
+    "loopback-explorer": "1.x"
   },
   "devDependencies": {
     "chai": "",
@@ -32,6 +32,6 @@
     "mocha-sinon": "",
     "sinon": "",
     "sinon-chai": "",
-    "supertest": "~0.9.0"
+    "supertest": ""
   }
 }
