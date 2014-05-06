@@ -5,6 +5,7 @@ var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
 var JsonSchema = require('../../../lib/models/json-schema');
+var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
 
@@ -96,6 +97,39 @@ describe('JsonSchema', function() {
             };
 
             JsonSchema.registerLoopbackModelForCollection('people', app, next);
+        });
+    });
+
+    describe('.findByCollectionName', function() {
+        beforeEach(function() {
+            var req = { body: {}, url: '/people/alice' };
+            this.ljsReq = new LJSRequest(req);
+
+            this.sinon.stub(console, 'info');
+            this.sinon.stub(console, 'warn');
+        });
+
+        it('should find JsonSchema collection by name and execute provided callback', function(done) {
+            var jsonSchema = JsonSchema.create({ modelName: 'person', collectionName: 'people' });
+
+            var callback = this.sinon.spy();
+            var next = function() {
+                expect(callback).to.have.been.called;
+                done();
+            };
+
+            JsonSchema.findByCollectionName(this.ljsReq, next, callback)
+
+            JsonSchema.remove({ modelName: 'person' });
+        });
+
+        it('should log when collection JSON schema was not found', function(done) {
+            var next = function() {
+                expect(console.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
+                done();
+            };
+
+            JsonSchema.findByCollectionName(this.ljsReq, next, null);
         });
     });
 });
