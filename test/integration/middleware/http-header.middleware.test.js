@@ -28,7 +28,7 @@ describe('JsonSchema', function() {
     });
 
 
-    describe.only('resource', function () {
+    describe('resource', function () {
         it("should not add the header 'Link' when accessing collection list", function () {
             supertest(app)
               .get('/api/test-cars')
