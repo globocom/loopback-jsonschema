@@ -18,7 +18,7 @@ describe('JsonSchema', function() {
 
         describe('with no custom links', function() {
             beforeEach(function() {
-                req = { body: { collectionName: 'people' } };
+                req = { body: { collectionName: 'people' }, url: '/cars/mercedes' };
                 var ljsReq = new LJSRequest(req);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
                 JsonSchema.addLinks(ljsReq, app);
@@ -41,7 +41,8 @@ describe('JsonSchema', function() {
                             { rel: 'custom', href: 'http://example.org/api/people/custom' },
                             { rel: 'item', href: 'http://example.org/api/people/override/item' }
                         ]
-                    }
+                    },
+                    url: '/cars/mercedes'
                 };
                 var ljsReq = new LJSRequest(req);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');

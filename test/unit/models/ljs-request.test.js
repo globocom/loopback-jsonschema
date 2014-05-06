@@ -7,20 +7,28 @@ var LJSRequest = require('../../../lib/models/ljs-request');
 describe('LJSRequest', function() {
     var ljsReq, req;
 
-    describe('#body', function() {
+    describe('#properties', function() {
         beforeEach(function() {
-            req = { body: 'body' };
+            req = { body: 'body', protocol: 'http', url: '/cars/mercedes' };
             ljsReq = new LJSRequest(req);
         });
 
         it("should return inner request's body", function() {
-            expect(ljsReq.body).to.equal(req.body);
+                expect(ljsReq.body).to.equal(req.body);
+        });
+
+        it("should return 'cars' as collectionName", function() {
+            expect(ljsReq.collectionName).to.equal('cars');
+        });
+
+        it("should return 'mercedes' as resourceId", function() {
+            expect(ljsReq.resourceId).to.equal('mercedes');
         });
     });
 
     describe('#schemeAndAuthority', function() {
         beforeEach(function() {
-            req = { protocol: 'http' };
+            req = { protocol: 'http', url: '/cars/mercedes' };
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
             ljsReq = new LJSRequest(req);
@@ -33,7 +41,7 @@ describe('LJSRequest', function() {
 
     describe('#baseUrl', function() {
         beforeEach(function() {
-            req = { protocol: 'http', app: {} };
+            req = { protocol: 'http', app: {}, url: '/cars/mercedes' };
             req.app.get = this.sinon.stub().returns('/api');;
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
