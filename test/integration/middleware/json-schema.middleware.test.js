@@ -6,14 +6,14 @@ var supertest = require('supertest');
 
 var loopbackJsonSchema = require('../../../index');
 var JsonSchema = require('../../../lib/models/json-schema');
-var httpHeaderMiddleware = require('../../../lib/middleware/http-header.middleware');
+var jsonSchemaMiddleware = require('../../../lib/middleware/json-schema.middleware');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
-app.use(app.get('restApiRoot'), httpHeaderMiddleware());
+app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
 app.installMiddleware();
 
-describe('http-header.middleware', function() {
+describe('json-schema.middleware', function() {
     beforeEach(function() {
         loopbackJsonSchema.initLoopbackJsonSchema(app);
         var jsonSchema = new JsonSchema({modelName: 'test-car', collectionName: 'test-cars'});
