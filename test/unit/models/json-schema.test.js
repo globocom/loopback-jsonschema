@@ -9,6 +9,32 @@ var LJSRequest = require('../../../lib/models/ljs-request');
 var app = loopback();
 
 describe('JsonSchema', function() {
+    describe('#addHeaders', function() {
+        var req;
+
+        beforeEach(function() {
+            app.set('restApiRoot', '/api');
+            req = { body: {}, url: '/cars/mercedes' };
+        });
+
+        it('should add headers', function () {
+            var ljsReq = new LJSRequest(req);
+            var baseUrl = 'http://example.org/api';
+            this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
+
+            var res = { set: function () {}};
+            this.sinon.stub(res, "set");
+
+            var jsonSchema = new JsonSchema({ id: 123 });
+
+            jsonSchema.addHeaders(ljsReq, res);
+
+            expect(res.set).to.have.been.called.twice;
+            expect(res.set).to.have.been.calledWith('Content-Type', "application/json; profile='"+ baseUrl +"/json-schemas/123'");
+            expect(res.set).to.have.been.calledWith('Link', '<' + baseUrl +'/json-schemas/123>; rel=describedby');
+        });
+    });
+
     describe('.addLinks', function() {
         var req;
 
