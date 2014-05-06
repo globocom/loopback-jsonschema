@@ -39,7 +39,7 @@ describe('JsonSchema', function() {
           });
         });
 
-        it("should add the header 'Link' when accessing an specific resource", function () {
+        it("should add the header 'Link' when accessing an specific resource", function (done) {
             Car.create({name: 'C3', color: 'black'}, function(err, car) {
                 supertest(app)
                     .get('/api/test-cars/'+ car.id)
@@ -48,6 +48,7 @@ describe('JsonSchema', function() {
                         expect(err).to.not.exist;
                         expect(res.headers['link']).to.exist;
                         expect(res.headers['content-type']).to.match(/^application\/json; profile='.*\/api\/json-schemas\/.*'/);
+                        done();
                     });
             });
         });
