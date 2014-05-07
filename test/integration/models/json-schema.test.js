@@ -102,9 +102,6 @@ describe('JsonSchema', function() {
 
     describe('.findByCollectionName', function() {
         beforeEach(function() {
-            var req = { body: {}, url: '/people/alice' };
-            this.ljsReq = new LJSRequest(req);
-
             this.sinon.stub(console, 'info');
             this.sinon.stub(console, 'warn');
         });
@@ -118,7 +115,7 @@ describe('JsonSchema', function() {
                 done();
             };
 
-            JsonSchema.findByCollectionName(this.ljsReq, next, callback)
+            JsonSchema.findByCollectionName('people', next, callback)
 
             JsonSchema.remove({ modelName: 'person' });
         });
@@ -129,7 +126,7 @@ describe('JsonSchema', function() {
                 done();
             };
 
-            JsonSchema.findByCollectionName(this.ljsReq, next, null);
+            JsonSchema.findByCollectionName('people', next, null);
         });
     });
 });
