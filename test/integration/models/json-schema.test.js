@@ -69,37 +69,6 @@ describe('JsonSchema', function() {
         });
     });
 
-    describe('.registerLoopbackModelForCollection', function() {
-        beforeEach(function() {
-            this.sinon.stub(console, 'info');
-            this.sinon.stub(console, 'warn');
-        });
-
-        it('should register loopback model for an existing collection JSON schema', function(done) {
-            var jsonSchema = JsonSchema.create({ modelName: 'person', collectionName: 'people' });
-
-            var next = function() {
-                var Person = loopback.getModel('person');
-                expect(Person).to.not.be.null;
-                expect(Person.definition.name).to.equal('person');
-                expect(Person.definition.settings.plural).to.equal('people');
-                done();
-            };
-            JsonSchema.registerLoopbackModelForCollection('people', app, next);
-
-            JsonSchema.remove({ modelName: 'person' });
-        });
-
-        it('should log when collection JSON schema was not found', function(done) {
-            var next = function() {
-                expect(console.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
-                done();
-            };
-
-            JsonSchema.registerLoopbackModelForCollection('people', app, next);
-        });
-    });
-
     describe('.findByCollectionName', function() {
         beforeEach(function() {
             this.sinon.stub(console, 'info');
