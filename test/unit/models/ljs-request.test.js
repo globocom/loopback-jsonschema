@@ -14,15 +14,11 @@ describe('LJSRequest', function() {
         });
 
         it("should return inner request's body", function() {
-                expect(ljsReq.body).to.equal(req.body);
+            expect(ljsReq.body).to.equal(req.body);
         });
 
         it("should return 'cars' as collectionName", function() {
             expect(ljsReq.collectionName).to.equal('cars');
-        });
-
-        it("should return 'mercedes' as resourceId", function() {
-            expect(ljsReq.resourceId).to.equal('mercedes');
         });
     });
 
