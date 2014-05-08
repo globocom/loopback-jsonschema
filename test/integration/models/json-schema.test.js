@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
+var logger = require('../../../lib/support/logger')
 var JsonSchema = require('../../../lib/models/json-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
@@ -24,7 +25,7 @@ describe('JsonSchema', function() {
         it('should have $schema', function() {
             JsonSchema.findOne({where: {modelName: 'test'}}, function(err, jsonSchema) {
                 if (err) {
-                    console.log(err);
+                    logger.log(err);
                 }
                 expect(jsonSchema.$schema).to.exist;
             });
@@ -35,7 +36,7 @@ describe('JsonSchema', function() {
         it('should set $schema', function() {
             JsonSchema.create({modelName: 'test'}, function(err, jsonSchema) {
                 if (err) {
-                    console.log(err);
+                    logger.log(err);
                 }
                 expect(jsonSchema.$schema).to.exist;
             });
@@ -44,7 +45,7 @@ describe('JsonSchema', function() {
         it('should create model defined by the json schema provided', function() {
             JsonSchema.create({modelName: 'test'}, function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.log(err);
                 }
                 expect(loopback.getModel('test')).to.exist;
             });
@@ -71,8 +72,8 @@ describe('JsonSchema', function() {
 
     describe('.findByCollectionName', function() {
         beforeEach(function() {
-            this.sinon.stub(console, 'info');
-            this.sinon.stub(console, 'warn');
+            this.sinon.stub(logger, 'info');
+            this.sinon.stub(logger, 'warn');
         });
 
         it('should find JsonSchema collection by name and execute provided callback', function(done) {
@@ -91,7 +92,7 @@ describe('JsonSchema', function() {
 
         it('should log when collection JSON schema was not found', function(done) {
             var next = function() {
-                expect(console.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
+                expect(logger.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
                 done();
             };
 
