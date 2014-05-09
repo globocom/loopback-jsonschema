@@ -16,7 +16,7 @@ clean:
 
 TESTER = ./node_modules/.bin/mocha
 OPTS = -G
-TESTS = $(shell find test -name "*.test.js")
+TESTS = test/**/*.test.js
 
 test:
 	$(TESTER) $(OPTS) $(TESTS)
