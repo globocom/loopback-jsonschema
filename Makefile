@@ -1,9 +1,12 @@
 help:
-	@echo '    setup ............................ sets up project'
-	@echo '    clean ............................ cleans project'
-	@echo '    test ............................. runs tests'
-	@echo '    test-verbose ..................... runs tests with spec reporter'
-	@echo '    testing .......................... runs tests continuously on file changes'
+	@echo '    setup ....................................... sets up project'
+	@echo '    clean ....................................... cleans project'
+	@echo '    test ........................................ runs tests'
+	@echo '    test-verbose ................................ runs tests with spec reporter'
+	@echo '    testing ..................................... runs tests continuously on file changes'
+	@echo '    bump_patch_version .......................... bumps patch version'
+	@echo '    bump_minor_version .......................... bumps minor version'
+	@echo '    bump_major_version .......................... bumps major version'
 
 setup:
 	npm install
@@ -23,3 +26,12 @@ testing:
 	$(TESTER) $(OPTS) --watch $(TESTS)
 
 .PHONY: test
+
+bump_patch_version:
+	npm version patch
+
+bump_minor_version:
+	npm version minor
+
+bump_major_version:
+	npm version major
