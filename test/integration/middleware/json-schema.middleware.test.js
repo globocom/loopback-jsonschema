@@ -41,7 +41,7 @@ describe('json-schema.middleware', function() {
                 .end(function (err, res) {
                     expect(err).to.not.exist;
                     expect(res.headers['link']).to.exist;
-                    expect(res.headers['content-type']).to.match(/^application\/json; profile='.*\/api\/json-schemas\/.*'/);
+                    expect(res.headers['content-type']).to.match(/^application\/json; profile=.*\/api\/json-schemas\/.*/);
                     done();
                 });
         };

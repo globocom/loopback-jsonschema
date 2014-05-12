@@ -30,7 +30,7 @@ describe('JsonSchema', function() {
             jsonSchema.addHeaders(ljsReq, res);
 
             expect(res.set).to.have.been.called.twice;
-            expect(res.set).to.have.been.calledWith('Content-Type', "application/json; profile='"+ baseUrl +"/json-schemas/123'");
+            expect(res.set).to.have.been.calledWith('Content-Type', "application/json; profile="+ baseUrl +"/json-schemas/123");
             expect(res.set).to.have.been.calledWith('Link', '<' + baseUrl +'/json-schemas/123>; rel=describedby');
         });
     });
