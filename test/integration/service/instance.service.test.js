@@ -7,13 +7,13 @@ var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
 var LJSRequest = require('../../../lib/models/ljs-request');
 var JsonSchema = require('../../../lib/models/json-schema');
-var JsonSchemaService = require('../../../lib/service/json-schema.service');
+var InstanceService = require('../../../lib/service/instance.service');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
 
-describe('json-schema.service', function() {
-    var jsonSchemaService, ljsReq;
+describe('instance.service', function() {
+    var instanceService, ljsReq;
 
     beforeEach(function() {
         var req = { body: 'body', protocol: 'http', url: '/people', app: app };
@@ -24,7 +24,7 @@ describe('json-schema.service', function() {
         var res = { set: function () {} };
         this.sinon.stub(res, "set");
 
-        jsonSchemaService = new JsonSchemaService(ljsReq, res);
+        instanceService = new InstanceService(ljsReq, res);
     });
 
     describe('#build', function() {
@@ -43,7 +43,7 @@ describe('json-schema.service', function() {
                 expect(Person.definition.settings.plural).to.equal('people');
                 done();
             };
-            jsonSchemaService.build(next);
+            instanceService.build(next);
 
             JsonSchema.remove({ modelName: 'person' });
         });
@@ -54,7 +54,7 @@ describe('json-schema.service', function() {
                 done();
             };
 
-            jsonSchemaService.build(next);
+            instanceService.build(next);
         });
     });
 });
