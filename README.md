@@ -49,6 +49,18 @@ curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-s
 
 The people collection will then be available at `http://example.org/api/people`.
 
+## Schema Links
+
+### Default Links ("self", "item", "update", "delete")
+
+Never are persisted. They are built considering the requested host and collectionName of the model.
+
+### Custom Links
+
+Always are persisted. There are two possible scenarios.
+
+a) when they are relatives, links are built considering the requested host
+b) when they are absolut, links are delivered as it is
 
 ## Sample App
 An example running LoopBack with this module: https://github.com/globocom/loopback-jsonschema-example
