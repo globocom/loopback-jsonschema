@@ -7,12 +7,9 @@ var JsonSchemaLinks = require('../../../lib/models/json-schema-links');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
+app.set('restApiRoot', '/api');
 
 describe('JsonSchemaLinks', function() {
-    beforeEach(function() {
-        app.set('restApiRoot', '/api');
-    });
-
     describe('#onRequest', function() {
         var req;
 

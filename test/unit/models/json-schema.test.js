@@ -7,13 +7,13 @@ var JsonSchema = require('../../../lib/models/json-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
+app.set('restApiRoot', '/api');
 
 describe('JsonSchema', function() {
     describe('#addHeaders', function() {
         var req;
 
         beforeEach(function() {
-            app.set('restApiRoot', '/api');
             req = { body: {}, url: '/cars/mercedes' };
         });
 
