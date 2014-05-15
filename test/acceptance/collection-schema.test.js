@@ -10,15 +10,13 @@ var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware'
 
 var app = loopback();
 app.set('restApiRoot', '/api');
+loopbackJsonSchema.initLoopbackJsonSchema(app);
 
 describe('collection-schema', function() {
-    beforeEach(function() {
-        loopbackJsonSchema.initLoopbackJsonSchema(app);
-    });
-
     describe('GET /collection-schemas/:schemaId', function () {
        describe('when ItemSchema exists', function () {
             var jsonSchemaId;
+
             beforeEach(function (done) {
                 JsonSchema.create({ modelName: 'person', collectionName: 'people', title: 'Person', type: 'object', properties: {}  }, function(err, jsonSchema) {
                     if (err) { throw err };
