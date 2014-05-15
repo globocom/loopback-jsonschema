@@ -15,15 +15,15 @@ clean:
 	rm -rf node_modules
 
 TESTER = ./node_modules/.bin/mocha
-OPTS = -G
+OPTS = -G --recursive
 TESTS = test/**/*.test.js
 
 test:
-	$(TESTER) $(OPTS) $(TESTS)
+	$(TESTER) $(OPTS) "$(TESTS)"
 test-verbose:
-	$(TESTER) $(OPTS) --reporter spec $(TESTS)
+	$(TESTER) $(OPTS) --reporter spec "$(TESTS)"
 testing:
-	$(TESTER) $(OPTS) --watch $(TESTS)
+	$(TESTER) $(OPTS) --watch "$(TESTS)"
 
 .PHONY: test
 
