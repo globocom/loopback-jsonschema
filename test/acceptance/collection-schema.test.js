@@ -18,21 +18,28 @@ describe('collection-schema', function() {
             var jsonSchemaId;
 
             beforeEach(function (done) {
-                JsonSchema.create({ modelName: 'person', collectionName: 'people', title: 'Person', type: 'object', properties: {}  }, function(err, jsonSchema) {
+                JsonSchema.create({
+                    modelName: 'person',
+                    collectionName: 'people',
+                    title: 'Person',
+                    collectionTitle: 'People',
+                    type: 'object',
+                    properties: {}
+                }, function(err, jsonSchema) {
                     if (err) { throw err };
                     jsonSchemaId = jsonSchema.id;
                     done();
                 });
             });
 
-            xit('should return Collection schema', function (done) {
+            it('should return Collection schema', function (done) {
                 request(app)
                     .get('/api/collection-schemas/' + jsonSchemaId)
                     .expect(200)
                     .end(function (err, res) {
                         if (err) { throw err };
 
-                        expect(res.body).to.not.be.emtpy;
+                        expect(res.body).to.not.be.empty;
                         expect(res.body).to.include.keys(['$schema', 'title', 'type', 'items']);
                         done();
                     });

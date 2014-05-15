@@ -18,9 +18,15 @@ describe('CollectionSchema', function() {
             var itemSchema;
 
             beforeEach(function (done) {
-                JsonSchema.create({ modelName: 'person', collectionName: 'people', title: 'Person', type: 'object', properties: {}  }, function(err, jsonSchema) {
+                JsonSchema.create({
+                    modelName: 'person',
+                    collectionName: 'people',
+                    title: 'Person',
+                    collectionTitle: 'People',
+                    type: 'object',
+                    properties: {}
+                }, function(err, jsonSchema) {
                     if (err) { throw err };
-
                     itemSchema = jsonSchema;
                     done();
                 });
@@ -41,7 +47,7 @@ describe('CollectionSchema', function() {
                 var collectionSchema = new CollectionSchema(itemSchema.id);
 
                 var callback = function(err, data){
-                    expect(data.items.$ref).to.eq("itemSchema");
+                    expect(data.items.$ref).to.eq('itemSchema');
                     done();
                 };
 
