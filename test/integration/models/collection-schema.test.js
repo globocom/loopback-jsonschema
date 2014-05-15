@@ -26,22 +26,22 @@ describe('CollectionSchema', function() {
                 });
             });
 
-            it('should include type object', function (done) {
+            it('should include type array', function (done) {
                 var collectionSchema = new CollectionSchema(itemSchema.id);
 
                 var callback = function(err, data){
-                    expect(data.type).to.eq('object');
+                    expect(data.type).to.eq('array');
                     done();
                 };
 
                 collectionSchema.data(callback);
             });
 
-            it('should include properties', function (done) {
+            it('should include "items" key pointing to itemSchema url', function (done) {
                 var collectionSchema = new CollectionSchema(itemSchema.id);
 
                 var callback = function(err, data){
-                    expect(data).to.include.keys('properties');
+                    expect(data.items.$ref).to.eq("itemSchema");
                     done();
                 };
 
@@ -65,7 +65,7 @@ describe('CollectionSchema', function() {
                 var collectionSchema = new CollectionSchema(itemSchema.id);
 
                 var callback = function(err, data){
-                    expect(data.title).to.eq(itemSchema.title);
+                    expect(data.title).to.eq(itemSchema.collectionTitle);
                     done();
                 };
 

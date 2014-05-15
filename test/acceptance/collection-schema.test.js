@@ -25,7 +25,7 @@ describe('collection-schema', function() {
                 });
             });
 
-            it('should return Collection schema', function (done) {
+            xit('should return Collection schema', function (done) {
                 request(app)
                     .get('/api/collection-schemas/' + jsonSchemaId)
                     .expect(200)
@@ -33,7 +33,7 @@ describe('collection-schema', function() {
                         if (err) { throw err };
 
                         expect(res.body).to.not.be.emtpy;
-                        expect(res.body).to.include.keys(['$schema', 'title', 'type', 'properties']);
+                        expect(res.body).to.include.keys(['$schema', 'title', 'type', 'items']);
                         done();
                     });
             });
