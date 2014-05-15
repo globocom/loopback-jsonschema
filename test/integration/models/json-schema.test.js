@@ -17,7 +17,8 @@ describe('JsonSchema', function() {
 
     describe('.findOne', function() {
         beforeEach(function(done) {
-            JsonSchema.create({modelName: 'test'}, function() {
+            JsonSchema.create({modelName: 'test'}, function(err, instance) {
+                if (err) { throw err };
                 done();
             });
         });
