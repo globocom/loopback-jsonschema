@@ -63,6 +63,7 @@ describe('collection-schema', function() {
         });
     });
 
+    // TODO: Should this test be here? (collection-schema.test)
     describe('GET /collection', function () {
        describe('when collection exists', function () {
             var jsonSchemaId;
@@ -82,6 +83,7 @@ describe('collection-schema', function() {
                 });
             });
 
+            // TODO: Should this test be here? (collection-schema.test)
             xit('should add collection schema url in the header', function (done) {
                 request(app)
                     .get('/api/people')
