@@ -11,7 +11,7 @@ var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
-loopbackJsonSchema.initLoopbackJsonSchema(app);
+loopbackJsonSchema.init(app);
 
 describe('CollectionSchema', function() {
 

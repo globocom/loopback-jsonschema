@@ -15,7 +15,7 @@ app.installMiddleware();
 
 describe('json-schema.middleware', function() {
     beforeEach(function() {
-        loopbackJsonSchema.initLoopbackJsonSchema(app);
+        loopbackJsonSchema.init(app);
     });
 
     it('should register a json-schema', function (done) {

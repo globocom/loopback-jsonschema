@@ -11,7 +11,7 @@ var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware'
 var app = loopback();
 app.set('restApiRoot', '/api');
 app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
-loopbackJsonSchema.initLoopbackJsonSchema(app);
+loopbackJsonSchema.init(app);
 app.installMiddleware();
 
 describe('collection-schema', function() {

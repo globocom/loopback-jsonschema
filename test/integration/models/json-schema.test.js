@@ -12,7 +12,7 @@ var app = loopback();
 
 describe('JsonSchema', function() {
     beforeEach(function() {
-        loopbackJsonSchema.initLoopbackJsonSchema(app);
+        loopbackJsonSchema.init(app);
     });
 
     describe('.findOne', function() {

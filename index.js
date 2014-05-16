@@ -8,7 +8,7 @@ var JsonSchema = require('./lib/models/json-schema');
 var jsonSchemaRoutes = require('./lib/config/json-schema-routes');
 var jsonSchemaMiddleware = require('./lib/middleware/json-schema.middleware');
 
-loopbackJsonSchema.initLoopbackJsonSchema = function(app, customConfig) {
+loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
 
     var db = dataSource(app);
