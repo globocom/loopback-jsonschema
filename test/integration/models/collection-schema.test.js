@@ -6,6 +6,8 @@ var loopback = require('loopback');
 var loopbackJsonSchema = require('../../../index');
 var JsonSchema = require('../../../lib/models/json-schema');
 var CollectionSchema = require('../../../lib/models/collection-schema');
+var LJSRequest = require('../../../lib/models/ljs-request');
+
 
 var app = loopback();
 app.set('restApiRoot', '/api');
@@ -30,10 +32,15 @@ describe('CollectionSchema', function() {
                     itemSchema = jsonSchema;
                     done();
                 });
+
+                req = { body: 'body', protocol: 'http', url: '/people/alice' };
+                req.get = this.sinon.stub();
+                req.get.withArgs('Host').returns('example.org');
+                this.ljsReq = new LJSRequest(req, app);
             });
 
             it('should include type array', function (done) {
-                var collectionSchema = new CollectionSchema(itemSchema.id);
+                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
 
                 var callback = function(err, data){
                     expect(data.type).to.eq('array');
@@ -44,10 +51,10 @@ describe('CollectionSchema', function() {
             });
 
             it('should include "items" key pointing to itemSchema url', function (done) {
-                var collectionSchema = new CollectionSchema(itemSchema.id);
+                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
 
                 var callback = function(err, data){
-                    expect(data.items.$ref).to.eq('itemSchema');
+                    expect(data.items.$ref).to.eq('http://example.org/api/json-schemas/' + itemSchema.id);
                     done();
                 };
 
@@ -55,8 +62,9 @@ describe('CollectionSchema', function() {
             });
 
             it('should include $schema from ItemSchema', function (done) {
+                var self = this;
                 JsonSchema.findById(itemSchema.id, function(err, itemSchema){
-                    var collectionSchema = new CollectionSchema(itemSchema.id);
+                    var collectionSchema = new CollectionSchema(self.ljsReq, itemSchema.id);
 
                     var callback = function(err, data){
                         expect(data.$schema).to.eq(itemSchema.$schema);
@@ -68,7 +76,7 @@ describe('CollectionSchema', function() {
             });
 
             it('should use the property "collectionTitle" from ItemSchema as title', function (done) {
-                var collectionSchema = new CollectionSchema(itemSchema.id);
+                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
 
                 var callback = function(err, data){
                     expect(data.title).to.eq(itemSchema.collectionTitle);
@@ -81,7 +89,7 @@ describe('CollectionSchema', function() {
 
         describe('when ItemSchema is not found', function() {
             it('should return empty data', function (done) {
-                var collectionSchema = new CollectionSchema('invalid-id');
+                var collectionSchema = new CollectionSchema(this.ljsReq, 'invalid-id');
 
                 var callback = function(err, data){
                     expect(data).to.be.empty;
