@@ -18,7 +18,7 @@ describe('JsonSchema', function() {
         });
 
         it('should add headers', function () {
-            var ljsReq = new LJSRequest(req);
+            var ljsReq = new LJSRequest(req, app);
             var baseUrl = 'http://example.org/api';
             this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
 

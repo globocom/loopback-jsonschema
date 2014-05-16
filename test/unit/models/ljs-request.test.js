@@ -24,10 +24,10 @@ describe('LJSRequest', function() {
 
     describe('#schemeAndAuthority', function() {
         beforeEach(function() {
-            req = { protocol: 'http', url: '/cars/mercedes' };
+            req = { protocol: 'http', app:{}, url: '/cars/mercedes' };
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
-            ljsReq = new LJSRequest(req);
+            ljsReq = new LJSRequest(req, req.app);
         });
 
         it("should return inner request's scheme and authority concatenated together", function() {
@@ -41,7 +41,7 @@ describe('LJSRequest', function() {
             req.app.get = this.sinon.stub().returns('/api');;
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
-            ljsReq = new LJSRequest(req);
+            ljsReq = new LJSRequest(req, req.app);
         });
 
         it("should return inner request's scheme, authority and api rest concatenated together", function() {

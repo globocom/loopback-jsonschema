@@ -20,7 +20,7 @@ describe('instance.service', function() {
         req.get = this.sinon.stub();
         req.get.withArgs('Host').returns('example.org');
 
-        ljsReq = new LJSRequest(req);
+        ljsReq = new LJSRequest(req, app);
         var res = { set: function () {} };
         this.sinon.stub(res, "set");
 
