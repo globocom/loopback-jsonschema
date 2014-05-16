@@ -1,11 +1,16 @@
 module.exports = loopbackJsonSchema = {};
 
+var _ = require('underscore');
 var loopback = require('loopback');
+
+var config = require('./lib/support/config');
 var JsonSchema = require('./lib/models/json-schema');
 var jsonSchemaRoutes = require('./lib/config/json-schema-routes');
 var jsonSchemaMiddleware = require('./lib/middleware/json-schema.middleware');
 
-loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
+loopbackJsonSchema.initLoopbackJsonSchema = function(app, customConfig) {
+    _.extend(config, customConfig);
+
     var db = dataSource(app);
     JsonSchema.attachTo(db);
 
@@ -17,7 +22,6 @@ loopbackJsonSchema.initLoopbackJsonSchema = function(app) {
 
     jsonSchemaRoutes.draw(app);
 };
-
 
 function dataSource (app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
