@@ -17,7 +17,7 @@ describe('JsonSchemaLinks', function() {
             beforeEach(function() {
                 req = { body: { collectionName: 'people' }, url: '/cars/mercedes' };
 
-                var ljsReq = new LJSRequest(req);
+                var ljsReq = new LJSRequest(req, app);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
                 var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
@@ -42,7 +42,7 @@ describe('JsonSchemaLinks', function() {
                     url: '/cars/mercedes'
                 };
 
-                var ljsReq = new LJSRequest(req);
+                var ljsReq = new LJSRequest(req, app);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
                 var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
@@ -64,7 +64,7 @@ describe('JsonSchemaLinks', function() {
         var req, result;
 
         var onResponse = function(req, result) {
-            var ljsReq = new LJSRequest(req);
+            var ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
             var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
