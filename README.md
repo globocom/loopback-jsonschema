@@ -134,24 +134,36 @@ Connection: keep-alive
 }
 ```
 
+### Default links
+
+Item and collection schemas have a default set of links which correspond to the basic CRUD operations supported by Loopback.
+
+### Including custom links
+
+It is possible to include custom links in an item schema. To do so, just include them in the `links` property of the schema used to define a Loopback model:
+
+```
+{
+  "type": "object",
+  ...
+  "properties": {
+    ...
+  },
+  "links": [
+    {
+      "rel": "my-custom-link",
+      "href": "http://example.org/my/custom/link"
+    } 
+  ]
+}
+```
+
 ### Instance/Schema correlation
 
 Every request for an instance is automatically correlated to its schema according to the [recommendation of the JSON Schema spec](http://json-schema.org/latest/json-schema-core.html#anchor33).
 
-## Schema Links
-
-### Default Links ("self", "item", "update", "delete")
-
-Never are persisted. They are built considering the requested host and collectionName of the model.
-
-### Custom Links
-
-Always are persisted. There are two possible scenarios.
-
-a) when they are relatives, links are built considering the requested host
-b) when they are absolut, links are delivered as it is
-
 ## Sample App
+
 An example running LoopBack with this module: https://github.com/globocom/loopback-jsonschema-example
 
 ## Disclaimer
