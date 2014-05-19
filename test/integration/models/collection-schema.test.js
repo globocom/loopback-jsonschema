@@ -16,9 +16,14 @@ loopbackJsonSchema.init(app);
 describe('CollectionSchema', function() {
     describe('#data', function() {
         describe('when ItemSchema is found', function() {
-            var itemSchema;
+            var collectionSchema, itemSchemaId;
 
             beforeEach(function (done) {
+                var req = { body: 'body', protocol: 'http', url: '/people/alice' };
+                req.get = this.sinon.stub();
+                req.get.withArgs('Host').returns('example.org');
+                var ljsReq = new LJSRequest(req, app);
+
                 JsonSchema.create({
                     modelName: 'person',
                     collectionName: 'people',
@@ -26,22 +31,16 @@ describe('CollectionSchema', function() {
                     collectionTitle: 'People',
                     type: 'object',
                     properties: {}
-                }, function(err, jsonSchema) {
+                }, function(err, itemSchema) {
                     if (err) { throw err };
-                    itemSchema = jsonSchema;
+                    itemSchemaId = itemSchema.id;
+                    collectionSchema = new CollectionSchema(ljsReq, itemSchema.id);
                     done();
                 });
-
-                req = { body: 'body', protocol: 'http', url: '/people/alice' };
-                req.get = this.sinon.stub();
-                req.get.withArgs('Host').returns('example.org');
-                this.ljsReq = new LJSRequest(req, app);
             });
 
             it('should include type array', function (done) {
-                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
-
-                var callback = function(err, data){
+                var callback = function(err, data) {
                     expect(data.type).to.eq('array');
                     done();
                 };
@@ -50,10 +49,8 @@ describe('CollectionSchema', function() {
             });
 
             it('should include "items" key pointing to itemSchema url', function (done) {
-                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
-
-                var callback = function(err, data){
-                    expect(data.items.$ref).to.eq('http://example.org/api/json-schemas/' + itemSchema.id);
+                var callback = function(err, data) {
+                    expect(data.items.$ref).to.eq('http://example.org/api/json-schemas/' + itemSchemaId);
                     done();
                 };
 
@@ -61,34 +58,37 @@ describe('CollectionSchema', function() {
             });
 
             it('should include $schema from ItemSchema', function (done) {
-                var self = this;
-                JsonSchema.findById(itemSchema.id, function(err, itemSchema){
-                    var collectionSchema = new CollectionSchema(self.ljsReq, itemSchema.id);
-
-                    var callback = function(err, data){
-                        expect(data.$schema).to.eq(itemSchema.$schema);
-                        done();
-                    };
-
-                    collectionSchema.data(callback);
-                });
-            });
-
-            it('should use the property "collectionTitle" from ItemSchema as title', function (done) {
-                var collectionSchema = new CollectionSchema(this.ljsReq, itemSchema.id);
-
-                var callback = function(err, data){
-                    expect(data.title).to.eq(itemSchema.collectionTitle);
+                var callback = function(err, data) {
+                    expect(data.$schema).to.eq('http://json-schema.org/draft-04/hyper-schema#');
                     done();
                 };
 
+                collectionSchema.data(callback);
+            });
+
+            it('should use the property "collectionTitle" from ItemSchema as title', function (done) {
+                var callback = function(err, data){
+                    expect(data.title).to.eq('People');
+                    done();
+                };
+
+                collectionSchema.data(callback);
+            });
+
+            it('should include links', function(done) {
+                var callback = function(err, data) {
+                    expect(data.links).to.eql([
+                        { rel: 'self', href: 'http://example.org/api/collection-schemas/' + itemSchemaId }
+                    ]);
+                    done();
+                }
                 collectionSchema.data(callback);
             });
         });
 
         describe('when ItemSchema is not found', function() {
             it('should return empty data', function (done) {
-                var collectionSchema = new CollectionSchema(this.ljsReq, 'invalid-id');
+                var collectionSchema = new CollectionSchema(undefined, 'invalid-id');
 
                 var callback = function(err, data){
                     expect(data).to.be.empty;
@@ -101,7 +101,6 @@ describe('CollectionSchema', function() {
     });
 
     it('has a pluraModelName property', function () {
-        var collectionSchema = new CollectionSchema({}, {});
-        expect(collectionSchema.pluralModelName).to.eql('collection-schemas');
+        expect(CollectionSchema.pluralModelName).to.eql('collection-schemas');
     });
 });
