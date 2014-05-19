@@ -14,7 +14,6 @@ app.set('restApiRoot', '/api');
 loopbackJsonSchema.init(app);
 
 describe('CollectionSchema', function() {
-
     describe('#data', function() {
         describe('when ItemSchema is found', function() {
             var itemSchema;
@@ -99,5 +98,10 @@ describe('CollectionSchema', function() {
                 collectionSchema.data(callback);
             });
         });
+    });
+
+    it('has a pluraModelName property', function () {
+        var collectionSchema = new CollectionSchema({}, {});
+        expect(collectionSchema.pluralModelName).to.eql('collection-schemas');
     });
 });
