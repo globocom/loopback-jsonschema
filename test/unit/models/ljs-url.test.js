@@ -5,6 +5,28 @@ var expect = require('chai').expect;
 var LJSUrl = require('../../../lib/models/ljs-url');
 
 describe('LJSUrl', function() {
+    describe('#isCollection', function () {
+        describe('when url represents a collection', function () {
+            beforeEach(function() {
+                this.ljsUrl = new LJSUrl('http://example.org/api/people');
+            });
+
+            it('should return true', function () {
+                expect(this.ljsUrl.isCollection()).to.be.true;
+            });
+        });
+
+        describe('when url represents an item', function () {
+            beforeEach(function() {
+                this.ljsUrl = new LJSUrl('http://example.org/api/people/1');
+            });
+
+            it('should return false', function () {
+                expect(this.ljsUrl.isCollection()).to.be.false;
+            });
+        });
+    });
+
     describe('.buildFromModel', function() {
         beforeEach(function() {
             var jsonSchema = {
@@ -34,28 +56,13 @@ describe('LJSUrl', function() {
     });
 
     describe('.buildFromRequest', function() {
-        describe('#isCollection', function () {
-            describe('collection url', function () {
-                beforeEach(function() {
-                    this.ljsReq = { fullUrl: this.sinon.stub().returns('http://example.org/api/people') };
-                });
+        beforeEach(function() {
+            var ljsReq = { fullUrl: this.sinon.stub().returns('http://example.org/api/people') };
+            this.ljsUrl = LJSUrl.buildFromRequest(ljsReq);
+        });
 
-                it('should return true', function () {
-                    ljsUrl = LJSUrl.buildFromRequest(this.ljsReq);
-                    expect(ljsUrl.isCollection()).to.be.true;
-                });
-            });
-
-            describe('item url', function () {
-                beforeEach(function() {
-                    this.ljsReq = { fullUrl: this.sinon.stub().returns('http://example.org/api/people/1') };
-                });
-
-                it('should return false', function () {
-                    ljsUrl = LJSUrl.buildFromRequest(this.ljsReq);
-                    expect(ljsUrl.isCollection()).to.be.false;
-                });
-            });
+        it("should return request's url", function () {
+            expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
         });
     });
 });
