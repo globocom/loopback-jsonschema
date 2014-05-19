@@ -29,29 +29,20 @@ describe('LJSUrl', function() {
 
     describe('.buildFromModel', function() {
         beforeEach(function() {
-            var jsonSchema = {
+            var myModel = {
                 id: 1,
                 constructor: {
-                    pluralModelName: 'json-schemas'
+                    pluralModelName: 'my-models'
                 }
             };
 
-            var ljsReq = { };
+            var ljsReq = {};
             ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
-
-            this.ljsUrl = LJSUrl.buildFromModel(ljsReq, jsonSchema);
+            this.ljsUrl = LJSUrl.buildFromModel(ljsReq, myModel);
         });
 
-        it('should return an instance of LJSUrl', function() {
-            expect(this.ljsUrl).to.be.an.instanceof(LJSUrl);
-        });
-
-        describe('#url', function () {
-            it('should return the resource schema url', function() {
-                var schemaUrl = this.ljsUrl.url;
-
-                expect(schemaUrl).to.eq('http://example.org/api/json-schemas/1');
-            });
+        it('should build url from given model', function() {
+            expect(this.ljsUrl.url).to.eq('http://example.org/api/my-models/1');
         });
     });
 
@@ -61,7 +52,7 @@ describe('LJSUrl', function() {
             this.ljsUrl = LJSUrl.buildFromRequest(ljsReq);
         });
 
-        it("should return request's url", function () {
+        it('should build url from given request', function () {
             expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
         });
     });
