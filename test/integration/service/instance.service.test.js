@@ -16,15 +16,12 @@ describe('instance.service', function() {
     var instanceService, ljsReq;
 
     beforeEach(function() {
-        var req = { body: 'body', protocol: 'http', url: '/people', app: app };
-        req.get = this.sinon.stub();
-        req.get.withArgs('Host').returns('example.org');
+        var req = { body: 'body', protocol: 'http', url: '/people', app: app, get: this.sinon.stub() };
 
         ljsReq = new LJSRequest(req, app);
-        var res = { set: function () {} };
-        this.sinon.stub(res, "set");
+        this.res = { set: this.sinon.stub() };
 
-        instanceService = new InstanceService(ljsReq, res);
+        instanceService = new InstanceService(ljsReq, this.res);
     });
 
     describe('#build', function() {
@@ -56,5 +53,49 @@ describe('instance.service', function() {
 
             instanceService.build(next);
         });
+    });
+
+    describe('#addHeaders', function() {
+        var itemSchema, baseUrl;
+
+        beforeEach(function (done) {
+            JsonSchema.create({
+                modelName: 'person',
+                collectionName: 'people',
+                title: 'Person',
+                collectionTitle: 'People',
+                type: 'object',
+                properties: {}
+            }, function(err, jsonSchema) {
+                if (err) { throw err };
+                itemSchema = jsonSchema;
+                done();
+            });
+
+            baseUrl = 'http://example.org/api';
+            this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
+        });
+
+        describe('when accessing an item', function() {
+            it('should use json-schemas collection', function () {
+                ljsReq.resourceId = itemSchema.id;
+                instanceService.addHeaders(ljsReq, this.res, itemSchema);
+
+                expect(this.res.set).to.have.been.called.twice;
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/json-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
+            });
+        });
+
+        describe('when accessing a collection', function() {
+            it('should use collection-schemas collection', function () {
+                instanceService.addHeaders(ljsReq, this.res, itemSchema);
+
+                expect(this.res.set).to.have.been.called.twice;
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/collection-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + baseUrl + '/collection-schemas/' + itemSchema.id + '>; rel=describedby');
+            });
+        });
+
     });
 });

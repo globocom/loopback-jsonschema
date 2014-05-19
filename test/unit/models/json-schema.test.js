@@ -10,31 +10,6 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('JsonSchema', function() {
-    describe('#addHeaders', function() {
-        var req;
-
-        beforeEach(function() {
-            req = { body: {}, url: '/cars/mercedes' };
-        });
-
-        it('should add headers', function () {
-            var ljsReq = new LJSRequest(req, app);
-            var baseUrl = 'http://example.org/api';
-            this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
-
-            var res = { set: function () {}};
-            this.sinon.stub(res, "set");
-
-            var jsonSchema = new JsonSchema({ id: 123 });
-
-            jsonSchema.addHeaders(ljsReq, res);
-
-            expect(res.set).to.have.been.called.twice;
-            expect(res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile="+ baseUrl +"/json-schemas/123");
-            expect(res.set).to.have.been.calledWith('Link', '<' + baseUrl +'/json-schemas/123>; rel=describedby');
-        });
-    });
-
     describe('#update$schema', function() {
         it('should set $schema to hyper-schema draft-04 by default', function() {
             var jsonSchema = new JsonSchema();

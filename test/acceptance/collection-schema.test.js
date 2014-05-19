@@ -62,41 +62,4 @@ describe('collection-schema', function() {
             });
         });
     });
-
-    // TODO: Should this test be here? (collection-schema.test)
-    describe('GET /collection', function () {
-       describe('when collection exists', function () {
-            var jsonSchemaId;
-
-            beforeEach(function (done) {
-                JsonSchema.create({
-                    modelName: 'person',
-                    collectionName: 'people',
-                    title: 'Person',
-                    collectionTitle: 'People',
-                    type: 'object',
-                    properties: {}
-                }, function(err, jsonSchema) {
-                    if (err) { throw err };
-                    jsonSchemaId = jsonSchema.id;
-                    done();
-                });
-            });
-
-            // TODO: Should this test be here? (collection-schema.test)
-            xit('should add collection schema url in the header', function (done) {
-                request(app)
-                    .get('/api/people')
-                    .expect(200)
-                    .end(function (err, res) {
-                        if (err) { throw err };
-
-                        expect(res.headers['content-type']).to.match(/^application\/json; charset=utf-8; profile=.*\/api\/collecion-schemas\/.*/);
-                        expect(res.headers['link']).to.exist;
-                        done();
-                    });
-            });
-        });
-    });
-
 });
