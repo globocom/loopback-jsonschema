@@ -48,4 +48,17 @@ describe('LJSRequest', function() {
             expect(ljsReq.baseUrl()).to.equal('http://example.org/api');
         });
     });
+
+    describe('#fullUrl', function() {
+        beforeEach(function() {
+            req = { protocol: 'http', app: {}, url: '/cars/mercedes', originalUrl: '/api/cars/mercedes' };
+            req.get = this.sinon.stub();
+            req.get.withArgs('Host').returns('example.org');
+            ljsReq = new LJSRequest(req, req.app);
+        });
+
+        it("should return full url", function() {
+            expect(ljsReq.fullUrl()).to.equal('http://example.org/api/cars/mercedes');
+        });
+    });
 });
