@@ -29,20 +29,32 @@ describe('LJSUrl', function() {
 
     describe('.buildFromModel', function() {
         beforeEach(function() {
-            var myModel = {
+            var person = {
                 id: 1,
                 constructor: {
-                    pluralModelName: 'my-models'
+                    pluralModelName: 'people'
                 }
             };
 
             var ljsReq = {};
             ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
-            this.ljsUrl = LJSUrl.buildFromModel(ljsReq, myModel);
+            this.ljsUrl = LJSUrl.buildFromModel(ljsReq, person);
         });
 
         it('should build url from given model', function() {
-            expect(this.ljsUrl.url).to.eq('http://example.org/api/my-models/1');
+            expect(this.ljsUrl.url).to.eq('http://example.org/api/people/1');
+        });
+    });
+
+    describe('.buildFromCollectionName', function() {
+        beforeEach(function() {
+            var ljsReq = {};
+            ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
+            this.ljsUrl = LJSUrl.buildFromCollectionName(ljsReq, 'people');
+        });
+
+        it('should build url from given collection name', function() {
+            expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
         });
     });
 
