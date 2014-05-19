@@ -5,28 +5,6 @@ var expect = require('chai').expect;
 var LJSUrl = require('../../../lib/models/ljs-url');
 
 describe('LJSUrl', function() {
-    describe('#isCollection', function () {
-        describe('when url represents a collection', function () {
-            beforeEach(function() {
-                this.ljsUrl = new LJSUrl('http://example.org/api/people');
-            });
-
-            it('should return true', function () {
-                expect(this.ljsUrl.isCollection()).to.be.true;
-            });
-        });
-
-        describe('when url represents an item', function () {
-            beforeEach(function() {
-                this.ljsUrl = new LJSUrl('http://example.org/api/people/1');
-            });
-
-            it('should return false', function () {
-                expect(this.ljsUrl.isCollection()).to.be.false;
-            });
-        });
-    });
-
     describe('.buildFromModel', function() {
         beforeEach(function() {
             var person = {
@@ -66,6 +44,28 @@ describe('LJSUrl', function() {
 
         it('should build url from given request', function () {
             expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
+        });
+    });
+
+    describe('#isCollection', function () {
+        describe('when url represents a collection', function () {
+            beforeEach(function() {
+                this.ljsUrl = new LJSUrl('http://example.org/api/people');
+            });
+
+            it('should return true', function () {
+                expect(this.ljsUrl.isCollection()).to.be.true;
+            });
+        });
+
+        describe('when url represents an item', function () {
+            beforeEach(function() {
+                this.ljsUrl = new LJSUrl('http://example.org/api/people/1');
+            });
+
+            it('should return false', function () {
+                expect(this.ljsUrl.isCollection()).to.be.false;
+            });
         });
     });
 });
