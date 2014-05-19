@@ -78,7 +78,7 @@ describe('CollectionSchema', function() {
             it('should include links', function(done) {
                 var callback = function(err, data) {
                     expect(data.links).to.eql([
-                        { rel: 'self', href: 'http://example.org/api/collection-schemas/' + itemSchemaId }
+                        { rel: 'self', href: 'http://example.org/api/people' }
                     ]);
                     done();
                 }
