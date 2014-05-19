@@ -23,6 +23,29 @@ loopbackJsonSchema.init(app);
 
 Add a `loopbackJsonSchemaDb` entry to the `datasources.json` file with your data source configuration. If no `loopbackJsonSchemaDb` entry is found, we fallback to using the default memory data source.
 
+### Overriding the default collection schema
+
+It is possible to override the default collection schema by passing a custom `CollectionSchema` implementation to the `init` function:
+
+```js
+loopbackJsonSchema.init(app, { CollectionSchemaClass: MyCustomCollectionSchema });
+```
+
+```js
+var util = require('util');
+var CollectionSchema = require('loopback-jsonschema/lib/models/collection-schema');
+
+function MyCustomCollectionSchema() {
+    CollectionSchema.apply(this, Array.prototype.slice.call(arguments));
+};
+
+util.inherits(BackstageCollectionSchema, CollectionSchema);
+
+# Override functions to customize the default collection schema.
+```
+
+Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/models/collection-schema.js for available functions to override.
+
 ## Using
 
 ### Dynamically defining Loopback models from a JSON Schema
