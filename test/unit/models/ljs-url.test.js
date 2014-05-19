@@ -16,7 +16,7 @@ describe('LJSUrl', function() {
         var ljsReq = { };
         ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
 
-        this.ljsUrl = LJSUrl.build(ljsReq, jsonSchema);
+        this.ljsUrl = LJSUrl.buildFromModel(ljsReq, jsonSchema);
     });
 
     describe('.build', function() {
@@ -27,7 +27,7 @@ describe('LJSUrl', function() {
 
     describe('#url', function () {
         it('should return the resource schema url', function() {
-            var schemaUrl = this.ljsUrl.url();
+            var schemaUrl = this.ljsUrl.url;
 
             expect(schemaUrl).to.eq('http://example.org/api/json-schemas/1');
         });
