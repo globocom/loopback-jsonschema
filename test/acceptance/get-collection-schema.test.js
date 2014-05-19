@@ -40,7 +40,7 @@ describe('GET /collection-schemas/:schemaId', function () {
                 .end(function (err, res) {
                     if (err) { throw err };
                     expect(res.body).to.not.be.empty;
-                    expect(res.body).to.include.keys(['$schema', 'title', 'type', 'items']);
+                    expect(res.body).to.include.keys(['$schema', 'title', 'type', 'items', 'links']);
                     done();
             });
         });
