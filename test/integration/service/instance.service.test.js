@@ -79,7 +79,7 @@ describe('instance.service', function() {
         describe('when accessing an item', function() {
             it('should use json-schemas collection', function () {
                 ljsReq.resourceId = itemSchema.id;
-                instanceService.addHeaders(ljsReq, this.res, itemSchema);
+                instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
                 expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/json-schemas/" + itemSchema.id);
@@ -89,7 +89,7 @@ describe('instance.service', function() {
 
         describe('when accessing a collection', function() {
             it('should use collection-schemas collection', function () {
-                instanceService.addHeaders(ljsReq, this.res, itemSchema);
+                instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
                 expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/collection-schemas/" + itemSchema.id);
