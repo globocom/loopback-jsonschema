@@ -34,6 +34,7 @@ To dynamically define a new Loopback model just create a new instance of the Jso
 {
   "type": "object",
   "title": "Person",
+  "collectionTitle": "People",
   "modelName": "person",
   "collectionName": "people",
   "properties": {
@@ -48,6 +49,10 @@ curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-s
 ```
 
 The people collection will then be available at `http://example.org/api/people`.
+
+### Correlating instances and schemas
+
+Every request for an instance is automatically correlated to its schema according to the [recommendation of the JSON Schema spec](http://json-schema.org/latest/json-schema-core.html#anchor33).
 
 ## Schema Links
 
