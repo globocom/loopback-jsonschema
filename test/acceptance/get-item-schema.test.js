@@ -24,7 +24,10 @@ describe('GET /item-schemas/:id', function() {
                 title: 'Person',
                 collectionTitle: 'People',
                 type: 'object',
-                properties: {}
+                properties: {},
+                links: [
+                    { rel: 'custom', href: '/custom' }
+                ]
             }, function(err, itemSchema) {
                 if (err) { throw err };
                 itemSchemaId = itemSchema.id;
@@ -79,70 +82,10 @@ describe('GET /item-schemas/:id', function() {
                     rel: 'delete',
                     method: 'DELETE',
                     href: schemeAndAuthority + '/api/people/{id}'
-                }
-            ]);
-        });
-    });
-
-    describe('when schema has custom links', function() {
-        before(function(done) {
-            JsonSchema.create({
-                modelName: 'person',
-                collectionName: 'people',
-                title: 'Person',
-                collectionTitle: 'People',
-                type: 'object',
-                properties: {},
-                links: [
-                    { rel: 'relative-custom', href: '/relative-custom' },
-                    { rel: 'absolute-custom', href: 'http://example.org/absolute-custom' }
-                ]
-            }, function(err, itemSchema) {
-                if (err) { throw err };
-                itemSchemaId = itemSchema.id;
-                done();
-            });
-        });
-
-        before(function(done) {
-            request(app)
-                .get('/api/json-schemas/' + itemSchemaId)
-                .expect(200)
-                .end(function(err, res) {
-                    if (err) { throw err };
-                    schemeAndAuthority = 'http://' + res.req._headers.host;
-                    itemSchema = res.body;
-                    done();
-                });
-        });
-
-        it('should include default and custom links', function() {
-            expect(itemSchema['links']).to.eql([
-                {
-                    rel: 'self',
-                    href: schemeAndAuthority + '/api/people/{id}'
                 },
                 {
-                    rel: 'item',
-                    href: schemeAndAuthority + '/api/people/{id}'
-                },
-                {
-                    rel: 'update',
-                    method: 'PUT',
-                    href: schemeAndAuthority + '/api/people/{id}'
-                },
-                {
-                    rel: 'delete',
-                    method: 'DELETE',
-                    href: schemeAndAuthority + '/api/people/{id}'
-                },
-                {
-                    rel: 'relative-custom',
-                    href: schemeAndAuthority + '/api/relative-custom'
-                },
-                {
-                    rel: 'absolute-custom',
-                    href: 'http://example.org/absolute-custom'
+                    rel: 'custom',
+                    href: schemeAndAuthority + '/api/custom'
                 }
             ]);
         });
