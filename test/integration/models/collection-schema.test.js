@@ -82,6 +82,7 @@ describe('CollectionSchema', function() {
                     ]);
                     done();
                 }
+
                 collectionSchema.data(callback);
             });
         });

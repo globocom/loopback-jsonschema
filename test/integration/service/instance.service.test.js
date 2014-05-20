@@ -13,19 +13,13 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('instance.service', function() {
-    var instanceService, ljsReq;
-
-    beforeEach(function() {
-        var req = { body: 'body', protocol: 'http', url: '/people', app: app, get: this.sinon.stub() };
-
-        ljsReq = new LJSRequest(req, app);
-        this.res = { set: this.sinon.stub() };
-
-        instanceService = new InstanceService(ljsReq, this.res);
-    });
-
     describe('#build', function() {
         beforeEach(function() {
+            var req = { body: 'body', protocol: 'http', url: '/people', app: app, get: this.sinon.stub() };
+            ljsReq = new LJSRequest(req, app);
+            this.res = { set: this.sinon.stub() };
+            this.instanceService = new InstanceService(ljsReq, this.res);
+
             this.sinon.stub(logger, 'info');
             this.sinon.stub(logger, 'warn');
         });
@@ -40,7 +34,7 @@ describe('instance.service', function() {
                 expect(Person.definition.settings.plural).to.equal('people');
                 done();
             };
-            instanceService.build(next);
+            this.instanceService.build(next);
 
             JsonSchema.remove({ modelName: 'person' });
         });
@@ -51,7 +45,7 @@ describe('instance.service', function() {
                 done();
             };
 
-            instanceService.build(next);
+            this.instanceService.build(next);
         });
     });
 
@@ -76,10 +70,19 @@ describe('instance.service', function() {
             this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
         });
 
-        describe('when accessing an item', function() {
-            it('should use json-schemas collection', function () {
-                ljsReq.resourceId = itemSchema.id;
-                instanceService.addHeaders(itemSchema);
+        describe('when url represents an item', function() {
+            beforeEach(function () {
+                var req = { protocol: 'http', app: app, url: '/people/' + itemSchema.id, originalUrl: '/api/people/' + itemSchema.id };
+                req.get = this.sinon.stub();
+                req.get.withArgs('Host').returns('example.org');
+                ljsReq = new LJSRequest(req, app);
+
+                this.res = { set: this.sinon.stub() };
+                this.instanceService = new InstanceService(ljsReq, this.res);
+            });
+
+            it('should build the url with "json-schemas"', function () {
+                this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
                 expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/json-schemas/" + itemSchema.id);
@@ -87,9 +90,20 @@ describe('instance.service', function() {
             });
         });
 
-        describe('when accessing a collection', function() {
+        describe('when url represents a collection', function() {
+            beforeEach(function () {
+                var req = { protocol: 'http', app: app, url: '/people', originalUrl: '/api/people' };
+                req.get = this.sinon.stub();
+                req.get.withArgs('Host').returns('example.org');
+                ljsReq = new LJSRequest(req, app);
+
+                this.res = { set: this.sinon.stub() };
+                this.instanceService = new InstanceService(ljsReq, this.res);
+            });
+
             it('should use collection-schemas collection', function () {
-                instanceService.addHeaders(itemSchema);
+
+                this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
                 expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/collection-schemas/" + itemSchema.id);
