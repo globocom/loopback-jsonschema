@@ -78,7 +78,18 @@ describe('CollectionSchema', function() {
             it('should include links', function(done) {
                 var callback = function(err, data) {
                     expect(data.links).to.eql([
-                        { rel: 'self', href: 'http://example.org/api/people' }
+                        {
+                            rel: 'self',
+                            href: 'http://example.org/api/people'
+                        },
+                        {
+                            rel: 'add',
+                            method: 'POST',
+                            href: 'http://example.org/api/people',
+                            schema: {
+                                $ref: 'http://example.org/api/json-schemas/' + itemSchemaId
+                            }
+                        }
                     ]);
                     done();
                 }
