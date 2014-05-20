@@ -16,9 +16,9 @@ app.installMiddleware();
 
 describe('GET /collection-schemas/:id', function () {
    describe('when corresponding item schema exists', function () {
-        var jsonSchemaId;
+        var itemSchema, itemSchemaId;
 
-        beforeEach(function (done) {
+        before(function (done) {
             JsonSchema.create({
                 modelName: 'person',
                 collectionName: 'people',
@@ -28,22 +28,57 @@ describe('GET /collection-schemas/:id', function () {
                 properties: {}
             }, function(err, jsonSchema) {
                 if (err) { throw err };
-                jsonSchemaId = jsonSchema.id;
+                itemSchemaId = jsonSchema.id;
                 done();
             });
         });
 
-        it('should return collection schema', function (done) {
+        before(function(done) {
+            console.log(itemSchemaId);
             request(app)
-                .get('/api/collection-schemas/' + jsonSchemaId)
+                .get('/api/collection-schemas/' + itemSchemaId)
                 .expect(200)
                 .end(function (err, res) {
                     if (err) { throw err };
-                    expect(res.body).to.not.be.empty;
-                    expect(res.body).to.include.keys(['$schema', 'title', 'type', 'items', 'links']);
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+                    itemSchema = res.body;
                     done();
             });
         });
+
+        it('should include $schema', function() {
+            expect(itemSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
+        });
+
+        it('should include type', function() {
+            expect(itemSchema['type']).to.eq('array');
+        });
+
+        it('should include title', function() {
+            expect(itemSchema['title']).to.eq('People');
+        });
+
+        it('should include properties', function() {
+            expect(itemSchema['properties']).to.be.undefined;
+        });
+
+        it('should include links', function() {
+            expect(itemSchema['links']).to.eql([
+                {
+                    rel: 'self',
+                    href: schemeAndAuthority + '/api/people'
+                },
+                {
+                    rel: 'add',
+                    method: 'POST',
+                    href: schemeAndAuthority + '/api/people',
+                    schema: {
+                        $ref: schemeAndAuthority + '/api/json-schemas/' + itemSchemaId
+                    }
+                }
+            ]);
+        });
+
     });
 
    describe('when corresponding item schema does not exist', function () {
