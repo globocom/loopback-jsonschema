@@ -40,6 +40,8 @@ function MyCustomCollectionSchema() {
 };
 
 util.inherits(BackstageCollectionSchema, CollectionSchema);
+// It's required to set the value of "pluralModelName". This value will be used on the headers. You can still use the default value (see below).
+BackstageCollectionSchema.pluralModelName = BackstageCollectionSchema.super_.pluralModelName;
 
 # Override functions to customize the default collection schema.
 ```
@@ -176,7 +178,7 @@ It is possible to include custom links in an item schema. To do so, just include
     {
       "rel": "my-custom-link",
       "href": "http://example.org/my/custom/link"
-    } 
+    }
   ]
 }
 ```
