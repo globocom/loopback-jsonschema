@@ -11,13 +11,10 @@ var jsonSchemaMiddleware = require('../../../lib/middleware/json-schema.middlewa
 var app = loopback();
 app.set('restApiRoot', '/api');
 app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
+loopbackJsonSchema.init(app);
 app.installMiddleware();
 
 describe('json-schema.middleware', function() {
-    beforeEach(function() {
-        loopbackJsonSchema.init(app);
-    });
-
     it('should register a json-schema model', function (done) {
         request(app)
             .post('/api/json-schemas')
