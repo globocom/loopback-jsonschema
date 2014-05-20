@@ -25,7 +25,10 @@ describe('GET /collection-schemas/:id', function () {
                 title: 'Person',
                 collectionTitle: 'People',
                 type: 'object',
-                properties: {}
+                properties: {},
+                collectionLinks: [
+                    { rel: 'custom', href: '/custom' }
+                ]
             }, function(err, itemSchema) {
                 if (err) { throw err };
                 collectionSchemaId = itemSchema.id;
@@ -74,68 +77,14 @@ describe('GET /collection-schemas/:id', function () {
                     schema: {
                         $ref: schemeAndAuthority + '/api/json-schemas/' + collectionSchemaId
                     }
+                },
+                {
+                    rel: 'custom',
+                    href: schemeAndAuthority + '/api/custom'
                 }
             ]);
         });
 
-    });
-
-    describe('when corresponding item schema has custom links', function() {
-        before(function (done) {
-            JsonSchema.create({
-                modelName: 'person',
-                collectionName: 'people',
-                title: 'Person',
-                collectionTitle: 'People',
-                type: 'object',
-                properties: {},
-                collectionLinks: [
-                    { rel: 'relative-custom', href: '/relative-custom' },
-                    { rel: 'absolute-custom', href: 'http://example.org/absolute-custom' }
-                ]
-            }, function(err, itemSchema) {
-                if (err) { throw err };
-                collectionSchemaId = itemSchema.id;
-                done();
-            });
-        });
-
-        before(function(done) {
-            request(app)
-                .get('/api/collection-schemas/' + collectionSchemaId)
-                .expect(200)
-                .end(function (err, res) {
-                    if (err) { throw err };
-                    schemeAndAuthority = 'http://' + res.req._headers.host;
-                    collectionSchema = res.body;
-                    done();
-            });
-        });
-
-        it('should include default and custom links', function() {
-            expect(collectionSchema['links']).to.eql([
-                {
-                    rel: 'self',
-                    href: schemeAndAuthority + '/api/people'
-                },
-                {
-                    rel: 'add',
-                    method: 'POST',
-                    href: schemeAndAuthority + '/api/people',
-                    schema: {
-                        $ref: schemeAndAuthority + '/api/json-schemas/' + collectionSchemaId
-                    }
-                },
-                {
-                    rel: 'relative-custom',
-                    href: schemeAndAuthority + '/api/relative-custom'
-                },
-                {
-                    rel: 'absolute-custom',
-                    href: 'http://example.org/absolute-custom'
-                }
-            ]);
-        });
     });
 
     describe('when corresponding item schema does not exist', function () {
