@@ -36,17 +36,6 @@ describe('LJSUrl', function() {
         });
     });
 
-    describe('.buildFromRequest', function() {
-        beforeEach(function() {
-            var ljsReq = { fullUrl: this.sinon.stub().returns('http://example.org/api/people') };
-            this.ljsUrl = LJSUrl.buildFromRequest(ljsReq);
-        });
-
-        it('should build url from given request', function () {
-            expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
-        });
-    });
-
     describe('#isCollection', function () {
         describe('when url represents a collection', function () {
             beforeEach(function() {

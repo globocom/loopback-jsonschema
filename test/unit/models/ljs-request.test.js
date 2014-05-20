@@ -3,13 +3,14 @@ require('../../support');
 var expect = require('chai').expect;
 
 var LJSRequest = require('../../../lib/models/ljs-request');
+var LJSUrl = require('../../../lib/models/ljs-url');
 
 describe('LJSRequest', function() {
     var ljsReq, req;
 
     describe('#properties', function() {
         beforeEach(function() {
-            req = { body: 'body', protocol: 'http', url: '/cars/mercedes' };
+            req = { body: 'body', protocol: 'http', url: '/people/1' };
             ljsReq = new LJSRequest(req);
         });
 
@@ -17,14 +18,14 @@ describe('LJSRequest', function() {
             expect(ljsReq.body).to.equal(req.body);
         });
 
-        it("should return 'cars' as collectionName", function() {
-            expect(ljsReq.collectionName).to.equal('cars');
+        it("should return 'people' as collectionName", function() {
+            expect(ljsReq.collectionName).to.equal('people');
         });
     });
 
     describe('#schemeAndAuthority', function() {
         beforeEach(function() {
-            req = { protocol: 'http', app:{}, url: '/cars/mercedes' };
+            req = { protocol: 'http', app:{}, url: '/people/1' };
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
             ljsReq = new LJSRequest(req, req.app);
@@ -37,7 +38,7 @@ describe('LJSRequest', function() {
 
     describe('#baseUrl', function() {
         beforeEach(function() {
-            req = { protocol: 'http', app: {}, url: '/cars/mercedes' };
+            req = { protocol: 'http', app: {}, url: '/people/1' };
             req.app.get = this.sinon.stub().returns('/api');;
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
@@ -51,14 +52,27 @@ describe('LJSRequest', function() {
 
     describe('#fullUrl', function() {
         beforeEach(function() {
-            req = { protocol: 'http', app: {}, url: '/cars/mercedes', originalUrl: '/api/cars/mercedes' };
+            req = { protocol: 'http', app: {}, url: '/people/1', originalUrl: '/api/people/1' };
             req.get = this.sinon.stub();
             req.get.withArgs('Host').returns('example.org');
             ljsReq = new LJSRequest(req, req.app);
         });
 
         it("should return full url", function() {
-            expect(ljsReq.fullUrl()).to.equal('http://example.org/api/cars/mercedes');
+            expect(ljsReq.fullUrl()).to.equal('http://example.org/api/people/1');
+        });
+    });
+
+    describe('#ljsUrl', function() {
+        beforeEach(function() {
+            req = { protocol: 'http', app: {}, url: '/people/1', originalUrl: '/api/people/1' };
+            req.get = this.sinon.stub();
+            req.get.withArgs('Host').returns('example.org');
+            ljsReq = new LJSRequest(req, req.app);
+        });
+
+        it('should build ljsUrl object from current request', function () {
+            expect(ljsReq.ljsUrl()).to.be.an.instanceof(LJSUrl)
         });
     });
 });
