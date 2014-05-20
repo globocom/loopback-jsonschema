@@ -16,7 +16,7 @@ describe('instance.service', function() {
     describe('#build', function() {
         beforeEach(function() {
             var req = { body: 'body', protocol: 'http', url: '/people', app: app, get: this.sinon.stub() };
-            ljsReq = new LJSRequest(req, app);
+            var ljsReq = new LJSRequest(req, app);
             this.res = { set: this.sinon.stub() };
             this.instanceService = new InstanceService(ljsReq, this.res);
 
@@ -50,7 +50,7 @@ describe('instance.service', function() {
     });
 
     describe('#addHeaders', function() {
-        var itemSchema, baseUrl;
+        var itemSchema;
 
         beforeEach(function (done) {
             JsonSchema.create({
@@ -66,8 +66,7 @@ describe('instance.service', function() {
                 done();
             });
 
-            baseUrl = 'http://example.org/api';
-            this.sinon.stub(ljsReq, 'baseUrl').returns(baseUrl);
+            this.baseUrl = 'http://example.org/api';
         });
 
         describe('when url represents an item', function() {
@@ -75,7 +74,7 @@ describe('instance.service', function() {
                 var req = { protocol: 'http', app: app, url: '/people/' + itemSchema.id, originalUrl: '/api/people/' + itemSchema.id };
                 req.get = this.sinon.stub();
                 req.get.withArgs('Host').returns('example.org');
-                ljsReq = new LJSRequest(req, app);
+                var ljsReq = new LJSRequest(req, app);
 
                 this.res = { set: this.sinon.stub() };
                 this.instanceService = new InstanceService(ljsReq, this.res);
@@ -85,8 +84,8 @@ describe('instance.service', function() {
                 this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
-                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/json-schemas/" + itemSchema.id);
-                expect(this.res.set).to.have.been.calledWith('Link', '<' + baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/json-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
             });
         });
 
@@ -95,7 +94,7 @@ describe('instance.service', function() {
                 var req = { protocol: 'http', app: app, url: '/people', originalUrl: '/api/people' };
                 req.get = this.sinon.stub();
                 req.get.withArgs('Host').returns('example.org');
-                ljsReq = new LJSRequest(req, app);
+                var ljsReq = new LJSRequest(req, app);
 
                 this.res = { set: this.sinon.stub() };
                 this.instanceService = new InstanceService(ljsReq, this.res);
@@ -106,8 +105,8 @@ describe('instance.service', function() {
                 this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
-                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + baseUrl + "/collection-schemas/" + itemSchema.id);
-                expect(this.res.set).to.have.been.calledWith('Link', '<' + baseUrl + '/collection-schemas/' + itemSchema.id + '>; rel=describedby');
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/collection-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/collection-schemas/' + itemSchema.id + '>; rel=describedby');
             });
         });
 
