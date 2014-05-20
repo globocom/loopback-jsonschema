@@ -46,4 +46,68 @@ describe('JsonSchemaLinks', function() {
             expect(allLinks[0]).to.eql({ rel: 'self', href: 'http://example.org/api' });
         });
     });
+
+    describe('#onRequest', function() {
+        var req;
+
+        describe('without custom links', function() {
+            beforeEach(function() {
+                req = { body: { collectionName: 'people' }, url: '/cars/mercedes' };
+
+                var ljsReq = new LJSRequest(req, app);
+                this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+
+                var defaultLinks = [
+                    { rel: 'self', href: null },
+                    { rel: 'item', href: null },
+                    { rel: 'update', method: 'PUT', href: null },
+                    { rel: 'delete', method: 'DELETE', href: null }
+                ];
+
+                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
+                jsonSchemaLinks.onRequest();
+            });
+
+            it('should persist empty array', function() {
+                expect(req.body.links).to.be.empty;
+            });
+        });
+
+        describe('with custom links', function() {
+            beforeEach(function() {
+                req = {
+                    body: {
+                        collectionName: 'people',
+                        links: [
+                            { rel: 'custom', href: 'http://example.org/api/people/custom' },
+                            { rel: 'item', href: 'http://example.org/api/people/override/item' }
+                        ]
+                    },
+                    url: '/cars/mercedes'
+                };
+
+                var ljsReq = new LJSRequest(req, app);
+                this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+
+                var defaultLinks = [
+                    { rel: 'self', href: null },
+                    { rel: 'item', href: null },
+                    { rel: 'update', method: 'PUT', href: null },
+                    { rel: 'delete', method: 'DELETE', href: null }
+                ];
+
+                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
+                jsonSchemaLinks.onRequest();
+            });
+
+            it('should include custom links', function() {
+                expect(req.body.links[0]).to.eql({ rel: 'custom', href: 'http://example.org/api/people/custom' });
+            });
+
+            it('should not allow overriding default links', function() {
+                expect(req.body.links).to.have.length(1);
+                expect(req.body.links[0]).to.eql({ rel: 'custom', href: 'http://example.org/api/people/custom' });
+            });
+        });
+    });
 });
