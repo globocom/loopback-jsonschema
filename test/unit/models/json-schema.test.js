@@ -10,6 +10,17 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('JsonSchema', function() {
+    describe('.defaultLinks', function() {
+        it('should return default links', function() {
+            expect(JsonSchema.defaultLinks()).to.eql([
+                { rel: 'self', href: null },
+                { rel: 'item', href: null },
+                { rel: 'update', method: 'PUT', href: null },
+                { rel: 'delete', method: 'DELETE', href: null }
+            ]);
+        });
+    });
+
     describe('#update$schema', function() {
         it('should set $schema to hyper-schema draft-04 by default', function() {
             var jsonSchema = new JsonSchema();

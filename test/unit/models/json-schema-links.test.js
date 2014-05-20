@@ -10,6 +10,24 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('JsonSchemaLinks', function() {
+    describe('#all', function() {
+        var allLinks;
+
+        beforeEach(function() {
+            var defaultLinks = [
+                { rel: 'self', href: 'http://example.org/api' }
+            ];
+            var links = new JsonSchemaLinks(null, defaultLinks);
+            allLinks = links.all();
+        });
+
+        it('should return all links', function() {
+            expect(allLinks).to.eql([
+                { rel: 'self', href: 'http://example.org/api' }
+            ])
+        });
+    });
+
     describe('#onRequest', function() {
         var req;
 
@@ -20,7 +38,14 @@ describe('JsonSchemaLinks', function() {
                 var ljsReq = new LJSRequest(req, app);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
-                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
+                var defaultLinks = [
+                    { rel: 'self', href: null },
+                    { rel: 'item', href: null },
+                    { rel: 'update', method: 'PUT', href: null },
+                    { rel: 'delete', method: 'DELETE', href: null }
+                ];
+
+                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
                 jsonSchemaLinks.onRequest();
             });
 
@@ -45,7 +70,14 @@ describe('JsonSchemaLinks', function() {
                 var ljsReq = new LJSRequest(req, app);
                 this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
-                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
+                var defaultLinks = [
+                    { rel: 'self', href: null },
+                    { rel: 'item', href: null },
+                    { rel: 'update', method: 'PUT', href: null },
+                    { rel: 'delete', method: 'DELETE', href: null }
+                ];
+
+                var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
                 jsonSchemaLinks.onRequest();
             });
 
@@ -67,7 +99,14 @@ describe('JsonSchemaLinks', function() {
             var ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
 
-            var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, app);
+            var defaultLinks = [
+                { rel: 'self', href: null },
+                { rel: 'item', href: null },
+                { rel: 'update', method: 'PUT', href: null },
+                { rel: 'delete', method: 'DELETE', href: null }
+            ];
+
+            var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
             jsonSchemaLinks.onResponse(result);
         };
 
