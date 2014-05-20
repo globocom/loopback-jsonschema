@@ -14,8 +14,8 @@ app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
 loopbackJsonSchema.init(app);
 app.installMiddleware();
 
-describe('GET /collection-schemas/:schemaId', function () {
-   describe('when item schema exists', function () {
+describe('GET /collection-schemas/:id', function () {
+   describe('when corresponding item schema exists', function () {
         var jsonSchemaId;
 
         beforeEach(function (done) {
@@ -33,7 +33,7 @@ describe('GET /collection-schemas/:schemaId', function () {
             });
         });
 
-        it('should return Collection schema', function (done) {
+        it('should return collection schema', function (done) {
             request(app)
                 .get('/api/collection-schemas/' + jsonSchemaId)
                 .expect(200)
@@ -46,7 +46,7 @@ describe('GET /collection-schemas/:schemaId', function () {
         });
     });
 
-   describe('when item schema does not exist', function () {
+   describe('when corresponding item schema does not exist', function () {
         it('should return 404', function (done) {
             request(app)
                 .get('/api/collection-schemas/invalid-schema-id')
