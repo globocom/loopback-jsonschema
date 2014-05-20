@@ -101,7 +101,7 @@ describe('instance.service', function() {
                 this.instanceService = new InstanceService(ljsReq, this.res);
             });
 
-            it('should use collection-schemas collection', function () {
+            it('should build the url with "collection-schemas"', function () {
 
                 this.instanceService.addHeaders(itemSchema);
 
