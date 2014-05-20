@@ -12,11 +12,14 @@ app.set('restApiRoot', '/api');
 describe('JsonSchema', function() {
     describe('.defaultLinks', function() {
         it('should return default links', function() {
-            expect(JsonSchema.defaultLinks()).to.eql([
-                { rel: 'self', href: null },
-                { rel: 'item', href: null },
-                { rel: 'update', method: 'PUT', href: null },
-                { rel: 'delete', method: 'DELETE', href: null }
+            var req = null;
+            var ljsReq = new LJSRequest(req, app);
+            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+            expect(JsonSchema.defaultLinks(ljsReq, 'people')).to.eql([
+                { rel: 'self', href: 'http://example.org/api/people/{id}' },
+                { rel: 'item', href: 'http://example.org/api/people/{id}' },
+                { rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' },
+                { rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' }
             ]);
         });
     });

@@ -22,7 +22,8 @@ describe('JsonSchemaLinks', function() {
             ];
             var customLinks = [
                 { rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' },
-                { rel: 'custom-relative', href: '/custom-relative' }
+                { rel: 'custom-relative', href: '/custom-relative' },
+                { rel: 'self', href: 'http://example.org/api/override/self' }
             ];
             var links = new JsonSchemaLinks(ljsReq, defaultLinks, customLinks);
             allLinks = links.all();
@@ -38,6 +39,11 @@ describe('JsonSchemaLinks', function() {
 
         it('should include custom relative links', function() {
             expect(allLinks[2]).to.eql({ rel: 'custom-relative', href: 'http://example.org/api/custom-relative' });
+        });
+
+        it('should not allow overriding default links', function() {
+            expect(allLinks).to.have.length(3);
+            expect(allLinks[0]).to.eql({ rel: 'self', href: 'http://example.org/api' });
         });
     });
 
@@ -101,103 +107,6 @@ describe('JsonSchemaLinks', function() {
             it('should not allow overriding default links', function() {
                 expect(req.body.links).to.have.length(1);
                 expect(req.body.links[0]).to.eql({ rel: 'custom', href: 'http://example.org/api/people/custom' });
-            });
-        });
-    });
-
-    describe('#onResponse', function() {
-        var req, result;
-
-        var onResponse = function(req, result) {
-            var ljsReq = new LJSRequest(req, app);
-            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-
-            var defaultLinks = [
-                { rel: 'self', href: null },
-                { rel: 'item', href: null },
-                { rel: 'update', method: 'PUT', href: null },
-                { rel: 'delete', method: 'DELETE', href: null }
-            ];
-
-            var jsonSchemaLinks = new JsonSchemaLinks(ljsReq, defaultLinks);
-            jsonSchemaLinks.onResponse(result);
-        };
-
-        describe('without result', function() {
-            beforeEach(function() {
-                req = { body: { }, url: '/cars/mercedes' };
-                result = undefined;
-
-                onResponse.call(this, req, result);
-            });
-
-            it('should not change anything', function() {
-                expect(result).to.be.undefined;
-            });
-        });
-
-        describe('without collectionName', function() {
-            beforeEach(function() {
-                req = { body: { }, url: '/cars/mercedes' };
-                result = {};
-
-                onResponse.call(this, req, result);
-            });
-
-            it('should not fill links', function() {
-                expect(result.links).to.be.undefined;
-            });
-        });
-
-        describe('without custom links', function() {
-            beforeEach(function() {
-                req = { body: { }, url: '/cars/mercedes' };
-                result = { "links" : null, collectionName: 'people' };
-
-                onResponse.call(this, req, result);
-            });
-
-            it('should include default links', function() {
-                expect(result.links[0]).to.eql({ rel: 'self', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[1]).to.eql({ rel: 'item', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[2]).to.eql({ rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[3]).to.eql({ rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' });
-            });
-        });
-
-        describe('with custom links', function() {
-            beforeEach(function() {
-                req = { body: { }, url: '/cars/mercedes' };
-                result = {
-                    links: [
-                            { rel: 'custom', href: 'http://example.org/api/people/custom' },
-                            { rel: 'customRelative', href: '/people/custom-relative' },
-                            { rel: 'item', href: 'http://example.org/api/people/override/item' }
-                        ],
-                    collectionName: 'people'
-                };
-
-                onResponse.call(this, req, result);
-            });
-
-            it('should include default links', function() {
-                expect(result.links[0]).to.eql({ rel: 'self', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[1]).to.eql({ rel: 'item', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[2]).to.eql({ rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' });
-                expect(result.links[3]).to.eql({ rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' });
-            });
-
-            it('should include custom links', function() {
-                expect(result.links[4]).to.eql({ rel: 'custom', href: 'http://example.org/api/people/custom' });
-            });
-
-            it('should not allow overriding default links', function() {
-                expect(result.links).to.have.length(6);
-                expect(result.links[1]).to.eql({ rel: 'item', href: 'http://example.org/api/people/{id}' });
-            });
-
-            it('should complete relative custom links with base url', function() {
-                expect(result.links[5]).to.eql({ rel: 'customRelative', href: 'http://example.org/api/people/custom-relative' });
             });
         });
     });
