@@ -37,7 +37,7 @@ describe('JsonSchemaLinks', function() {
             expect(allLinks[1]).to.eql({ rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' });
         });
 
-        it('should include custom relative links', function() {
+        it('should include custom relative links with base url added', function() {
             expect(allLinks[2]).to.eql({ rel: 'custom-relative', href: 'http://example.org/api/custom-relative' });
         });
 
