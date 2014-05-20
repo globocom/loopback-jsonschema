@@ -16,7 +16,7 @@ app.installMiddleware();
 
 describe('GET /collection-schemas/:id', function () {
    describe('when corresponding item schema exists', function () {
-        var itemSchema, itemSchemaId;
+        var collectionSchema, collectionSchemaId;
 
         before(function (done) {
             JsonSchema.create({
@@ -26,44 +26,43 @@ describe('GET /collection-schemas/:id', function () {
                 collectionTitle: 'People',
                 type: 'object',
                 properties: {}
-            }, function(err, jsonSchema) {
+            }, function(err, itemSchema) {
                 if (err) { throw err };
-                itemSchemaId = jsonSchema.id;
+                collectionSchemaId = itemSchema.id;
                 done();
             });
         });
 
         before(function(done) {
-            console.log(itemSchemaId);
             request(app)
-                .get('/api/collection-schemas/' + itemSchemaId)
+                .get('/api/collection-schemas/' + collectionSchemaId)
                 .expect(200)
                 .end(function (err, res) {
                     if (err) { throw err };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
-                    itemSchema = res.body;
+                    collectionSchema = res.body;
                     done();
             });
         });
 
         it('should include $schema', function() {
-            expect(itemSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
+            expect(collectionSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
         });
 
         it('should include type', function() {
-            expect(itemSchema['type']).to.eq('array');
+            expect(collectionSchema['type']).to.eq('array');
         });
 
         it('should include title', function() {
-            expect(itemSchema['title']).to.eq('People');
+            expect(collectionSchema['title']).to.eq('People');
         });
 
-        it('should include properties', function() {
-            expect(itemSchema['properties']).to.be.undefined;
+        it('should not include properties', function() {
+            expect(collectionSchema['properties']).to.be.undefined;
         });
 
         it('should include links', function() {
-            expect(itemSchema['links']).to.eql([
+            expect(collectionSchema['links']).to.eql([
                 {
                     rel: 'self',
                     href: schemeAndAuthority + '/api/people'
@@ -73,7 +72,7 @@ describe('GET /collection-schemas/:id', function () {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/json-schemas/' + itemSchemaId
+                        $ref: schemeAndAuthority + '/api/json-schemas/' + collectionSchemaId
                     }
                 }
             ]);
@@ -81,7 +80,65 @@ describe('GET /collection-schemas/:id', function () {
 
     });
 
-   describe('when corresponding item schema does not exist', function () {
+    describe('when corresponding item schema has custom links', function() {
+        before(function (done) {
+            JsonSchema.create({
+                modelName: 'person',
+                collectionName: 'people',
+                title: 'Person',
+                collectionTitle: 'People',
+                type: 'object',
+                properties: {},
+                collectionLinks: [
+                    { rel: 'relative-custom', href: '/relative-custom' },
+                    { rel: 'absolute-custom', href: 'http://example.org/absolute-custom' }
+                ]
+            }, function(err, itemSchema) {
+                if (err) { throw err };
+                collectionSchemaId = itemSchema.id;
+                done();
+            });
+        });
+
+        before(function(done) {
+            request(app)
+                .get('/api/collection-schemas/' + collectionSchemaId)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) { throw err };
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+                    collectionSchema = res.body;
+                    done();
+            });
+        });
+
+        it('should include default and custom links', function() {
+            expect(collectionSchema['links']).to.eql([
+                {
+                    rel: 'self',
+                    href: schemeAndAuthority + '/api/people'
+                },
+                {
+                    rel: 'add',
+                    method: 'POST',
+                    href: schemeAndAuthority + '/api/people',
+                    schema: {
+                        $ref: schemeAndAuthority + '/api/json-schemas/' + collectionSchemaId
+                    }
+                },
+                {
+                    rel: 'relative-custom',
+                    href: schemeAndAuthority + '/api/relative-custom'
+                },
+                {
+                    rel: 'absolute-custom',
+                    href: 'http://example.org/absolute-custom'
+                }
+            ]);
+        });
+    });
+
+    describe('when corresponding item schema does not exist', function () {
         it('should return 404', function (done) {
             request(app)
                 .get('/api/collection-schemas/invalid-schema-id')

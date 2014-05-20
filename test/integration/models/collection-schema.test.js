@@ -15,7 +15,7 @@ loopbackJsonSchema.init(app);
 
 describe('CollectionSchema', function() {
     describe('#data', function() {
-        describe('when ItemSchema is found', function() {
+        describe('when corresponding item schema exists', function() {
             var collectionSchema, itemSchemaId;
 
             beforeEach(function (done) {
@@ -30,7 +30,10 @@ describe('CollectionSchema', function() {
                     title: 'Person',
                     collectionTitle: 'People',
                     type: 'object',
-                    properties: {}
+                    properties: {},
+                    collectionLinks: [
+                        { rel: 'custom', href: '/custom' }
+                    ]
                 }, function(err, itemSchema) {
                     if (err) { throw err };
                     itemSchemaId = itemSchema.id;
@@ -75,7 +78,7 @@ describe('CollectionSchema', function() {
                 collectionSchema.data(callback);
             });
 
-            it('should include links', function(done) {
+            it('should include default and custom links', function(done) {
                 var callback = function(err, data) {
                     expect(data.links).to.eql([
                         {
@@ -89,6 +92,10 @@ describe('CollectionSchema', function() {
                             schema: {
                                 $ref: 'http://example.org/api/json-schemas/' + itemSchemaId
                             }
+                        },
+                        {
+                            rel: 'custom',
+                            href: 'http://example.org/api/custom'
                         }
                     ]);
                     done();
@@ -98,7 +105,7 @@ describe('CollectionSchema', function() {
             });
         });
 
-        describe('when ItemSchema is not found', function() {
+        describe('when corresponding item schema does not exist', function() {
             it('should return empty data', function (done) {
                 var collectionSchema = new CollectionSchema(undefined, 'invalid-id');
 
