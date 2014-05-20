@@ -14,17 +14,30 @@ describe('JsonSchemaLinks', function() {
         var allLinks;
 
         beforeEach(function() {
+            var req = null;
+            var ljsReq = new LJSRequest(req, app);
+            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             var defaultLinks = [
                 { rel: 'self', href: 'http://example.org/api' }
             ];
-            var links = new JsonSchemaLinks(null, defaultLinks);
+            var customLinks = [
+                { rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' },
+                { rel: 'custom-relative', href: '/custom-relative' }
+            ];
+            var links = new JsonSchemaLinks(ljsReq, defaultLinks, customLinks);
             allLinks = links.all();
         });
 
-        it('should return all links', function() {
-            expect(allLinks).to.eql([
-                { rel: 'self', href: 'http://example.org/api' }
-            ])
+        it('should include default links', function() {
+            expect(allLinks[0]).to.eql({ rel: 'self', href: 'http://example.org/api' });
+        });
+
+        it('should include custom absolute links', function() {
+            expect(allLinks[1]).to.eql({ rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' });
+        });
+
+        it('should include custom relative links', function() {
+            expect(allLinks[2]).to.eql({ rel: 'custom-relative', href: 'http://example.org/api/custom-relative' });
         });
     });
 
