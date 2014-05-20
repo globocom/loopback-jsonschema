@@ -17,10 +17,6 @@ describe('LJSRequest', function() {
         it("should return inner request's body", function() {
             expect(ljsReq.body).to.equal(req.body);
         });
-
-        it("should return 'people' as collectionName", function() {
-            expect(ljsReq.collectionName).to.equal('people');
-        });
     });
 
     describe('#schemeAndAuthority', function() {

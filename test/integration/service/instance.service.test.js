@@ -15,7 +15,7 @@ app.set('restApiRoot', '/api');
 describe('instance.service', function() {
     describe('#build', function() {
         beforeEach(function() {
-            var req = { body: 'body', protocol: 'http', url: '/people', app: app, get: this.sinon.stub() };
+            var req = { body: 'body', protocol: 'http', url: '/people', originalUrl: '/api/people', app: app, get: this.sinon.stub() };
             var ljsReq = new LJSRequest(req, app);
             this.res = { set: this.sinon.stub() };
             this.instanceService = new InstanceService(ljsReq, this.res);
