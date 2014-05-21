@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
   "dependencies": {
+    "cors": "^2.3",
     "debug": "",
     "underscore": "1.x",
     "winston": "0.x"
