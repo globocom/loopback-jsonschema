@@ -16,7 +16,7 @@ app.installMiddleware();
 
 describe('GET /collection-schemas/:id', function () {
    describe('when corresponding item schema exists', function () {
-        var collectionSchema, collectionSchemaId;
+        var collectionSchemaResponse, collectionSchemaId;
 
         before(function (done) {
             JsonSchema.create({
@@ -43,29 +43,29 @@ describe('GET /collection-schemas/:id', function () {
                 .end(function (err, res) {
                     if (err) { throw err };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
-                    collectionSchema = res.body;
+                    collectionSchemaResponse = res;
                     done();
             });
         });
 
         it('should include $schema', function() {
-            expect(collectionSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
+            expect(collectionSchemaResponse.body['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
         });
 
         it('should include type', function() {
-            expect(collectionSchema['type']).to.eq('array');
+            expect(collectionSchemaResponse.body['type']).to.eq('array');
         });
 
         it('should include title', function() {
-            expect(collectionSchema['title']).to.eq('People');
+            expect(collectionSchemaResponse.body['title']).to.eq('People');
         });
 
         it('should not include properties', function() {
-            expect(collectionSchema['properties']).to.be.undefined;
+            expect(collectionSchemaResponse.body['properties']).to.be.undefined;
         });
 
         it('should include links', function() {
-            expect(collectionSchema['links']).to.eql([
+            expect(collectionSchemaResponse.body['links']).to.eql([
                 {
                     rel: 'self',
                     href: schemeAndAuthority + '/api/people'
@@ -85,6 +85,9 @@ describe('GET /collection-schemas/:id', function () {
             ]);
         });
 
+        it('should include Access-Control-Allow-Origin', function() {
+            expect(collectionSchemaResponse.headers['access-control-allow-origin']).to.eq('*');
+        });
     });
 
     describe('when corresponding item schema does not exist', function () {
