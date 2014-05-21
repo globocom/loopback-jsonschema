@@ -22,13 +22,13 @@
     "winston": "0.x"
   },
   "peerDependencies": {
-    "loopback": "1.x",
-    "loopback-explorer": "1.x"
+    "loopback": "^1.8.1",
+    "loopback-explorer": "^1.1"
   },
   "devDependencies": {
     "chai": "",
-    "loopback": "1.x",
-    "loopback-explorer": "1.x",
+    "loopback": "^1.8.1",
+    "loopback-explorer": "^1.1",
     "mocha": "",
     "mocha-sinon": "",
     "sinon": "",
