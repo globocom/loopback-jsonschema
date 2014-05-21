@@ -15,56 +15,51 @@ loopbackJsonSchema.init(app);
 app.installMiddleware();
 
 describe('GET /:collection/:id', function () {
-   describe('when item(:id) exists', function () {
-        var jsonSchemaId;
+    var itemId, jsonSchemaId, response, schemeAndAuthority;
 
-        beforeEach(function (done) {
-            JsonSchema.create({
-                modelName: 'person',
-                collectionName: 'people',
-                title: 'Person',
-                collectionTitle: 'People',
-                type: 'object',
-                properties: {}
-            }, function(err, jsonSchema) {
+    before(function(done) {
+        JsonSchema.create({
+            type: 'object',
+            title: 'Person',
+            collectionTitle: 'People',
+            modelName: 'person',
+            collectionName: 'people',
+            properties: {}
+        }, function(err, jsonSchema) {
+            if (err) { throw err };
+            jsonSchemaId = jsonSchema.id;
+            done();
+        });
+    });
+
+    before(function(done) {
+        request(app)
+            .post('/api/people')
+            .set('Content-Type', 'application/json')
+            .send('{"name": "Alice"}')
+            .expect(200)
+            .end(function (err, res) {
                 if (err) { throw err };
-                jsonSchemaId = jsonSchema.id;
+                itemId = res.body.id;
                 done();
             });
-        });
+    });
 
-        it('should build schema url with "json-schemas" collection', function (done) {
-            var fetchAlice = function(registerRes) {
-                request(app)
-                    .get('/api/people/'+ registerRes.body.id)
-                    .expect(200)
-                    .end(function (err, res) {
-                        expect(err).to.not.exist;
-                        expect(res.headers['link']).to.exist;
-                        expect(res.headers['content-type']).to.match(/^application\/json; charset=utf-8; profile=.*\/api\/json-schemas\/.*/);
-                        done();
-                    });
-            };
+    before(function(done) {
+        request(app)
+            .get('/api/people/' + itemId)
+            .expect(200)
+            .end(function (err, res) {
+                if (err) { throw err };
+                schemeAndAuthority = 'http://' + res.req._headers.host;
+                response = res;
+                done();
+            });
+    });
 
-            var registerPerson = function() {
-                request(app)
-                    .post('/api/people')
-                    .set('Content-Type', 'application/json')
-                    .send('{"name": "Alice"}')
-                    .expect(200)
-                    .end(function (err, res) {
-                        fetchAlice(res);
-                    });
-            };
-
-            request(app)
-                .post('/api/json-schemas')
-                .set('Content-Type', 'application/json')
-                .send('{"modelName": "person", "collectionName": "people", "properties": { "name": { "type": "string", "title": "Name" }}}')
-                .expect(200)
-                .end(function (err, res) {
-                    registerPerson();
-                });
-        });
+    it('should correlate the item with its schema', function() {
+        var itemSchemaUrl = schemeAndAuthority + '/api/json-schemas/' + jsonSchemaId;
+        expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel=describedby');
+        expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile=' + itemSchemaUrl);
     });
 });
