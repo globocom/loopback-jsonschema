@@ -15,34 +15,38 @@ loopbackJsonSchema.init(app);
 app.installMiddleware();
 
 describe('GET /:collection', function () {
-   describe('when :collection exists', function () {
-        var jsonSchemaId;
+    var jsonSchemaId, response, schemeAndAuthority;
 
-        beforeEach(function (done) {
-            JsonSchema.create({
-                modelName: 'person',
-                collectionName: 'people',
-                title: 'Person',
-                collectionTitle: 'People',
-                type: 'object',
-                properties: {}
-            }, function(err, jsonSchema) {
+    before(function (done) {
+        JsonSchema.create({
+            modelName: 'person',
+            collectionName: 'people',
+            title: 'Person',
+            collectionTitle: 'People',
+            type: 'object',
+            properties: {}
+        }, function(err, jsonSchema) {
+            if (err) { throw err };
+            jsonSchemaId = jsonSchema.id;
+            done();
+        });
+    });
+
+    before(function(done) {
+        request(app)
+            .get('/api/people')
+            .expect(200)
+            .end(function (err, res) {
                 if (err) { throw err };
-                jsonSchemaId = jsonSchema.id;
+                schemeAndAuthority = 'http://' + res.req._headers.host;
+                response = res;
                 done();
-            });
         });
+    });
 
-        it('should build schema url with "collection-schemas" collection', function (done) {
-            request(app)
-                .get('/api/people')
-                .expect(200)
-                .end(function (err, res) {
-                    expect(err).to.not.exist;
-                    expect(res.headers['link']).to.exist;
-                    expect(res.headers['content-type']).to.match(/^application\/json; charset=utf-8; profile=.*\/api\/collection-schemas\/.*/);
-                    done();
-                });
-        });
+    it('should correlate the collection with its schema', function() {
+        var collectionSchemaUrl = schemeAndAuthority + '/api/collection-schemas/' + jsonSchemaId;
+        expect(response.headers['link']).to.eq('<' + collectionSchemaUrl + '>; rel=describedby');
+        expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile=' + collectionSchemaUrl);
     });
 });
