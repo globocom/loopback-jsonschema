@@ -15,7 +15,9 @@ loopbackJsonSchema.init(app);
 app.installMiddleware();
 
 describe('POST /:collection', function() {
-    beforeEach(function (done) {
+    var itemResponse, jsonSchemaId, schemeAndAuthority;
+
+    before(function (done) {
         JsonSchema.create({
             modelName: 'person',
             collectionName: 'people',
@@ -30,7 +32,7 @@ describe('POST /:collection', function() {
         });
     });
 
-    xit('', function (done) {
+    before(function(done) {
         request(app)
             .post('/api/people')
             .set('Content-Type', 'application/json')
@@ -38,10 +40,15 @@ describe('POST /:collection', function() {
             .expect(200)
             .end(function (err, res) {
                 if (err) { throw err };
-
-                expect(res.headers['link']).to.exist;
-                expect(res.headers['content-type']).to.match(/^application\/json; charset=utf-8; profile=.*\/api\/json-schemas\/.*/);
+                schemeAndAuthority = 'http://' + res.req._headers.host;
+                itemResponse = res;
                 done();
             });
+    });
+
+    it('should correlate the item with its schema', function() {
+        var itemSchemaUrl = schemeAndAuthority + '/api/json-schemas/' + jsonSchemaId;
+        expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel=describedby');
+        expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile=' + itemSchemaUrl);
     });
 });

@@ -89,9 +89,9 @@ describe('instance.service', function() {
             });
         });
 
-        describe('when url represents a collection', function() {
+        describe('when url represents a collection and the method is GET', function() {
             beforeEach(function () {
-                var req = { protocol: 'http', app: app, url: '/people', originalUrl: '/api/people' };
+                var req = { protocol: 'http', app: app, url: '/people', originalUrl: '/api/people', method: 'GET' };
                 req.get = this.sinon.stub();
                 req.get.withArgs('Host').returns('example.org');
                 var ljsReq = new LJSRequest(req, app);
@@ -101,7 +101,6 @@ describe('instance.service', function() {
             });
 
             it('should build the url with "collection-schemas"', function () {
-
                 this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
@@ -110,5 +109,24 @@ describe('instance.service', function() {
             });
         });
 
+        describe('when url represents a collection and the method is not GET', function() {
+            beforeEach(function () {
+                var req = { protocol: 'http', app: app, url: '/people', originalUrl: '/api/people', method: 'NOTGET' };
+                req.get = this.sinon.stub();
+                req.get.withArgs('Host').returns('example.org');
+                var ljsReq = new LJSRequest(req, app);
+
+                this.res = { set: this.sinon.stub() };
+                this.instanceService = new InstanceService(ljsReq, this.res);
+            });
+
+            it('should build the url with "collection-schemas"', function () {
+                this.instanceService.addHeaders(itemSchema);
+
+                expect(this.res.set).to.have.been.called.twice;
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/json-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
+            });
+        });
     });
 });
