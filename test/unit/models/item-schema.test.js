@@ -29,7 +29,7 @@ describe('ItemSchema', function() {
                     method: 'POST',
                     href: 'http://example.org/api/people',
                     schema: {
-                        $ref: 'http://example.org/api/json-schemas/1'
+                        $ref: 'http://example.org/api/item-schemas/1'
                     }
                 },
                 { rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' },
@@ -49,7 +49,7 @@ describe('ItemSchema', function() {
         });
 
         it('should return URL this item schema', function() {
-            expect(itemSchema.url(ljsReq)).to.eq('http://example.org/api/json-schemas/1');
+            expect(itemSchema.url(ljsReq)).to.eq('http://example.org/api/item-schemas/1');
         });
     });
 

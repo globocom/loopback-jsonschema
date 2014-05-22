@@ -80,12 +80,12 @@ describe('instance.service', function() {
                 this.instanceService = new InstanceService(ljsReq, this.res);
             });
 
-            it('should build the url with "json-schemas"', function () {
+            it('should build the url with "item-schemas"', function () {
                 this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
-                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/json-schemas/" + itemSchema.id);
-                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/item-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/item-schemas/' + itemSchema.id + '>; rel=describedby');
             });
         });
 
@@ -120,12 +120,12 @@ describe('instance.service', function() {
                 this.instanceService = new InstanceService(ljsReq, this.res);
             });
 
-            it('should build the url with "collection-schemas"', function () {
+            it('should build the url with "item-schemas"', function () {
                 this.instanceService.addHeaders(itemSchema);
 
                 expect(this.res.set).to.have.been.called.twice;
-                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/json-schemas/" + itemSchema.id);
-                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/json-schemas/' + itemSchema.id + '>; rel=describedby');
+                expect(this.res.set).to.have.been.calledWith('Content-Type', "application/json; charset=utf-8; profile=" + this.baseUrl + "/item-schemas/" + itemSchema.id);
+                expect(this.res.set).to.have.been.calledWith('Link', '<' + this.baseUrl + '/item-schemas/' + itemSchema.id + '>; rel=describedby');
             });
         });
     });

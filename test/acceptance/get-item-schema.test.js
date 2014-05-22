@@ -37,7 +37,7 @@ describe('GET /item-schemas/:id', function() {
 
         before(function(done) {
             request(app)
-                .get('/api/json-schemas/' + itemSchemaId)
+                .get('/api/item-schemas/' + itemSchemaId)
                 .expect(200)
                 .end(function(err, res) {
                     if (err) { throw err };
@@ -78,7 +78,7 @@ describe('GET /item-schemas/:id', function() {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/json-schemas/' + itemSchemaId
+                        $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchemaId
                     }
                 },
                 {
@@ -102,7 +102,7 @@ describe('GET /item-schemas/:id', function() {
     describe('when schema does not exist', function() {
         it('should return 404', function (done) {
             request(app)
-                .get('/api/json-schemas/invalid-schema-id')
+                .get('/api/item-schemas/invalid-schema-id')
                 .expect(404)
                 .end(function (err, res) {
                     if (err) { throw err };

@@ -16,7 +16,7 @@ app.installMiddleware();
 describe('json-schema.middleware', function() {
     it('should register a json-schema model', function (done) {
         request(app)
-            .post('/api/json-schemas')
+            .post('/api/item-schemas')
             .set('Content-Type', 'application/json')
             .send('{"modelName": "person", "collectionName": "people"}')
             .expect(200)

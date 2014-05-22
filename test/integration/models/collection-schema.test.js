@@ -53,7 +53,7 @@ describe('CollectionSchema', function() {
 
             it('should include "items" key pointing to itemSchema url', function (done) {
                 var callback = function(err, data) {
-                    expect(data.items.$ref).to.eq('http://example.org/api/json-schemas/' + itemSchemaId);
+                    expect(data.items.$ref).to.eq('http://example.org/api/item-schemas/' + itemSchemaId);
                     done();
                 };
 
@@ -90,7 +90,7 @@ describe('CollectionSchema', function() {
                             method: 'POST',
                             href: 'http://example.org/api/people',
                             schema: {
-                                $ref: 'http://example.org/api/json-schemas/' + itemSchemaId
+                                $ref: 'http://example.org/api/item-schemas/' + itemSchemaId
                             }
                         },
                         {

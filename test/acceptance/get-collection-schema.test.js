@@ -75,7 +75,7 @@ describe('GET /collection-schemas/:id', function () {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/json-schemas/' + collectionSchemaId
+                        $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaId
                     }
                 },
                 {
