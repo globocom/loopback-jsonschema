@@ -15,9 +15,18 @@ describe('JsonSchema', function() {
             var req = null;
             var ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            expect(JsonSchema.defaultLinks(ljsReq, 'people')).to.eql([
+            var itemSchema = new JsonSchema({id: 1, collectionName: 'people'});
+            expect(JsonSchema.defaultLinks(ljsReq, itemSchema)).to.eql([
                 { rel: 'self', href: 'http://example.org/api/people/{id}' },
                 { rel: 'item', href: 'http://example.org/api/people/{id}' },
+                {
+                    rel: 'create',
+                    method: 'POST',
+                    href: 'http://example.org/api/people',
+                    schema: {
+                        $ref: 'http://example.org/api/json-schemas/1'
+                    }
+                },
                 { rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' },
                 { rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' }
             ]);

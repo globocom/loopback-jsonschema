@@ -74,6 +74,14 @@ describe('GET /item-schemas/:id', function() {
                     href: schemeAndAuthority + '/api/people/{id}'
                 },
                 {
+                    rel: 'create',
+                    method: 'POST',
+                    href: schemeAndAuthority + '/api/people',
+                    schema: {
+                        $ref: schemeAndAuthority + '/api/json-schemas/' + itemSchemaId
+                    }
+                },
+                {
                     rel: 'update',
                     method: 'PUT',
                     href: schemeAndAuthority + '/api/people/{id}'
