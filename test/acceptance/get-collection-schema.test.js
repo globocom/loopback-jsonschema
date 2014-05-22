@@ -85,7 +85,7 @@ describe('GET /collection-schemas/:id', function () {
             ]);
         });
 
-        it('should include Access-Control-Allow-Origin', function() {
+        it('should include CORS headers', function() {
             expect(collectionSchemaResponse.headers['access-control-allow-origin']).to.eq('*');
         });
     });
