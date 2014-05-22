@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
-var JsonSchema = require('../../lib/models/json-schema');
+var JsonSchema = require('../../lib/models/item-schema');
 var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware');
 var loopbackJsonSchema = require('../../index');
 

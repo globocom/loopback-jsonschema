@@ -3,7 +3,7 @@ require('../../support');
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
-var JsonSchema = require('../../../lib/models/json-schema');
+var JsonSchema = require('../../../lib/models/item-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();

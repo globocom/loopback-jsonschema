@@ -4,7 +4,7 @@ var _ = require('underscore');
 var loopback = require('loopback');
 
 var config = require('./lib/support/config');
-var JsonSchema = require('./lib/models/json-schema');
+var JsonSchema = require('./lib/models/item-schema');
 var jsonSchemaRoutes = require('./lib/config/json-schema-routes');
 var jsonSchemaMiddleware = require('./lib/middleware/json-schema.middleware');
 

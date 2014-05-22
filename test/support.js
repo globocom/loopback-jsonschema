@@ -3,7 +3,7 @@ require('mocha-sinon')();
 var chai = require('chai');
 var sinonChai = require('sinon-chai');
 
-var JsonSchema = require('../lib/models/json-schema');
+var JsonSchema = require('../lib/models/item-schema');
 
 chai.use(sinonChai);
 
