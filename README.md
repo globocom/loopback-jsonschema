@@ -70,7 +70,7 @@ To dynamically define a new Loopback model just create a new instance of the Ite
 
 ```
 # Create a Person model from a JSON Schema
-curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/json-schemas -T person.json
+curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/item-schemas -T person.json
 ```
 
 The people collection will then be available at `http://example.org/api/people`.
@@ -82,7 +82,7 @@ Once a Loopback model has been defined, Item and Collection schemas describing a
 #### Item Schema example
 
 ```
-$ curl -i http://example.org/api/json-schemas/537530ea27f8870b63f2d886
+$ curl -i http://example.org/api/item-schemas/537530ea27f8870b63f2d886
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -141,7 +141,7 @@ Connection: keep-alive
   "properties": {
     "items": {
       "items": {
-        "$ref": "http://example.org/api/json-schemas/537530ea27f8870b63f2d886"
+        "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
       },
       "type": "array"
     },
