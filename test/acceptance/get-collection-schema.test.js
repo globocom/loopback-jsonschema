@@ -5,7 +5,7 @@ var loopback = require('loopback');
 var request = require('supertest');
 
 var loopbackJsonSchema = require('../../index');
-var JsonSchema = require('../../lib/models/item-schema');
+var ItemSchema = require('../../lib/models/item-schema');
 var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware');
 
 var app = loopback();
@@ -19,7 +19,7 @@ describe('GET /collection-schemas/:id', function () {
         var collectionSchemaResponse, collectionSchemaId;
 
         before(function (done) {
-            JsonSchema.create({
+            ItemSchema.create({
                 modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',

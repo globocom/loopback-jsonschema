@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
-var JsonSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/models/item-schema');
 var CollectionSchema = require('../../../lib/models/collection-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
@@ -24,7 +24,7 @@ describe('CollectionSchema', function() {
                 req.get.withArgs('Host').returns('example.org');
                 var ljsReq = new LJSRequest(req, app);
 
-                JsonSchema.create({
+                ItemSchema.create({
                     modelName: 'person',
                     collectionName: 'people',
                     title: 'Person',

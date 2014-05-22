@@ -3,13 +3,13 @@ require('../../support');
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
-var JsonSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/models/item-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
 
-describe('JsonSchema', function() {
+describe('ItemSchema', function() {
     describe('#defaultLinks', function() {
         var itemSchema, ljsReq;
 
@@ -17,7 +17,7 @@ describe('JsonSchema', function() {
             var req = null;
             ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            itemSchema = new JsonSchema({id: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
         });
 
         it('should return default links', function() {
@@ -45,7 +45,7 @@ describe('JsonSchema', function() {
             var req = null;
             ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            itemSchema = new JsonSchema({ id: 1 });
+            itemSchema = new ItemSchema({ id: 1 });
         });
 
         it('should return URL this item schema', function() {
@@ -60,7 +60,7 @@ describe('JsonSchema', function() {
             var req = null;
             ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            itemSchema = new JsonSchema({ collectionName: 'people' });
+            itemSchema = new ItemSchema({ collectionName: 'people' });
         });
 
         it('should return URL template for an item represented by this item schema', function() {
@@ -75,7 +75,7 @@ describe('JsonSchema', function() {
             var req = null;
             ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            itemSchema = new JsonSchema({ collectionName: 'people' });
+            itemSchema = new ItemSchema({ collectionName: 'people' });
         });
 
         it('should return URL for the collection of items represented by this item schema', function() {
@@ -85,13 +85,13 @@ describe('JsonSchema', function() {
 
     describe('#update$schema', function() {
         it('should set $schema to hyper-schema draft-04 by default', function() {
-            var jsonSchema = new JsonSchema();
+            var jsonSchema = new ItemSchema();
             jsonSchema.update$schema();
             expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-04/hyper-schema#');
         });
 
         it('should allow overriding of $schema', function() {
-            var jsonSchema = new JsonSchema({$schema: 'http://json-schema.org/draft-03/hyper-schema#'});
+            var jsonSchema = new ItemSchema({$schema: 'http://json-schema.org/draft-03/hyper-schema#'});
             jsonSchema.update$schema();
             expect(jsonSchema.$schema).to.equal('http://json-schema.org/draft-03/hyper-schema#');
         });
@@ -101,7 +101,7 @@ describe('JsonSchema', function() {
         var Test;
 
         beforeEach(function() {
-            var jsonSchema = new JsonSchema({modelName: 'test', collectionName: 'testplural'});
+            var jsonSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
             jsonSchema.createLoopbackModel(app);
             Test = loopback.getModel('test');
         });

@@ -4,8 +4,6 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
-var loopbackJsonSchema = require('../../index');
-
 var app = loopback();
 app.set('restApiRoot', '/api');
 app.installMiddleware();

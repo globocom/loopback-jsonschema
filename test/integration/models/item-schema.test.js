@@ -5,26 +5,26 @@ var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
-var JsonSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/models/item-schema');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
 
-describe('JsonSchema', function() {
+describe('ItemSchema', function() {
     beforeEach(function() {
         loopbackJsonSchema.init(app);
     });
 
     describe('.findOne', function() {
         beforeEach(function(done) {
-            JsonSchema.create({modelName: 'test'}, function(err, instance) {
+            ItemSchema.create({modelName: 'test'}, function(err, instance) {
                 if (err) { throw err };
                 done();
             });
         });
 
         it('should have $schema', function() {
-            JsonSchema.findOne({where: {modelName: 'test'}}, function(err, jsonSchema) {
+            ItemSchema.findOne({where: {modelName: 'test'}}, function(err, jsonSchema) {
                 if (err) {
                     logger.log(err);
                 }
@@ -35,7 +35,7 @@ describe('JsonSchema', function() {
 
     describe('.create', function() {
         it('should set $schema', function() {
-            JsonSchema.create({modelName: 'test'}, function(err, jsonSchema) {
+            ItemSchema.create({modelName: 'test'}, function(err, jsonSchema) {
                 if (err) {
                     logger.log(err);
                 }
@@ -44,7 +44,7 @@ describe('JsonSchema', function() {
         });
 
         it('should create model defined by the json schema provided', function() {
-            JsonSchema.create({modelName: 'test'}, function(err) {
+            ItemSchema.create({modelName: 'test'}, function(err) {
                 if (err) {
                     logger.log(err);
                 }
@@ -57,7 +57,7 @@ describe('JsonSchema', function() {
         var Test;
 
         beforeEach(function() {
-            var jsonSchema = new JsonSchema({modelName: 'test', collectionName: 'testplural'});
+            var jsonSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
             jsonSchema.createLoopbackModel(app);
             Test = loopback.getModel('test');
         });
@@ -77,8 +77,8 @@ describe('JsonSchema', function() {
             this.sinon.stub(logger, 'warn');
         });
 
-        it('should find JsonSchema collection by name and execute provided callback', function(done) {
-            var jsonSchema = JsonSchema.create({ modelName: 'person', collectionName: 'people' });
+        it('should find ItemSchema by collection name and execute provided callback', function(done) {
+            var jsonSchema = ItemSchema.create({ modelName: 'person', collectionName: 'people' });
 
             var callback = this.sinon.spy();
             var next = function() {
@@ -86,9 +86,9 @@ describe('JsonSchema', function() {
                 done();
             };
 
-            JsonSchema.findByCollectionName('people', next, callback)
+            ItemSchema.findByCollectionName('people', next, callback)
 
-            JsonSchema.remove({ modelName: 'person' });
+            ItemSchema.remove({ modelName: 'person' });
         });
 
         it('should log when collection JSON schema was not found', function(done) {
@@ -97,7 +97,7 @@ describe('JsonSchema', function() {
                 done();
             };
 
-            JsonSchema.findByCollectionName('people', next, null);
+            ItemSchema.findByCollectionName('people', next, null);
         });
     });
 });

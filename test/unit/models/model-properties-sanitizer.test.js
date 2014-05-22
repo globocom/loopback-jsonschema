@@ -2,13 +2,13 @@ require('../../support');
 
 var expect = require('chai').expect;
 
-var JsonSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/models/item-schema');
 var modelPropertiesSanitizer = require('../../../lib/models/model-properties-sanitizer');
 
 
 describe('modelPropertiesSanitizer', function() {
     beforeEach(function() {
-        this.jsonSchema = new JsonSchema();
+        this.jsonSchema = new ItemSchema();
         this.jsonSchema.update$schema();
     });
 

@@ -6,7 +6,7 @@ var loopback = require('loopback');
 var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
 var LJSRequest = require('../../../lib/models/ljs-request');
-var JsonSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/models/item-schema');
 var InstanceService = require('../../../lib/service/instance.service');
 
 var app = loopback();
@@ -25,7 +25,7 @@ describe('instance.service', function() {
         });
 
         it('should register loopback model for an existing collection JSON schema', function(done) {
-            var jsonSchema = JsonSchema.create({ modelName: 'person', collectionName: 'people' });
+            var jsonSchema = ItemSchema.create({ modelName: 'person', collectionName: 'people' });
 
             var next = function() {
                 var Person = loopback.getModel('person');
@@ -36,7 +36,7 @@ describe('instance.service', function() {
             };
             this.instanceService.build(next);
 
-            JsonSchema.remove({ modelName: 'person' });
+            ItemSchema.remove({ modelName: 'person' });
         });
 
         it('should log when collection JSON schema was not found', function(done) {
@@ -53,7 +53,7 @@ describe('instance.service', function() {
         var itemSchema;
 
         beforeEach(function (done) {
-            JsonSchema.create({
+            ItemSchema.create({
                 modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',

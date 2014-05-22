@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
-var JsonSchema = require('../../lib/models/item-schema');
+var ItemSchema = require('../../lib/models/item-schema');
 var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware');
 var loopbackJsonSchema = require('../../index');
 
@@ -18,7 +18,7 @@ describe('GET /item-schemas/:id', function() {
         var itemSchema, itemSchemaId, schemeAndAuthority;
 
         before(function(done) {
-            JsonSchema.create({
+            ItemSchema.create({
                 modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
