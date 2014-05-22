@@ -38,6 +38,21 @@ describe('JsonSchema', function() {
         });
     });
 
+    describe('#url', function() {
+        var itemSchema, ljsReq;
+
+        beforeEach(function() {
+            var req = null;
+            ljsReq = new LJSRequest(req, app);
+            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+            itemSchema = new JsonSchema({ id: 1 });
+        });
+
+        it('should return URL this item schema', function() {
+            expect(itemSchema.url(ljsReq)).to.eq('http://example.org/api/json-schemas/1');
+        });
+    });
+
     describe('#itemUrlTemplate', function() {
         var itemSchema, ljsReq;
 
