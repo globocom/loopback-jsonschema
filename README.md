@@ -39,9 +39,9 @@ function MyCustomCollectionSchema() {
     CollectionSchema.apply(this, Array.prototype.slice.call(arguments));
 };
 
-util.inherits(BackstageCollectionSchema, CollectionSchema);
+util.inherits(MyCustomCollectionSchema, CollectionSchema);
 // It's required to set the value of "pluralModelName". This value will be used on the headers. You can still use the default value (see below).
-BackstageCollectionSchema.pluralModelName = BackstageCollectionSchema.super_.pluralModelName;
+MyCustomCollectionSchema.pluralModelName = MyCustomCollectionSchema.super_.pluralModelName;
 
 # Override functions to customize the default collection schema.
 ```
@@ -52,7 +52,7 @@ Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/m
 
 ### Dynamically defining Loopback models from a JSON Schema
 
-To dynamically define a new Loopback model just create a new instance of the JsonSchema model provided by loopback-jsonschema. Doing this via the REST interface is as simples as POSTing a valid JSON Schema, as follows:
+To dynamically define a new Loopback model just create a new instance of the ItemSchema model provided by loopback-jsonschema. Doing this via the REST interface is as simples as POSTing a valid JSON Schema, as follows:
 
 ```
 # person.json
