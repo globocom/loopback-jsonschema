@@ -11,11 +11,16 @@ app.set('restApiRoot', '/api');
 
 describe('JsonSchema', function() {
     describe('#defaultLinks', function() {
-        it('should return default links', function() {
+        var itemSchema, ljsReq;
+
+        beforeEach(function() {
             var req = null;
-            var ljsReq = new LJSRequest(req, app);
+            ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
-            var itemSchema = new JsonSchema({id: 1, collectionName: 'people'});
+            itemSchema = new JsonSchema({id: 1, collectionName: 'people'});
+        });
+
+        it('should return default links', function() {
             expect(itemSchema.defaultLinks(ljsReq)).to.eql([
                 { rel: 'self', href: 'http://example.org/api/people/{id}' },
                 { rel: 'item', href: 'http://example.org/api/people/{id}' },
@@ -30,6 +35,21 @@ describe('JsonSchema', function() {
                 { rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' },
                 { rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' }
             ]);
+        });
+    });
+
+    describe('#itemUrlTemplate', function() {
+        var itemSchema, ljsReq;
+
+        beforeEach(function() {
+            var req = null;
+            ljsReq = new LJSRequest(req, app);
+            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+            itemSchema = new JsonSchema({ collectionName: 'people' });
+        });
+
+        it('should return URL template for an item represented by this item schema', function() {
+            expect(itemSchema.itemUrlTemplate(ljsReq)).to.eq('http://example.org/api/people/{id}');
         });
     });
 
