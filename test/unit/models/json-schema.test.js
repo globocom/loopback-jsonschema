@@ -53,6 +53,21 @@ describe('JsonSchema', function() {
         });
     });
 
+    describe('#collectionUrl', function() {
+        var itemSchema, ljsReq;
+
+        beforeEach(function() {
+            var req = null;
+            ljsReq = new LJSRequest(req, app);
+            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
+            itemSchema = new JsonSchema({ collectionName: 'people' });
+        });
+
+        it('should return URL for the collection of items represented by this item schema', function() {
+            expect(itemSchema.collectionUrl(ljsReq)).to.eq('http://example.org/api/people');
+        });
+    });
+
     describe('#update$schema', function() {
         it('should set $schema to hyper-schema draft-04 by default', function() {
             var jsonSchema = new JsonSchema();
