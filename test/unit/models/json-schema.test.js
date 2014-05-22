@@ -10,13 +10,13 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('JsonSchema', function() {
-    describe('.defaultLinks', function() {
+    describe('#defaultLinks', function() {
         it('should return default links', function() {
             var req = null;
             var ljsReq = new LJSRequest(req, app);
             this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             var itemSchema = new JsonSchema({id: 1, collectionName: 'people'});
-            expect(JsonSchema.defaultLinks(ljsReq, itemSchema)).to.eql([
+            expect(itemSchema.defaultLinks(ljsReq)).to.eql([
                 { rel: 'self', href: 'http://example.org/api/people/{id}' },
                 { rel: 'item', href: 'http://example.org/api/people/{id}' },
                 {
