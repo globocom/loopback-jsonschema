@@ -3,6 +3,7 @@ require('../../support');
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
+var CollectionSchema = require('../../../lib/domain/collection-schema');
 var ItemSchema = require('../../../lib/models/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
@@ -112,6 +113,21 @@ describe('ItemSchema', function() {
 
         it("should use collectionName as model's plural", function() {
             expect(Test.pluralModelName).to.equal('testplural');
+        });
+    });
+
+    describe('#collectionSchema', function() {
+        var collectionSchema, schemaId;
+
+        beforeEach(function() {
+            schemaId = 1;
+            var itemSchema = new ItemSchema({id: schemaId});
+            collectionSchema = itemSchema.collectionSchema();
+        });
+
+        it('should return a collection schema that corresponds to this item schema', function() {
+            expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
+            expect(collectionSchema.id).to.eq(schemaId);
         });
     });
 });

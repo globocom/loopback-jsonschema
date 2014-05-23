@@ -102,7 +102,7 @@ describe('CollectionSchema', function() {
 
         describe('when corresponding item schema does not exist', function() {
             it('should return empty data', function (done) {
-                var collectionSchema = new CollectionSchema(undefined, 'invalid-id');
+                var collectionSchema = new CollectionSchema('invalid-id');
 
                 var callback = function(err, data){
                     expect(data).to.be.empty;
@@ -111,6 +111,19 @@ describe('CollectionSchema', function() {
 
                 collectionSchema.data(callback);
             });
+        });
+    });
+
+    describe('#url', function() {
+        var collectionSchema, schemaId;
+
+        beforeEach(function() {
+            schemaId = 1;
+            collectionSchema = new CollectionSchema(schemaId);
+        });
+
+        it('should return URL this collection schema', function() {
+            expect(collectionSchema.url()).to.eq('/collection-schemas/' + schemaId);
         });
     });
 
