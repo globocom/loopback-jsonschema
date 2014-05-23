@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var ItemSchema = require('../../../lib/models/item-schema');
-var LJSRequest = require('../../../lib/models/ljs-request');
+var LJSRequest = require('../../../lib/http/ljs-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
