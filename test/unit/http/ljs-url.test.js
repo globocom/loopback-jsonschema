@@ -2,7 +2,7 @@ require('../../support');
 
 var expect = require('chai').expect;
 
-var LJSUrl = require('../../../lib/models/ljs-url');
+var LJSUrl = require('../../../lib/http/ljs-url');
 
 describe('LJSUrl', function() {
     var ljsUrl;
