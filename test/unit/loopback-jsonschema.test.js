@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var config = require('../../lib/support/config');
+var loopbackJsonSchema = require('../../index');
 
 var app = loopback();
 

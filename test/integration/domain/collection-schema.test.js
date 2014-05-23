@@ -19,11 +19,6 @@ describe('CollectionSchema', function() {
             var collectionSchema, itemSchemaId;
 
             beforeEach(function (done) {
-                var req = { body: 'body', protocol: 'http', url: '/people/alice' };
-                req.get = this.sinon.stub();
-                req.get.withArgs('Host').returns('example.org');
-                var ljsReq = new LJSRequest(req, app);
-
                 ItemSchema.create({
                     modelName: 'person',
                     collectionName: 'people',
@@ -37,7 +32,7 @@ describe('CollectionSchema', function() {
                 }, function(err, itemSchema) {
                     if (err) { throw err };
                     itemSchemaId = itemSchema.id;
-                    collectionSchema = new CollectionSchema(ljsReq, itemSchema.id);
+                    collectionSchema = new CollectionSchema(itemSchema.id);
                     done();
                 });
             });
@@ -53,7 +48,7 @@ describe('CollectionSchema', function() {
 
             it('should include "items" key pointing to itemSchema url', function (done) {
                 var callback = function(err, data) {
-                    expect(data.items.$ref).to.eq('http://example.org/api/item-schemas/' + itemSchemaId);
+                    expect(data.items.$ref).to.eq('/item-schemas/' + itemSchemaId);
                     done();
                 };
 
@@ -83,19 +78,19 @@ describe('CollectionSchema', function() {
                     expect(data.links).to.eql([
                         {
                             rel: 'self',
-                            href: 'http://example.org/api/people'
+                            href: '/people'
                         },
                         {
                             rel: 'add',
                             method: 'POST',
-                            href: 'http://example.org/api/people',
+                            href: '/people',
                             schema: {
-                                $ref: 'http://example.org/api/item-schemas/' + itemSchemaId
+                                $ref: '/item-schemas/' + itemSchemaId
                             }
                         },
                         {
                             rel: 'custom',
-                            href: 'http://example.org/api/custom'
+                            href: '/custom'
                         }
                     ]);
                     done();
