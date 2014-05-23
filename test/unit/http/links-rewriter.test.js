@@ -39,7 +39,7 @@ describe('linksRewriter', function() {
             });
         });
 
-        describe('when schema.$ref is relative', function() {
+        describe('when $ref is relative', function() {
             beforeEach(function() {
                 links = [
                     { schema: { $ref: '/relative' } }
@@ -52,7 +52,7 @@ describe('linksRewriter', function() {
             });
         });
 
-        describe('when schema.$ref is absolute', function() {
+        describe('when $ref is absolute', function() {
             beforeEach(function() {
                 links = [
                     { schema: { $ref: 'http://example.org/absolute' } }

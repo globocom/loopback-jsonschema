@@ -19,7 +19,7 @@
   "dependencies": {
     "cors": "2.x",
     "debug": "",
-    "object-path": "",
+    "traverse": "",
     "underscore": "1.x",
     "winston": "0.x"
   },
