@@ -7,7 +7,7 @@ var LJSUrl = require('../../../lib/models/ljs-url');
 describe('LJSUrl', function() {
     var ljsUrl;
 
-    describe('#properties', function() {
+    describe('properties', function() {
         beforeEach(function() {
             ljsUrl = new LJSUrl('http://example.org/api/people/1');
         });
@@ -75,6 +75,38 @@ describe('LJSUrl', function() {
 
             it('should return false', function () {
                 expect(ljsUrl.isCollection()).to.be.false;
+            });
+        });
+    });
+
+    describe('#isSchema', function() {
+        describe('when url represents an item schema', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/item-schemas/1');
+            });
+
+            it('should return true', function() {
+                expect(ljsUrl.isSchema()).to.be.true;
+            });
+        });
+
+        describe('when url represents a collection schema', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/collection-schemas/1');
+            });
+
+            it('should return true', function() {
+                expect(ljsUrl.isSchema()).to.be.true;
+            });
+        });
+
+        describe('when url does not represent a schema', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people/1');
+            });
+
+            it('should return true', function() {
+                expect(ljsUrl.isSchema()).to.be.false;
             });
         });
     });
