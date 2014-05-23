@@ -3,13 +3,13 @@ require('../../support');
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
-var JsonSchemaLinks = require('../../../lib/models/links');
+var Links = require('../../../lib/models/links');
 var LJSRequest = require('../../../lib/models/ljs-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
 
-describe('JsonSchemaLinks', function() {
+describe('Links', function() {
     describe('#all', function() {
         var allLinks;
 
@@ -25,7 +25,7 @@ describe('JsonSchemaLinks', function() {
                 { rel: 'custom-relative', href: '/custom-relative' },
                 { rel: 'self', href: 'http://example.org/api/override/self' }
             ];
-            var links = new JsonSchemaLinks(ljsReq, defaultLinks, customLinks);
+            var links = new Links(ljsReq, defaultLinks, customLinks);
             allLinks = links.all();
         });
 
