@@ -33,7 +33,7 @@ loopbackJsonSchema.init(app, { CollectionSchemaClass: MyCustomCollectionSchema }
 
 ```js
 var util = require('util');
-var CollectionSchema = require('loopback-jsonschema/lib/models/collection-schema');
+var CollectionSchema = require('loopback-jsonschema/lib/domain/collection-schema');
 
 function MyCustomCollectionSchema() {
     CollectionSchema.apply(this, Array.prototype.slice.call(arguments));
@@ -46,7 +46,7 @@ MyCustomCollectionSchema.pluralModelName = MyCustomCollectionSchema.super_.plura
 # Override functions to customize the default collection schema.
 ```
 
-Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/models/collection-schema.js for available functions to override.
+Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/domain/collection-schema.js for available functions to override.
 
 ## Using
 
