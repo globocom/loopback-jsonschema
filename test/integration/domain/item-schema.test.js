@@ -77,27 +77,26 @@ describe('ItemSchema', function() {
             this.sinon.stub(logger, 'warn');
         });
 
-        it('should find ItemSchema by collection name and execute provided callback', function(done) {
-            var jsonSchema = ItemSchema.create({ modelName: 'person', collectionName: 'people' });
-
-            var callback = this.sinon.spy();
-            var next = function() {
-                expect(callback).to.have.been.called;
+        it('should find ItemSchema by collection name', function(done) {
+            var callback = function(err, itemSchema) {
+                expect(itemSchema.modelName).to.eq('person');
                 done();
             };
 
-            ItemSchema.findByCollectionName('people', next, callback)
-
-            ItemSchema.remove({ modelName: 'person' });
+            ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
+                if (err) { throw err; }
+                ItemSchema.findByCollectionName('people', callback);
+            });
         });
 
         it('should log when collection JSON schema was not found', function(done) {
-            var next = function() {
+            var callback = function(err) {
+                if (err) { throw err; }
                 expect(logger.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
                 done();
             };
 
-            ItemSchema.findByCollectionName('people', next, null);
+            ItemSchema.findByCollectionName('people', callback);
         });
     });
 });

@@ -25,27 +25,20 @@ describe('instance.service', function() {
         });
 
         it('should register loopback model for an existing collection JSON schema', function(done) {
-            var jsonSchema = ItemSchema.create({ modelName: 'person', collectionName: 'people' });
-
-            var next = function() {
+            var callback = function(err) {
+                if (err) { throw err; }
                 var Person = loopback.getModel('person');
                 expect(Person).to.not.be.null;
                 expect(Person.definition.name).to.equal('person');
                 expect(Person.definition.settings.plural).to.equal('people');
                 done();
             };
-            this.instanceService.build(next);
 
-            ItemSchema.remove({ modelName: 'person' });
-        });
-
-        it('should log when collection JSON schema was not found', function(done) {
-            var next = function() {
-                expect(logger.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
-                done();
-            };
-
-            this.instanceService.build(next);
+            var self = this;
+            ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
+                if (err) { throw err; }
+                self.instanceService.build(callback);
+            });
         });
     });
 });
