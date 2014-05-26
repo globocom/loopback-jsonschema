@@ -8,22 +8,41 @@ describe('LJSUrl', function() {
     var ljsUrl;
 
     describe('properties', function() {
-        beforeEach(function() {
-            ljsUrl = new LJSUrl('http://example.org/api/people/1');
+        describe('when url represents an item', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people/1?query=string');
+            });
+
+            it("should return 'people' as collectionName", function() {
+                expect(ljsUrl.collectionName).to.equal('people');
+            });
+
+            it("should return '1' as resourceId", function() {
+                expect(ljsUrl.resourceId).to.equal('1');
+            });
+
+            it("should return 'api' as restApiRoot", function() {
+                expect(ljsUrl.restApiRoot).to.equal('api');
+            });
         });
 
-        it("should return 'people' as collectionName", function() {
-            expect(ljsUrl.collectionName).to.equal('people');
-        });
+        describe('when url represents a collection', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people?query=string');
+            });
 
-        it("should return '1' as resourceId", function() {
-            expect(ljsUrl.resourceId).to.equal('1');
-        });
+            it("should return 'people' as collectionName", function() {
+                expect(ljsUrl.collectionName).to.equal('people');
+            });
 
-        it("should return 'api' as restApiRoot", function() {
-            expect(ljsUrl.restApiRoot).to.equal('api');
-        });
+            it("should return undefined as resourceId", function() {
+                expect(ljsUrl.resourceId).to.be.undefined;
+            });
 
+            it("should return 'api' as restApiRoot", function() {
+                expect(ljsUrl.restApiRoot).to.equal('api');
+            });
+        });
     });
 
     describe('.buildFromModel', function() {
