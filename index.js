@@ -22,6 +22,8 @@ loopbackJsonSchema.init = function(app, customConfig) {
     });
 };
 
+loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
+
 function dataSource (app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
 };
