@@ -2,7 +2,7 @@ require('../../support');
 
 var expect = require('chai').expect;
 
-var ItemSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/domain/item-schema');
 var modelPropertiesSanitizer = require('../../../lib/models/model-properties-sanitizer');
 
 

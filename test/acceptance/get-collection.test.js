@@ -5,7 +5,7 @@ var loopback = require('loopback');
 var request = require('supertest');
 
 var loopbackJsonSchema = require('../../index');
-var ItemSchema = require('../../lib/models/item-schema');
+var ItemSchema = require('../../lib/domain/item-schema');
 var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware');
 
 var app = loopback();

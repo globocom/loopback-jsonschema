@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
-var ItemSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/domain/item-schema');
 var CollectionSchema = require('../../../lib/domain/collection-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 

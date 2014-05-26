@@ -5,7 +5,7 @@ var loopback = require('loopback');
 
 var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
-var ItemSchema = require('../../../lib/models/item-schema');
+var ItemSchema = require('../../../lib/domain/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
 var app = loopback();
