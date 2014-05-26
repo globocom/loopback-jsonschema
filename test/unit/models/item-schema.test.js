@@ -12,75 +12,63 @@ app.set('restApiRoot', '/api');
 
 describe('ItemSchema', function() {
     describe('#defaultLinks', function() {
-        var itemSchema, ljsReq;
+        var itemSchema;
 
         beforeEach(function() {
-            var req = null;
-            ljsReq = new LJSRequest(req, app);
-            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
         });
 
         it('should return default links', function() {
-            expect(itemSchema.defaultLinks(ljsReq)).to.eql([
-                { rel: 'self', href: 'http://example.org/api/people/{id}' },
-                { rel: 'item', href: 'http://example.org/api/people/{id}' },
+            expect(itemSchema.defaultLinks()).to.eql([
+                { rel: 'self', href: '/people/{id}' },
+                { rel: 'item', href: '/people/{id}' },
                 {
                     rel: 'create',
                     method: 'POST',
-                    href: 'http://example.org/api/people',
+                    href: '/people',
                     schema: {
-                        $ref: 'http://example.org/api/item-schemas/1'
+                        $ref: '/item-schemas/1'
                     }
                 },
-                { rel: 'update', method: 'PUT', href: 'http://example.org/api/people/{id}' },
-                { rel: 'delete', method: 'DELETE', href: 'http://example.org/api/people/{id}' }
+                { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
             ]);
         });
     });
 
     describe('#url', function() {
-        var itemSchema, ljsReq;
+        var itemSchema;
 
         beforeEach(function() {
-            var req = null;
-            ljsReq = new LJSRequest(req, app);
-            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             itemSchema = new ItemSchema({ id: 1 });
         });
 
         it('should return URL this item schema', function() {
-            expect(itemSchema.url(ljsReq)).to.eq('http://example.org/api/item-schemas/1');
+            expect(itemSchema.url()).to.eq('/item-schemas/1');
         });
     });
 
     describe('#itemUrlTemplate', function() {
-        var itemSchema, ljsReq;
+        var itemSchema;
 
         beforeEach(function() {
-            var req = null;
-            ljsReq = new LJSRequest(req, app);
-            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             itemSchema = new ItemSchema({ collectionName: 'people' });
         });
 
         it('should return URL template for an item represented by this item schema', function() {
-            expect(itemSchema.itemUrlTemplate(ljsReq)).to.eq('http://example.org/api/people/{id}');
+            expect(itemSchema.itemUrlTemplate()).to.eq('/people/{id}');
         });
     });
 
     describe('#collectionUrl', function() {
-        var itemSchema, ljsReq;
+        var itemSchema;
 
         beforeEach(function() {
-            var req = null;
-            ljsReq = new LJSRequest(req, app);
-            this.sinon.stub(ljsReq, 'schemeAndAuthority').returns('http://example.org');
             itemSchema = new ItemSchema({ collectionName: 'people' });
         });
 
         it('should return URL for the collection of items represented by this item schema', function() {
-            expect(itemSchema.collectionUrl(ljsReq)).to.eq('http://example.org/api/people');
+            expect(itemSchema.collectionUrl()).to.eq('/people');
         });
     });
 
