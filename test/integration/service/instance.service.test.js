@@ -7,18 +7,19 @@ var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
 var LJSRequest = require('../../../lib/http/ljs-request');
 var ItemSchema = require('../../../lib/domain/item-schema');
-var InstanceService = require('../../../lib/service/instance.service');
+var instanceRequest = require('../../../lib/service/instance.service');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('instance.service', function() {
     describe('#build', function() {
+        var ljsReq, res;
+
         beforeEach(function() {
             var req = { body: 'body', protocol: 'http', url: '/people', originalUrl: '/api/people', app: app, get: this.sinon.stub() };
-            var ljsReq = new LJSRequest(req, app);
-            this.res = { set: this.sinon.stub() };
-            this.instanceService = new InstanceService(ljsReq, this.res);
+            ljsReq = new LJSRequest(req, app);
+            res = { set: this.sinon.stub() };
 
             this.sinon.stub(logger, 'info');
             this.sinon.stub(logger, 'warn');
@@ -34,10 +35,9 @@ describe('instance.service', function() {
                 done();
             };
 
-            var self = this;
             ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
                 if (err) { throw err; }
-                self.instanceService.build(callback);
+                instanceRequest.handle(ljsReq, res, callback);
             });
         });
     });
