@@ -5,7 +5,7 @@ var loopback = require('loopback');
 
 var config = require('./lib/support/config');
 var ItemSchema = require('./lib/domain/item-schema');
-var jsonSchemaRoutes = require('./lib/config/json-schema-routes');
+var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var jsonSchemaMiddleware = require('./lib/middleware/json-schema.middleware');
 
 loopbackJsonSchema.init = function(app, customConfig) {
