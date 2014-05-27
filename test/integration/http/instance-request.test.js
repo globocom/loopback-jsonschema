@@ -7,7 +7,7 @@ var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
 var LJSRequest = require('../../../lib/http/ljs-request');
 var ItemSchema = require('../../../lib/domain/item-schema');
-var instanceRequest = require('../../../lib/service/instance.service');
+var instanceRequest = require('../../../lib/http/instance-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
