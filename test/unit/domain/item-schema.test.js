@@ -11,18 +11,14 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('ItemSchema', function() {
-    describe('#mergeDefaultCustomLinks', function() {
+    describe('#allLinks', function() {
         beforeEach(function() {
             itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
         });
 
         describe('when there are no custom links', function() {
-            beforeEach(function() {
-                itemSchema.mergeDefaultCustomLinks();
-            });
-
             it('should default links with empty custom links', function() {
-                expect(itemSchema.links).to.eql([
+                expect(itemSchema.allLinks()).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
                     {
@@ -42,11 +38,10 @@ describe('ItemSchema', function() {
         describe('when there are custom links', function() {
             beforeEach(function() {
                 itemSchema.links = [{ rel: 'custom', href: '/custom' }];
-                itemSchema.mergeDefaultCustomLinks();
             });
 
             it('should merge default and custom links', function() {
-                expect(itemSchema.links).to.eql([
+                expect(itemSchema.allLinks()).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
                     {
@@ -67,11 +62,10 @@ describe('ItemSchema', function() {
         describe('when there are custom links trying to override a default link', function() {
             beforeEach(function() {
                 itemSchema.links = [{ rel: 'self', href: '/custom' }];
-                itemSchema.mergeDefaultCustomLinks();
             });
 
             it('should merge default and custom links without overriding default links', function() {
-                expect(itemSchema.links).to.eql([
+                expect(itemSchema.allLinks()).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
                     {
@@ -86,6 +80,24 @@ describe('ItemSchema', function() {
                     { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
                 ]);
             });
+        });
+    });
+
+    describe('#customLinks', function() {
+        beforeEach(function() {
+            itemSchema = new ItemSchema({ id: 1, collectionName: 'people' });
+        });
+
+        it('should return custom links', function() {
+            itemSchema.links = [{ rel: 'custom', href: '/custom' }];
+            expect(itemSchema.customLinks()).to.eql([
+                { rel: 'custom', href: '/custom' }
+            ]);
+        });
+
+        it('should not include custom links that try to override default links', function() {
+            itemSchema.links = [{ rel: 'self', href: '/custom' }];
+            expect(itemSchema.customLinks()).to.eql([]);
         });
     });
 
@@ -111,24 +123,6 @@ describe('ItemSchema', function() {
                 { rel: 'update', method: 'PUT', href: '/people/{id}' },
                 { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
             ]);
-        });
-    });
-
-    describe('#customLinks', function() {
-        beforeEach(function() {
-            itemSchema = new ItemSchema({ id: 1, collectionName: 'people' });
-        });
-
-        it('should return custom links', function() {
-            itemSchema.links = [{ rel: 'custom', href: '/custom' }];
-            expect(itemSchema.customLinks()).to.eql([
-                { rel: 'custom', href: '/custom' }
-            ]);
-        });
-
-        it('should not include custom links that try to override default links', function() {
-            itemSchema.links = [{ rel: 'self', href: '/custom' }];
-            expect(itemSchema.customLinks()).to.eql([]);
         });
     });
 
