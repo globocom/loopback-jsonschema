@@ -114,6 +114,24 @@ describe('ItemSchema', function() {
         });
     });
 
+    describe('#customLinks', function() {
+        beforeEach(function() {
+            itemSchema = new ItemSchema({ id: 1, collectionName: 'people' });
+        });
+
+        it('should return custom links', function() {
+            itemSchema.links = [{ rel: 'custom', href: '/custom' }];
+            expect(itemSchema.customLinks()).to.eql([
+                { rel: 'custom', href: '/custom' }
+            ]);
+        });
+
+        it('should not include custom links that try to override default links', function() {
+            itemSchema.links = [{ rel: 'self', href: '/custom' }];
+            expect(itemSchema.customLinks()).to.eql([]);
+        });
+    });
+
     describe('#url', function() {
         var itemSchema;
 

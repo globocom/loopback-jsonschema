@@ -43,4 +43,31 @@ describe('Links', function() {
             expect(allLinks[0]).to.eql({ rel: 'self', href: '/api' });
         });
     });
+
+    describe('#customLinks', function() {
+        beforeEach(function() {
+            var defaultLinks = [
+                { rel: 'self', href: '/api' }
+            ];
+            var customLinks = [
+                { rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' },
+                { rel: 'custom-relative', href: '/custom-relative' },
+                { rel: 'self', href: 'http://example.org/api/override/self' }
+            ];
+            var links = new Links(defaultLinks, customLinks);
+            returnedCustomLinks = links.custom();
+        });
+
+        it('should include custom absolute links', function() {
+            expect(returnedCustomLinks[0]).to.eql({ rel: 'custom-absolute', href: 'http://other.example.org/custom-absolute' });
+        });
+
+        it('should include custom relative links', function() {
+            expect(returnedCustomLinks[1]).to.eql({ rel: 'custom-relative', href: '/custom-relative' });
+        });
+
+        it('should not allow overriding default links', function() {
+            expect(returnedCustomLinks).to.have.length(2);
+        });
+    });
 });
