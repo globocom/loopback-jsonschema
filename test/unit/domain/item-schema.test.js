@@ -115,7 +115,7 @@ describe('ItemSchema', function() {
 
         it('should return a collection schema that corresponds to this item schema', function() {
             expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
-            expect(collectionSchema.id).to.eq(schemaId);
+            expect(collectionSchema.itemSchema.id).to.eq(schemaId);
         });
     });
 });
