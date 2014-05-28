@@ -86,12 +86,12 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe('#createLoopbackModel', function() {
+    describe('#registerLoopbackModel', function() {
         var Test;
 
         beforeEach(function() {
             var jsonSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
-            jsonSchema.createLoopbackModel(app);
+            jsonSchema.registerLoopbackModel(app);
             Test = loopback.getModel('test');
         });
 

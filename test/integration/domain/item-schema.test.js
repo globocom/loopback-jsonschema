@@ -53,24 +53,6 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe('#createLoopbackModel', function() {
-        var Test;
-
-        beforeEach(function() {
-            var jsonSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
-            jsonSchema.createLoopbackModel(app);
-            Test = loopback.getModel('test');
-        });
-
-        it('should create model defined by this json schema', function() {
-            expect(Test).to.exist;
-        });
-
-        it("should use collectionName as model's plural", function() {
-            expect(Test.pluralModelName).to.equal('testplural');
-        });
-    });
-
     describe('.findByCollectionName', function() {
         beforeEach(function() {
             this.sinon.stub(logger, 'info');

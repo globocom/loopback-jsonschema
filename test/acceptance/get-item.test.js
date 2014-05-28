@@ -6,7 +6,7 @@ var request = require('supertest');
 
 var loopbackJsonSchema = require('../../index');
 var ItemSchema = require('../../lib/domain/item-schema');
-var jsonSchemaMiddleware = require('../../lib/middleware/json-schema.middleware');
+var jsonSchemaMiddleware = require('../../lib/http/json-schema.middleware');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
