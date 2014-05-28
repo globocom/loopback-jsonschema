@@ -24,22 +24,22 @@ describe('ItemSchema', function() {
         });
 
         it('should have $schema', function() {
-            ItemSchema.findOne({where: {modelName: 'test'}}, function(err, jsonSchema) {
+            ItemSchema.findOne({where: {modelName: 'test'}}, function(err, itemSchema) {
                 if (err) {
                     logger.log(err);
                 }
-                expect(jsonSchema.$schema).to.exist;
+                expect(itemSchema.$schema).to.exist;
             });
         });
     });
 
     describe('.create', function() {
         it('should set $schema', function() {
-            ItemSchema.create({modelName: 'test'}, function(err, jsonSchema) {
+            ItemSchema.create({modelName: 'test'}, function(err, itemSchema) {
                 if (err) {
                     logger.log(err);
                 }
-                expect(jsonSchema.$schema).to.exist;
+                expect(itemSchema.$schema).to.exist;
             });
         });
 
