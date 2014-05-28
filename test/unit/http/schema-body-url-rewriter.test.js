@@ -6,7 +6,8 @@ var schemaBodyUrlRewriter = require('../../../lib/http/schema-body-url-rewriter'
 
 describe('schemaBodyUrlRewriter', function() {
     describe('.makeAbsolute', function() {
-        var body = {}
+        var body = {};
+        var originalBody = {};
         var ljsReq;
 
         before(function() {
@@ -16,10 +17,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links href is relative', function() {
             beforeEach(function() {
-                body.links = [
+                originalBody.links = [
                     { href: '/relative' }
                 ];
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should make href absolute', function() {
@@ -29,10 +30,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links href is absolute', function() {
             beforeEach(function() {
-                body.links = [
+                originalBody.links = [
                     { href: 'http://example.org/absolute' }
                 ];
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -42,10 +43,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links $ref is relative', function() {
             beforeEach(function() {
-                body.links = [
+                originalBody.links = [
                     { schema: { $ref: '/relative' } }
                 ];
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should make schema.$ref absolute', function() {
@@ -55,10 +56,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links $ref is absolute', function() {
             beforeEach(function() {
-                body.links = [
+                originalBody.links = [
                     { schema: { $ref: 'http://example.org/absolute' } }
                 ];
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -68,10 +69,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when properties $ref is relative', function() {
             beforeEach(function() {
-                body.properties = {
+                originalBody.properties = {
                     items: { $ref: '/relative' }
                 };
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should make schema.$ref absolute', function() {
@@ -81,10 +82,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when properties $ref is absolute', function() {
             beforeEach(function() {
-                body.properties = {
+                originalBody.properties = {
                     items: { $ref: 'http://example.org/absolute' }
                 };
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -94,9 +95,9 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links and properties do not exist', function() {
             beforeEach(function() {
-                body.links = undefined;
-                body.properties = undefined;
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                originalBody.links = undefined;
+                originalBody.properties = undefined;
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -107,9 +108,9 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when no keys with url exist', function() {
             beforeEach(function() {
-                body.links = [{}];
-                body.properties = {};
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                originalBody.links = [{}];
+                originalBody.properties = {};
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -120,10 +121,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when href is a child of something other than links', function() {
             beforeEach(function() {
-                body.properties = {
+                originalBody.properties = {
                     href: '/relative'
                 };
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
@@ -133,10 +134,10 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when $ref is a child of something other than links or properties', function() {
             beforeEach(function() {
-                body.something = {
+                originalBody.something = {
                     href: '/relative'
                 };
-                schemaBodyUrlRewriter.makeAbsolute(ljsReq, body);
+                body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
             it('should do nothing', function() {
