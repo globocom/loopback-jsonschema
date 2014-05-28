@@ -62,7 +62,7 @@ describe('ItemSchema', function() {
 
         it('should not allow overriding default links', function() {
             var customLinks = [{ rel: 'self', href: '/custom' }];
-            ItemSchema.create({modelName: 'test'}, function(err, itemSchema) {
+            ItemSchema.create({modelName: 'test', links: customLinks}, function(err, itemSchema) {
                 if (err) { throw err; }
                 expect(itemSchema.links).to.eql([]);
             });
