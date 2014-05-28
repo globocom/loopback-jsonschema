@@ -8,7 +8,6 @@ var ItemSchema = require('./lib/domain/item-schema');
 var jsonSchemaMiddleware = require('./lib/http/json-schema.middleware');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 
-
 loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
 
