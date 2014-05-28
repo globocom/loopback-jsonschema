@@ -11,6 +11,84 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('ItemSchema', function() {
+    describe('#mergeDefaultCustomLinks', function() {
+        beforeEach(function() {
+            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
+        });
+
+        describe('when there are no custom links', function() {
+            beforeEach(function() {
+                itemSchema.mergeDefaultCustomLinks();
+            });
+
+            it('should default links with empty custom links', function() {
+                expect(itemSchema.links).to.eql([
+                    { rel: 'self', href: '/people/{id}' },
+                    { rel: 'item', href: '/people/{id}' },
+                    {
+                        rel: 'create',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/1'
+                        }
+                    },
+                    { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                ]);
+            });
+        });
+
+        describe('when there are custom links', function() {
+            beforeEach(function() {
+                itemSchema.links = [{ rel: 'custom', href: '/custom' }];
+                itemSchema.mergeDefaultCustomLinks();
+            });
+
+            it('should merge default and custom links', function() {
+                expect(itemSchema.links).to.eql([
+                    { rel: 'self', href: '/people/{id}' },
+                    { rel: 'item', href: '/people/{id}' },
+                    {
+                        rel: 'create',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/1'
+                        }
+                    },
+                    { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'custom', href: '/custom' }
+                ]);
+            });
+        });
+
+        describe('when there are custom links trying to override a default link', function() {
+            beforeEach(function() {
+                itemSchema.links = [{ rel: 'self', href: '/custom' }];
+                itemSchema.mergeDefaultCustomLinks();
+            });
+
+            it('should merge default and custom links without overriding default links', function() {
+                expect(itemSchema.links).to.eql([
+                    { rel: 'self', href: '/people/{id}' },
+                    { rel: 'item', href: '/people/{id}' },
+                    {
+                        rel: 'create',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/1'
+                        }
+                    },
+                    { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                ]);
+            });
+        });
+    });
+
     describe('#defaultLinks', function() {
         var itemSchema;
 
