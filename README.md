@@ -43,7 +43,7 @@ util.inherits(MyCustomCollectionSchema, CollectionSchema);
 // It's required to set the value of "pluralModelName". This value will be used on the headers. You can still use the default value (see below).
 MyCustomCollectionSchema.pluralModelName = MyCustomCollectionSchema.super_.pluralModelName;
 
-# Override functions to customize the default collection schema.
+// Override functions to customize the default collection schema.
 ```
 
 Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/domain/collection-schema.js for available functions to override.
@@ -155,7 +155,20 @@ Connection: keep-alive
       "type": "integer"
     }
   },
-  "links": []
+  "links": [
+    {
+      "rel": "self",
+      "href": "http://example.org/api/people"
+    },
+    {
+      "rel": "add",
+      "method": "POST",
+      "href": "http://example.org/api/people",
+      "schema": {
+        "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
+      }
+    }
+  ]
 }
 ```
 
