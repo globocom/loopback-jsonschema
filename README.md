@@ -176,9 +176,9 @@ Connection: keep-alive
 
 Item and collection schemas have a default set of links which correspond to the basic CRUD operations supported by Loopback.
 
-### Including custom links
+### Including custom links in an item schema
 
-It is possible to include custom links in an item schema. To do so, just include them in the `links` property of the schema used to define a Loopback model:
+It is possible to include custom links in an item schema. To do so, just include them in the `links` property of the **item schema** used to define a Loopback model:
 
 ```
 {
@@ -189,8 +189,28 @@ It is possible to include custom links in an item schema. To do so, just include
   },
   "links": [
     {
-      "rel": "my-custom-link",
-      "href": "http://example.org/my/custom/link"
+      "rel": "my-custom-item-schema-link",
+      "href": "http://example.org/my/custom/item-schema-link"
+    }
+  ]
+}
+```
+
+### Including custom links in a collection schema
+
+It is possible to include custom links in an item schema. To do so, just include them in the `collectionLinks` property of the **item schema** used to define a Loopback model:
+
+```
+{
+  "type": "object",
+  ...
+  "properties": {
+    ...
+  },
+  "collectionLinks": [
+    {
+      "rel": "my-custom-collection-schema-link",
+      "href": "http://example.org/my/custom/collection-schema-link"
     }
   ]
 }
