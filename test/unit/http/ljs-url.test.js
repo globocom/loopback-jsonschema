@@ -76,6 +76,58 @@ describe('LJSUrl', function() {
         });
     });
 
+    describe('#isInstance', function() {
+        describe('when url represents an item', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people/1');
+            });
+
+            it('should return true', function () {
+                expect(ljsUrl.isInstance()).to.be.true;
+            });
+        });
+
+        describe('when url represents a collection', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people');
+            });
+
+            it('should return true', function () {
+                expect(ljsUrl.isInstance()).to.be.true;
+            });
+        });
+
+        describe('when url represents an item schema', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/item-schemas/1');
+            });
+
+            it('should return false', function() {
+                expect(ljsUrl.isInstance()).to.be.false;
+            });
+        });
+
+        describe('when url represents a collection schema', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/collection-schemas/1');
+            });
+
+            it('should return false', function() {
+                expect(ljsUrl.isInstance()).to.be.false;
+            });
+        });
+
+        describe('when url represents swagger resources', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/swagger/resources');
+            });
+
+            it('should return false', function() {
+                expect(ljsUrl.isInstance()).to.be.false;
+            });
+        });
+    });
+
     describe('#isCollection', function () {
         describe('when url represents a collection', function () {
             beforeEach(function() {
