@@ -49,6 +49,14 @@ describe('GET /collection-schemas/:id', function () {
             });
         });
 
+        it('should have application/schema+json content type', function() {
+            expect(collectionSchemaResponse.headers['content-type']).to.eq('application/schema+json; charset=utf-8');
+        });
+
+        it('should include CORS headers', function() {
+            expect(collectionSchemaResponse.headers['access-control-allow-origin']).to.eq('*');
+        });
+
         it('should include $schema', function() {
             expect(collectionSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
         });
@@ -84,10 +92,6 @@ describe('GET /collection-schemas/:id', function () {
                     href: schemeAndAuthority + '/api/custom'
                 }
             ]);
-        });
-
-        it('should include CORS headers', function() {
-            expect(collectionSchemaResponse.headers['access-control-allow-origin']).to.eq('*');
         });
     });
 
