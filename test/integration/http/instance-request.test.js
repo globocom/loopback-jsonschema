@@ -12,8 +12,8 @@ var instanceRequest = require('../../../lib/http/instance-request');
 var app = loopback();
 app.set('restApiRoot', '/api');
 
-describe('instance.service', function() {
-    describe('#build', function() {
+describe('instanceRequest', function() {
+    describe('#handle', function() {
         var ljsReq, res;
 
         beforeEach(function() {
