@@ -15,7 +15,7 @@ app.installMiddleware();
 
 describe('GET /item-schemas/:id', function() {
     describe('when schema exists', function() {
-        var itemSchema, itemSchemaId, schemeAndAuthority;
+        var itemSchema, itemSchemaId, response, schemeAndAuthority;
 
         before(function(done) {
             ItemSchema.create({
@@ -42,9 +42,14 @@ describe('GET /item-schemas/:id', function() {
                 .end(function(err, res) {
                     if (err) { throw err };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
-                    itemSchema = res.body;
+                    response = res;
+                    itemSchema = JSON.parse(res.text);
                     done();
                 });
+        });
+
+        it('should have application/schema+json content type', function() {
+            expect(response.headers['content-type']).to.eq('application/schema+json; charset=utf-8');
         });
 
         it('should include $schema', function() {

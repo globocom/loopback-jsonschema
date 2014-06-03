@@ -16,7 +16,7 @@ app.installMiddleware();
 
 describe('GET /collection-schemas/:id', function () {
    describe('when corresponding item schema exists', function () {
-        var collectionSchemaResponse, collectionSchemaId;
+        var collectionSchema, collectionSchemaResponse, collectionSchemaId;
 
         before(function (done) {
             ItemSchema.create({
@@ -44,28 +44,29 @@ describe('GET /collection-schemas/:id', function () {
                     if (err) { throw err };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     collectionSchemaResponse = res;
+                    collectionSchema = JSON.parse(res.text);
                     done();
             });
         });
 
         it('should include $schema', function() {
-            expect(collectionSchemaResponse.body['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
+            expect(collectionSchema['$schema']).to.eq('http://json-schema.org/draft-04/hyper-schema#');
         });
 
         it('should include type', function() {
-            expect(collectionSchemaResponse.body['type']).to.eq('array');
+            expect(collectionSchema['type']).to.eq('array');
         });
 
         it('should include title', function() {
-            expect(collectionSchemaResponse.body['title']).to.eq('People');
+            expect(collectionSchema['title']).to.eq('People');
         });
 
         it('should not include properties', function() {
-            expect(collectionSchemaResponse.body['properties']).to.be.undefined;
+            expect(collectionSchema['properties']).to.be.undefined;
         });
 
         it('should include links', function() {
-            expect(collectionSchemaResponse.body['links']).to.eql([
+            expect(collectionSchema['links']).to.eql([
                 {
                     rel: 'self',
                     href: schemeAndAuthority + '/api/people'
