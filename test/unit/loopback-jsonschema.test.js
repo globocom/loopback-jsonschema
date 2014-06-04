@@ -14,7 +14,11 @@ describe('loopbackJsonSchema', function() {
         it('should allow overriding default config', function() {
             var myConfig = {CollectionSchemaClass: 'MyCollectionSchemaClass', myConfigOption: 'myValue'};
             loopbackJsonSchema.init(app, myConfig);
-            expect(config).to.eql({CollectionSchemaClass: 'MyCollectionSchemaClass', myConfigOption: 'myValue'});
+            expect(config).to.eql({
+                CollectionSchemaClass: 'MyCollectionSchemaClass',
+                logLevel: 'info',
+                myConfigOption: 'myValue'
+            });
         });
 
         after(function() {
