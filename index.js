@@ -7,9 +7,12 @@ var config = require('./lib/support/config');
 var ItemSchema = require('./lib/domain/item-schema');
 var jsonSchemaMiddleware = require('./lib/http/json-schema.middleware');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
+var logger = require('./lib/support/logger');
+
 
 loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
+    logger.transports.console.level = config.logLevel;
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
