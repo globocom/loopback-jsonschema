@@ -71,4 +71,15 @@ describe('LJSRequest', function() {
             expect(ljsReq.ljsUrl()).to.be.an.instanceof(LJSUrl)
         });
     });
+
+    describe('#safeHeaders', function() {
+        beforeEach(function() {
+            req.headers = {'authorization': 'Bearer'};
+            ljsReq = new LJSRequest(req, req.app);
+        });
+
+        it('should not include Authorization header', function() {
+            expect(ljsReq.safeHeaders()).to.not.contain.key('authorization');
+        });
+    });
 });
