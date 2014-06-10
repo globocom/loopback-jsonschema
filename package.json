@@ -19,6 +19,7 @@
   "dependencies": {
     "cors": "2.x",
     "debug": "",
+    "stack-trace": "",
     "traverse": "",
     "type-is": "1.x.x",
     "underscore": "1.x",
