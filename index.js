@@ -19,10 +19,8 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     app.model(ItemSchema);
 
-    app.on('middleware:preprocessors', function() {
-        app.use(app.get('restApiRoot'), jsonSchemaMiddleware());
-        jsonSchemaRoutes.draw(app);
-    });
+    app.use(app.get('restApiRoot') || '/api', jsonSchemaMiddleware());
+    jsonSchemaRoutes.draw(app);
 };
 
 

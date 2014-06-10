@@ -1,14 +1,12 @@
-require('../../support');
+var support = require('../../support');
 
 var expect = require('chai').expect;
-var loopback = require('loopback');
 
 var ItemSchema = require('../../../lib/domain/item-schema');
 var CollectionSchemaFactory = require('../../../lib/domain/collection-schema-factory');
 var config = require('../../../lib/support/config');
 
-var app = loopback();
-app.set('restApiRoot', '/api');
+var app = support.newLoopbackJsonSchemaApp();
 
 describe('CollectionSchemaFactory', function() {
 

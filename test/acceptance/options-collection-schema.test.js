@@ -1,4 +1,4 @@
-require('../support');
+var support = require('../support');
 
 var expect = require('chai').expect;
 var loopback = require('loopback');
@@ -6,7 +6,7 @@ var request = require('supertest');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
-app.installMiddleware();
+app.use(app.get('restApiRoot'), loopback.rest());
 
 describe('OPTION /collection-schemas/:id', function() {
     var response;

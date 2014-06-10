@@ -1,17 +1,11 @@
-require('../support');
+var support = require('../support');
 
 var expect = require('chai').expect;
-var loopback = require('loopback');
 var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
-var jsonSchemaMiddleware = require('../../lib/http/json-schema.middleware');
-var loopbackJsonSchema = require('../../index');
 
-var app = loopback();
-app.set('restApiRoot', '/api');
-loopbackJsonSchema.init(app);
-app.installMiddleware();
+var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /item-schemas/:id', function() {
     describe('when schema exists', function() {

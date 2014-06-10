@@ -1,20 +1,15 @@
-require('../../support');
+var support = require('../../support');
 
 var expect = require('chai').expect;
 var loopback = require('loopback');
 
-var loopbackJsonSchema = require('../../../index');
 var logger = require('../../../lib/support/logger')
 var ItemSchema = require('../../../lib/domain/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
-var app = loopback();
+var app = support.newLoopbackJsonSchemaApp();
 
 describe('ItemSchema', function() {
-    beforeEach(function() {
-        loopbackJsonSchema.init(app);
-    });
-
     describe('.findOne', function() {
         beforeEach(function(done) {
             ItemSchema.create({modelName: 'test'}, function(err, instance) {
