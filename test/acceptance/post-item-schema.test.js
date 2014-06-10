@@ -4,6 +4,8 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
+var loopbackJsonSchema = require('../../index');
+
 var app = loopback();
 app.set('restApiRoot', '/api');
 loopbackJsonSchema.init(app);
@@ -44,6 +46,7 @@ describe('POST /item-schemas', function() {
             };
             request(app)
                 .post('/api/item-schemas')
+                .set('Accept', 'application/json')
                 .set('Content-Type', 'text/plain')
                 .send(JSON.stringify(schemaJson))
                 .end(function (err, res) {
@@ -58,7 +61,7 @@ describe('POST /item-schemas', function() {
         });
 
         it('should return error message', function() {
-            expect(response.text).to.eq('Unsupported Content-Type: <text/plain>.')
+            expect(response.body.error.message).to.eq('Unsupported Content-Type: <text/plain>.')
         });
     });
 });

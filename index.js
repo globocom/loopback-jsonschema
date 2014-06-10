@@ -1,4 +1,4 @@
-module.exports = loopbackJsonSchema = {};
+var loopbackJsonSchema = module.exports = {};
 
 var _ = require('underscore');
 var loopback = require('loopback');

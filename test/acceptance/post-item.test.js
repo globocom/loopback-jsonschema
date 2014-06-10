@@ -61,6 +61,7 @@ describe('POST /:collection', function() {
         before(function(done) {
             request(app)
                 .post('/api/people')
+                .set('Accept', 'application/json')
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
@@ -75,7 +76,7 @@ describe('POST /:collection', function() {
         });
 
         it('should return error message', function() {
-            expect(itemResponse.text).to.eq('Unsupported Content-Type: <text/plain>.')
+            expect(itemResponse.body.error.message).to.eq('Unsupported Content-Type: <text/plain>.')
         });
     });
 });
