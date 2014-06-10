@@ -20,6 +20,7 @@
     "cors": "2.x",
     "debug": "",
     "traverse": "",
+    "type-is": "1.x.x",
     "underscore": "1.x",
     "winston": "0.x"
   },

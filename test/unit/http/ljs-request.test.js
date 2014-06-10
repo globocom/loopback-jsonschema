@@ -82,4 +82,93 @@ describe('LJSRequest', function() {
             expect(ljsReq.safeHeaders()).to.not.contain.key('authorization');
         });
     });
+
+    describe('#isContentTypeSupported', function() {
+        beforeEach(function() {
+            req = {headers: {}};
+        });
+
+        describe('when request does not have body', function() {
+            beforeEach(function() {
+                req.headers['content-length'] = 0;
+                ljsReq = new LJSRequest(req, req.app);
+            });
+
+            it('should be true', function() {
+                expect(ljsReq.isContentTypeSupported()).to.be.true;
+            });
+        });
+
+        describe('when request has body', function() {
+            beforeEach(function() {
+                req.headers['content-length'] = 1;
+            });
+
+            describe('and Content-Type is application/json', function() {
+                beforeEach(function() {
+                    req.headers['content-type'] = 'application/json';
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should be truthy', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.truthy;
+                });
+            });
+
+            describe('and Content-Type is application/schema+json', function() {
+                beforeEach(function() {
+                    req.headers['content-type'] = 'application/schema+json';
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should be truthy', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.truthy;
+                });
+            });
+
+            describe('and Content-Type is vendor specific json', function() {
+                beforeEach(function() {
+                    req.headers['content-type'] = 'application/vnd.acme+json';
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should be truthy', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.truthy;
+                });
+            });
+
+            describe('and Content-Type is not json', function() {
+                beforeEach(function() {
+                    req.headers['content-type'] = 'text/plain';
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should return false', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.false;
+                });
+            });
+
+            describe('and Content-Type is vendor specific but not json', function() {
+                beforeEach(function() {
+                    req.headers['content-type'] = 'application/vnd.acme';
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should return false', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.false;
+                });
+            });
+
+            describe('and Content-Type is undefined', function() {
+                beforeEach(function() {
+                    delete req.headers['content-type'];
+                    ljsReq = new LJSRequest(req, req.app);
+                });
+
+                it('should return false', function() {
+                    expect(ljsReq.isContentTypeSupported()).to.be.false;
+                });
+            });
+        });
+    });
 });
