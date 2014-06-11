@@ -25,6 +25,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
 
 loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
+loopbackJsonSchema.ItemSchema = require('./lib/domain/item-schema');
 
 
 function dataSource (app) {

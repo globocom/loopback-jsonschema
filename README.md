@@ -125,35 +125,21 @@ Connection: keep-alive
 #### Collection Schema example
 
 ```
-$ curl -i http://localhost:5000/api/collection-schemas/537530ea27f8870b63f2d886
+$ curl -i http://example.org/api/collection-schemas/537530ea27f8870b63f2d886
 HTTP/1.1 200 OK
 X-Powered-By: Express
-Content-Type: application/json; charset=utf-8
-Content-Length: 428
-ETag: "64466323"
-Date: Mon, 19 May 2014 19:11:55 GMT
+Content-Type: application/schema+json; charset=utf-8
+Content-Length: 373
+ETag: "-833543453"
+Date: Wed, 11 Jun 2014 20:10:41 GMT
 Connection: keep-alive
 
 {
   "$schema": "http://json-schema.org/draft-04/hyper-schema#",
-  "type": "object",
   "title": "People",
-  "properties": {
-    "items": {
-      "items": {
-        "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
-      },
-      "type": "array"
-    },
-    "previous_page": {
-      "type": "integer"
-    },
-    "next_page": {
-      "type": "integer"
-    },
-    "item_count": {
-      "type": "integer"
-    }
+  "type": "array",
+  "items": {
+    "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
   },
   "links": [
     {
