@@ -4,9 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
-var app = loopback();
-app.set('restApiRoot', '/api');
-app.use(app.get('restApiRoot'), loopback.rest());
+var app = support.newLoopbackJsonSchemaApp();
 
 describe('OPTION /collection-schemas/:id', function() {
     var response;
