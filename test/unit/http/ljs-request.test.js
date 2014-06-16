@@ -73,13 +73,26 @@ describe('LJSRequest', function() {
     });
 
     describe('#safeHeaders', function() {
-        beforeEach(function() {
-            req.headers = {'authorization': 'Bearer'};
-            ljsReq = new LJSRequest(req, req.app);
+        describe('when authorization header is present', function () {
+            beforeEach(function() {
+                req.headers = {'authorization': 'Bearer'};
+                ljsReq = new LJSRequest(req, req.app);
+            });
+
+            it('should replace Authorization header value', function() {
+                expect(ljsReq.safeHeaders()['authorization']).to.eq('CONFIDENTIAL');
+            });
         });
 
-        it('should not include Authorization header', function() {
-            expect(ljsReq.safeHeaders()).to.not.contain.key('authorization');
+        describe('when authorization header is not present', function () {
+            beforeEach(function() {
+                req.headers = {};
+                ljsReq = new LJSRequest(req, req.app);
+            });
+
+            it('should not include Authorization header', function() {
+                expect(ljsReq.safeHeaders()).to.not.contain.key('authorization');
+            });
         });
     });
 
