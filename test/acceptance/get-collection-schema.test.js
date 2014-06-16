@@ -63,6 +63,12 @@ describe('GET /collection-schemas/:id', function () {
             expect(collectionSchema['title']).to.eq('People');
         });
 
+        it('should include items', function() {
+            expect(collectionSchema['items']).to.eql({
+                $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaId
+            });
+        });
+
         it('should not include properties', function() {
             expect(collectionSchema['properties']).to.be.undefined;
         });
