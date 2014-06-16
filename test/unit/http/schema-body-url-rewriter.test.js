@@ -95,14 +95,12 @@ describe('schemaBodyUrlRewriter', function() {
 
         describe('when links and properties do not exist', function() {
             beforeEach(function() {
-                originalBody.links = undefined;
-                originalBody.properties = undefined;
+                originalBody = {};
                 body = schemaBodyUrlRewriter.makeAbsolute(ljsReq, originalBody);
             });
 
-            it('should do nothing', function() {
-                expect(body.links).to.be.undefined;
-                expect(body.properties).to.be.undefined;
+            it('should do nothing and return null', function() {
+                expect(body).to.be.null;
             });
         });
 
