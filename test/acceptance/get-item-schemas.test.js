@@ -38,7 +38,6 @@ describe('GET /item-schemas', function() {
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     response = res;
                     itemSchemas = JSON.parse(res.text);
-                    console.log(itemSchemas);
                     done();
                 });
         });
