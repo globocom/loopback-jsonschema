@@ -25,6 +25,9 @@ test-verbose:
 testing:
 	$(TESTER) $(OPTS) --watch "$(TESTS)"
 
+debug:
+	$(TESTER) $(OPTS) --debug-brk --watch "$(TESTS)"
+
 .PHONY: test
 
 bump_patch_version:
