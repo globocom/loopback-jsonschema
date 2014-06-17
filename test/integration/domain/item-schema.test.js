@@ -49,17 +49,44 @@ describe('ItemSchema', function() {
 
         it('should save custom links', function() {
             var customLinks = [{ rel: 'custom', href: '/custom' }];
-            ItemSchema.create({modelName: 'test', links: customLinks}, function(err, itemSchema) {
+            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { throw err; }
-                expect(itemSchema.links).to.eql([{ rel: 'custom', href: '/custom' }]);
+                expect(itemSchema.links).to.eql([
+                    { rel: 'self', href: '/people/{id}' },
+                    { rel: 'item', href: '/people/{id}' },
+                    {
+                        rel: 'create',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/' + itemSchema.id
+                        }
+                    },
+                    { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'custom', href: '/custom' }
+                ]);
             });
         });
 
         it('should not allow overriding default links', function() {
             var customLinks = [{ rel: 'self', href: '/custom' }];
-            ItemSchema.create({modelName: 'test', links: customLinks}, function(err, itemSchema) {
+            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { throw err; }
-                expect(itemSchema.links).to.eql([]);
+                expect(itemSchema.links).to.eql([
+                    { rel: 'self', href: '/people/{id}' },
+                    { rel: 'item', href: '/people/{id}' },
+                    {
+                        rel: 'create',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/' + itemSchema.id
+                        }
+                    },
+                    { rel: 'update', method: 'PUT', href: '/people/{id}' },
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                ]);
             });
         });
     });
