@@ -89,6 +89,26 @@ describe('ItemSchema', function() {
                 ]);
             });
         });
+
+        it('should persist only custom links', function() {
+            var customLinks = [{ rel: 'self', href: '/people/{id}' }, { rel: 'custom', href: '/custom' }];
+
+            var afterSaveOriginal = ItemSchema.afterSave;
+
+            // prevent links be overridden
+            ItemSchema.afterSave = function(next) {
+                next();
+            };
+
+            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
+                if (err) { throw err; }
+                expect(itemSchema.links).to.eql([
+                    { rel: 'custom', href: '/custom' }
+                ]);
+
+                ItemSchema.afterSave = afterSaveOriginal;
+            });
+        });
     });
 
     describe('.findByCollectionName', function() {
