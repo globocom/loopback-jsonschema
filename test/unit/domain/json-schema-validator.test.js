@@ -36,6 +36,7 @@ describe('JsonSchemaValidator', function() {
                         },
                         "age": {
                             "type": "integer",
+                            "minimum": 10,
                             "required": true
                         }
                     }
@@ -49,7 +50,7 @@ describe('JsonSchemaValidator', function() {
 
             describe('required fields', function() {
                 it('should return a list of fields with error', function () {
-                    var data = {};
+                    var data = {age: 1};
 
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(2);
@@ -60,8 +61,8 @@ describe('JsonSchemaValidator', function() {
                             schemaPath: '/properties/firstName'
                         },
                         {
-                            code: 302,
-                            message: "Missing required property",
+                            code: 101,
+                            message: "Value is less than minimum",
                             dataPath: '/age',
                             schemaPath: '/properties/age'
                     }]);
