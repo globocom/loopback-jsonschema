@@ -19,6 +19,7 @@
   "dependencies": {
     "cors": "2.x",
     "debug": "",
+    "JSV": "4.x.x",
     "stack-trace": "",
     "traverse": "",
     "tv4": "",
