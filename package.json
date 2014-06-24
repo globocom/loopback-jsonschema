@@ -21,6 +21,7 @@
     "debug": "",
     "stack-trace": "",
     "traverse": "",
+    "tv4": "",
     "type-is": "1.x.x",
     "underscore": "1.x",
     "winston": "0.x"
