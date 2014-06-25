@@ -1,21 +1,21 @@
 require('../../support');
 
 var expect = require('chai').expect;
+var JSV = require('JSV').JSV;
 
 var JsonSchemaValidator = require('../../../lib/domain/json-schema-validator');
-var ValidationError = require('loopback').ValidationError;
 
 describe('JsonSchemaValidator', function() {
     var jsonSchemaValidator;
 
     it('should return null when the json schema version is not supported', function () {
-        jsonSchemaValidator = JsonSchemaValidator('unsupported-version');
-        expect(jsonSchemaValidator).to.be.null;
+        jsonSchemaValidator = new JsonSchemaValidator('unsupported-version');
+        expect(jsonSchemaValidator.validate({}, {})).to.be.null;
     });
 
     describe('draft3', function() {
         beforeEach(function() {
-            jsonSchemaValidator = JsonSchemaValidator('http://json-schema.org/draft-03/hyper-schema#');
+            jsonSchemaValidator = new JsonSchemaValidator('http://json-schema.org/draft-03/hyper-schema#');
         });
 
         it('should be able to validate a schema following draft4 rules', function () {
@@ -23,7 +23,7 @@ describe('JsonSchemaValidator', function() {
         });
 
         describe('#validate', function() {
-            var schema;
+            var schema, data;
 
             beforeEach(function () {
                 schema = {
@@ -32,6 +32,7 @@ describe('JsonSchemaValidator', function() {
                     "properties": {
                         "firstName": {
                             "type": "string",
+
                             "required": true
                         },
                         "age": {
@@ -50,7 +51,7 @@ describe('JsonSchemaValidator', function() {
 
             describe('required fields', function() {
                 it('should return a list of fields with error', function () {
-                    var data = {age: 1};
+                    data = {age: 1};
 
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(2);
@@ -67,17 +68,33 @@ describe('JsonSchemaValidator', function() {
                             schemaPath: '/properties/age'
                     }]);
                 });
+
+                it('should return unknown error code and original message when the error is not handled', function () {
+                    var env = {
+                        validate: this.sinon.stub().returns({ errors: [{message: 'custom-error-message'}] })
+                    };
+                    this.sinon.stub(JSV, 'createEnvironment').returns(env);
+
+                    data = {};
+                    var errors = jsonSchemaValidator.validate(schema, data);
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                        code: 1000,
+                        message: "Non-standard validation options"
+                    }]);
+
+                });
             });
         });
     });
 
     describe('draft4', function() {
         beforeEach(function() {
-            jsonSchemaValidator = JsonSchemaValidator('http://json-schema.org/draft-04/hyper-schema#');
+            jsonSchemaValidator = new JsonSchemaValidator('http://json-schema.org/draft-04/hyper-schema#');
         });
 
         it('should be able to validate a schema following draft4 rules', function () {
-            expect(jsonSchemaValidator).to.not.be.null;
+            expect(jsonSchemaValidator.validate({}, {})).to.not.be.null;
         });
 
         describe('#validate', function() {
