@@ -28,12 +28,12 @@
     "winston": "0.x"
   },
   "peerDependencies": {
-    "loopback": "1.x",
+    "loopback": "1.8.x",
     "loopback-explorer": "1.x"
   },
   "devDependencies": {
     "chai": "",
-    "loopback": "1.x",
+    "loopback": "1.8.x",
     "loopback-explorer": "1.x",
     "mocha": "",
     "mocha-sinon": "",
