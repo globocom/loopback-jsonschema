@@ -23,6 +23,14 @@ loopbackJsonSchema.init(app);
 
 Add a `loopbackJsonSchemaDb` entry to the `datasources.json` file with your data source configuration. If no `loopbackJsonSchemaDb` entry is found, we fallback to using the default memory data source.
 
+### Overriding the default base model
+
+By default, Loopback's `Model` is used as the base for dynamically defined models. It is possible to override this by passing a custom implementation to the `init` function:
+
+```js
+loopbackJsonSchema.init(app, { Model: MyCustomModel });
+```
+
 ### Overriding the default collection schema
 
 It is possible to override the default collection schema by passing a custom `CollectionSchema` implementation to the `init` function:
