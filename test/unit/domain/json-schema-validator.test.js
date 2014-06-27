@@ -32,7 +32,6 @@ describe('JsonSchemaValidator', function() {
                     "properties": {
                         "firstName": {
                             "type": "string",
-
                             "required": true
                         },
                         "age": {
@@ -57,12 +56,14 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.itemCount).to.eq(2);
                     expect(errors.items).to.eql([{
                             code: 302,
+                            property: '/firstName',
                             message: "Missing required property",
                             dataPath: '/firstName',
                             schemaPath: '/properties/firstName'
                         },
                         {
                             code: 101,
+                            property: '/age',
                             message: "Value is less than minimum",
                             dataPath: '/age',
                             schemaPath: '/properties/age'
@@ -83,6 +84,44 @@ describe('JsonSchemaValidator', function() {
                         message: "Non-standard validation options"
                     }]);
 
+                });
+            });
+
+            describe('array errors', function () {
+                it('should have at least the minItems value', function () {
+                    schema.properties.tags = {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                    };
+
+                    var data = {tags: []};
+                    var errors = jsonSchemaValidator.validate(schema, data);
+                    expect(errors.itemCount).to.eq(3);
+                    expect(errors.items).to.eql([{
+                        code: 302,
+                        property: '/firstName',
+                        dataPath: "/firstName",
+                        message: "Missing required property",
+                        schemaPath: "/properties/firstName"
+                    },
+                    {
+                        code: 302,
+                        property: '/age',
+                        dataPath: "/age",
+                        message: "Missing required property",
+                        schemaPath: "/properties/age"
+                    },
+                    {
+                        code: 400,
+                        property: '/tags',
+                        dataPath: "/tags",
+                        message: "Array is too short",
+                        schemaPath: "/properties/tags"
+                    }]);
                 });
             });
         });
@@ -129,12 +168,14 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.itemCount).to.eq(2);
                     expect(errors.items).to.eql([{
                             code: 302,
+                            property: '/firstName',
                             message: "Missing required property: firstName",
                             dataPath: '',
                             schemaPath: '/required/0'
                         },
                         {
                             code: 302,
+                            property: '/age',
                             message: "Missing required property: age",
                             dataPath: '',
                             schemaPath: '/required/1'
@@ -158,6 +199,7 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.itemCount).to.eq(1);
                     expect(errors.items).to.eql([{
                         code: 400,
+                        property: '/tags',
                         dataPath: "/tags",
                         message: "Array is too short (0), minimum 1",
                         schemaPath: "/properties/tags/minItems"
