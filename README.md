@@ -218,6 +218,8 @@ Every request for an instance is automatically correlated to its schema accordin
 
 Once a Item Schema has been defined all instances created or updated will be validated according the schema. In case of validation error loopback-jsonschema will return an error message following loopback error message format.
 
+This module provides Draft-4 and Draft-3 validation. Instances of a Draft-4 schema follow validation code and messages of [tv4](https://github.com/geraintluff/tv4) and instances of Draft-3 schema try to have codes and messages compliant with Draft-4.
+
 ## Sample App
 
 An example running LoopBack with this module: https://github.com/globocom/loopback-jsonschema-example
