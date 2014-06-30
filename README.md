@@ -214,6 +214,12 @@ It is possible to include custom links in an item schema. To do so, just include
 
 Every request for an instance is automatically correlated to its schema according to the [recommendation of the JSON Schema spec](http://json-schema.org/latest/json-schema-core.html#anchor33).
 
+### Instance Validation
+
+Once a Item Schema has been defined all instances created or updated will be validated according the schema. In case of validation error loopback-jsonschema will return an error message following loopback error message format.
+
+This module provides Draft-4 and Draft-3 validation. Instances of a Draft-4 schema follow validation code and messages of [tv4](https://github.com/geraintluff/tv4) and instances of Draft-3 schema try to have codes and messages compliant with Draft-4.
+
 ## Sample App
 
 An example running LoopBack with this module: https://github.com/globocom/loopback-jsonschema-example
