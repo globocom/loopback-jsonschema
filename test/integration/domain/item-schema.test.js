@@ -185,10 +185,10 @@ describe('ItemSchema', function() {
                         expect(valid).to.be.false;
                         expect(alice.errors['/firstName'][0]).to.be.eql('Missing required property: firstName');
                         expect(alice.errors['/age'][0]).to.be.eql('Value 1 is less than minimum 18');
-                        expect(alice.errors['instance'][0]).to.be.eql('is invalid');
+                        expect(alice.errors['_all'][0]).to.be.eql('is invalid');
                         expect(alice.errors.codes['/firstName'][0]).to.be.eql(302);
                         expect(alice.errors.codes['/age'][0]).to.be.eql(101);
-                        expect(alice.errors.codes['instance'][0]).to.be.eql('custom');
+                        expect(alice.errors.codes['_all'][0]).to.be.eql('custom');
                         done();
                     });
                 });
