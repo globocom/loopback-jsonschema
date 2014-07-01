@@ -14,12 +14,18 @@ describe('loopbackJsonSchema', function() {
         it('should allow overriding default config', function() {
             var myConfig = {
                 CollectionSchemaClass: 'MyCollectionSchemaClass',
+                jsonSchemaValidatorTranslation: {
+                    draft4: {}
+                },
                 Model: 'MyModel',
                 myConfigOption: 'myValue'
             };
             loopbackJsonSchema.init(app, myConfig);
             expect(config).to.eql({
                 CollectionSchemaClass: 'MyCollectionSchemaClass',
+                jsonSchemaValidatorTranslation: {
+                    draft4: {}
+                },
                 logLevel: 'info',
                 Model: 'MyModel',
                 myConfigOption: 'myValue'
