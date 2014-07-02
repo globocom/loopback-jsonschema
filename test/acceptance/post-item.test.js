@@ -64,8 +64,8 @@ describe('POST /:collection', function() {
                 });
         });
 
-        it('should return 400', function() {
-            expect(itemResponse.status).to.eq(400);
+        it('should return 415', function() {
+            expect(itemResponse.status).to.eq(415);
         });
 
         it('should return error message', function() {
