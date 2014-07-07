@@ -10,6 +10,7 @@ describe('modelPropertiesSanitizer', function() {
     beforeEach(function() {
         this.jsonSchema = new ItemSchema();
         this.jsonSchema.update$schema();
+        this.jsonSchema.__data.$schema = this.jsonSchema.$schema; // __data.$schema will be defined when a post is received
     });
 
     describe('.sanitize', function() {
@@ -18,8 +19,10 @@ describe('modelPropertiesSanitizer', function() {
         });
 
         it('should convert $schema to %24schema', function() {
-            expect(this.jsonSchema.$schema).to.not.exist;
             expect(this.jsonSchema['%24schema']).to.exist;
+            expect(this.jsonSchema.__data['%24schema']).to.exist;
+            expect(this.jsonSchema.$schema).to.not.exist;
+            expect(this.jsonSchema.__data.$schema).to.not.exist;
         });
     });
 
@@ -30,8 +33,10 @@ describe('modelPropertiesSanitizer', function() {
         });
 
         it('should restore %24schema to $schema', function() {
-            expect(this.jsonSchema['%24schema']).to.not.exist;
             expect(this.jsonSchema.$schema).to.exist;
+            expect(this.jsonSchema.__data.$schema).to.exist;
+            expect(this.jsonSchema['%24schema']).to.not.exist;
+            expect(this.jsonSchema.__data['%24schema']).to.not.exist;
         });
     });
 });

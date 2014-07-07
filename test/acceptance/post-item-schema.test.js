@@ -69,8 +69,8 @@ describe('POST /item-schemas', function() {
                 });
         });
 
-        it('should return 400', function() {
-            expect(response.status).to.eq(400);
+        it('should return 415', function() {
+            expect(response.status).to.eq(415);
         });
 
         it('should return error message', function() {

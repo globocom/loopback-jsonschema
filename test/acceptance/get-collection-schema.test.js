@@ -88,6 +88,14 @@ describe('GET /collection-schemas/:id', function () {
                     }
                 },
                 {
+                    rel: 'previous',
+                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={previousOffset}'
+                },
+                {
+                    rel: 'next',
+                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={nextOffset}'
+                },
+                {
                     rel: 'custom',
                     href: schemeAndAuthority + '/api/custom'
                 }
