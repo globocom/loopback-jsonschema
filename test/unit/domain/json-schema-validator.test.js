@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var JSV = require('JSV').JSV;
 
 var JsonSchemaValidator = require('../../../lib/domain/json-schema-validator');
+var config = require('../../../lib/support/config');
 
 describe('JsonSchemaValidator', function() {
     var jsonSchemaValidator;
@@ -16,6 +17,7 @@ describe('JsonSchemaValidator', function() {
     describe('draft3', function() {
         beforeEach(function() {
             jsonSchemaValidator = new JsonSchemaValidator('http://json-schema.org/draft-03/hyper-schema#');
+            config.jsonSchemaValidatorTranslation = {};
         });
 
         it('should be able to validate a schema following draft4 rules', function () {
@@ -57,14 +59,14 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.items).to.eql([{
                             code: 302,
                             property: '/firstName',
-                            message: "Missing required property",
+                            message: "Property is required",
                             dataPath: '/firstName',
                             schemaPath: '/properties/firstName'
                         },
                         {
                             code: 101,
                             property: '/age',
-                            message: "Value is less than minimum",
+                            message: "Number is less than the required minimum value",
                             dataPath: '/age',
                             schemaPath: '/properties/age'
                     }]);
@@ -81,8 +83,31 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.itemCount).to.eq(1);
                     expect(errors.items).to.eql([{
                         code: 1000,
-                        message: "Non-standard validation options"
+                        message: "custom-error-message"
                     }]);
+                });
+
+                it('should allow to translate error messages using config', function () {
+                    config.jsonSchemaValidatorTranslation = {
+                        draft3: {
+                            language: 'pt-br',
+                            mapping: {
+                                OBJECT_REQUIRED: "Campo requerido",
+                            }
+                        }
+                    };
+
+                    data = {age: 50};
+
+                    var errors = jsonSchemaValidator.validate(schema, data);
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                            code: 302,
+                            property: '/firstName',
+                            message: "Campo requerido",
+                            dataPath: '/firstName',
+                            schemaPath: '/properties/firstName'
+                        }]);
 
                 });
             });
@@ -105,21 +130,21 @@ describe('JsonSchemaValidator', function() {
                         code: 302,
                         property: '/firstName',
                         dataPath: "/firstName",
-                        message: "Missing required property",
+                        message: "Property is required",
                         schemaPath: "/properties/firstName"
                     },
                     {
                         code: 302,
                         property: '/age',
                         dataPath: "/age",
-                        message: "Missing required property",
+                        message: "Property is required",
                         schemaPath: "/properties/age"
                     },
                     {
                         code: 400,
                         property: '/tags',
                         dataPath: "/tags",
-                        message: "Array is too short",
+                        message: "The number of items is less than the required minimum",
                         schemaPath: "/properties/tags"
                     }]);
                 });
