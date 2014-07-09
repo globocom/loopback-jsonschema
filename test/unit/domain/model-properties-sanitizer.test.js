@@ -14,11 +14,17 @@ describe('modelPropertiesSanitizer', function() {
     });
 
     describe('.sanitize', function() {
-        beforeEach(function() {
+        it('should convert only if there is a $schema ', function() {
+            delete this.jsonSchema.$schema;
+
             modelPropertiesSanitizer.sanitize(this.jsonSchema);
+
+            expect(this.jsonSchema).to.not.have.ownProperty('%24schema');
         });
 
         it('should convert $schema to %24schema', function() {
+            modelPropertiesSanitizer.sanitize(this.jsonSchema);
+
             expect(this.jsonSchema['%24schema']).to.exist;
             expect(this.jsonSchema.__data['%24schema']).to.exist;
             expect(this.jsonSchema.$schema).to.not.exist;
