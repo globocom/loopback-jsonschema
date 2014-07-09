@@ -218,7 +218,26 @@ Every request for an instance is automatically correlated to its schema accordin
 
 Once a Item Schema has been defined all instances created or updated will be validated according the schema. In case of validation error loopback-jsonschema will return an error message following loopback error message format.
 
-This module provides Draft-4 and Draft-3 validation. Instances of a Draft-4 schema follow validation code and messages of [tv4](https://github.com/geraintluff/tv4) and instances of Draft-3 schema try to have codes and messages compliant with Draft-4.
+This module supports both drafts: Draft-4(default) and Draft-3. The error messages and codes try to follow the messages/codes returned by the module [tv4](https://github.com/geraintluff/tv4).
+
+If you want to use draft-3, you need to override the `$schema` property, for instance:
+
+```
+{
+  "schema": "http://json-schema.org/draft-03/hyper-schema#",
+  "type": "object",
+  ...
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Full name"
+     }
+   ...
+  }
+}
+
+```
+
 
 ## Sample App
 
