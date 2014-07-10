@@ -161,6 +161,14 @@ Connection: keep-alive
       "schema": {
         "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
       }
+    },
+    {
+      "rel": "previous",
+      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={previousOffset}"
+    },
+    {
+      "rel": "next",
+      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={nextOffset}"
     }
   ]
 }
