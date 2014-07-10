@@ -224,7 +224,7 @@ If you want to use draft-3, you need to override the `$schema` property, for ins
 
 ```
 {
-  "schema": "http://json-schema.org/draft-03/hyper-schema#",
+  "$schema": "http://json-schema.org/draft-03/hyper-schema#",
   "type": "object",
   ...
   "properties": {
