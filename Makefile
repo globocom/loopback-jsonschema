@@ -37,6 +37,10 @@ bump_patch_version:
 
 bump_minor_version:
 	npm version minor
+	git push origin --tags
+	npm publish
 
 bump_major_version:
 	npm version major
+	git push origin --tags
+	npm publish
