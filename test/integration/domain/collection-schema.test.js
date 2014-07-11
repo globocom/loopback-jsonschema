@@ -69,11 +69,11 @@ describe('CollectionSchema', function() {
                     },
                     {
                         rel: 'previous',
-                        href: '/people?filter[limit]={limit}&filter[offset]={previousOffset}'
+                        href: '/people?filter[limit]={limit}&filter[offset]={previousOffset}&{+qs}'
                     },
                     {
                         rel: 'next',
-                        href: '/people?filter[limit]={limit}&filter[offset]={nextOffset}'
+                        href: '/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+qs}'
                     },
                     {
                         rel: 'custom',
