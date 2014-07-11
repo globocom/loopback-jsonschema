@@ -32,6 +32,8 @@ debug:
 
 bump_patch_version:
 	npm version patch
+	git push origin --tags
+	npm publish
 
 bump_minor_version:
 	npm version minor
