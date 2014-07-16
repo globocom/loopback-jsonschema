@@ -96,6 +96,10 @@ describe('GET /collection-schemas/:id', function () {
                     href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+qs}'
                 },
                 {
+                    rel: 'order',
+                    href: schemeAndAuthority + '/api/people?filter[order]={field} {order}&{+orderQs}'
+                },
+                {
                     rel: 'custom',
                     href: schemeAndAuthority + '/api/custom'
                 }
