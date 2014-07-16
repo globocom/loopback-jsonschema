@@ -131,7 +131,9 @@ describe('POST /:collection', function() {
                     ]
                 }
             });
-            expect(error.message).to.eq('The `person` instance is not valid. Details: `_all` Instance is invalid; `/name` Missing required property: name.');
+            expect(error.message).to.contain('The `person` instance is not valid.');
+            expect(error.message).to.contain('`_all` Instance is invalid');
+            expect(error.message).to.contain('`/name` Missing required property: name');
             expect(error.name).to.eq('ValidationError');
             expect(error.status).to.eq(422);
             expect(error.statusCode).to.eq(422);
