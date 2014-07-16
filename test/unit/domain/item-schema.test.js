@@ -13,7 +13,7 @@ app.set('restApiRoot', '/api');
 describe('ItemSchema', function() {
     describe('#allLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
         });
 
         describe('when there are no custom links', function() {
@@ -85,7 +85,7 @@ describe('ItemSchema', function() {
 
     describe('#customLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({ id: 1, collectionName: 'people' });
+            itemSchema = new ItemSchema({ resourceId: 1, collectionName: 'people' });
         });
 
         it('should return custom links', function() {
@@ -105,7 +105,7 @@ describe('ItemSchema', function() {
         var itemSchema;
 
         beforeEach(function() {
-            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
         });
 
         it('should return default links', function() {
@@ -130,7 +130,7 @@ describe('ItemSchema', function() {
         var itemSchema;
 
         beforeEach(function() {
-            itemSchema = new ItemSchema({ id: 1 });
+            itemSchema = new ItemSchema({ resourceId: 1 });
         });
 
         it('should return URL this item schema', function() {
@@ -195,17 +195,17 @@ describe('ItemSchema', function() {
     });
 
     describe('#collectionSchema', function() {
-        var collectionSchema, schemaId;
+        var collectionSchema, schemaResourceId;
 
         beforeEach(function() {
-            schemaId = 1;
-            var itemSchema = new ItemSchema({id: schemaId});
+            schemaResourceId = 1;
+            var itemSchema = new ItemSchema({resourceId: schemaResourceId});
             collectionSchema = itemSchema.collectionSchema();
         });
 
         it('should return a collection schema that corresponds to this item schema', function() {
             expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
-            expect(collectionSchema.itemSchema.id).to.eq(schemaId);
+            expect(collectionSchema.itemSchema.resourceId).to.eq(schemaResourceId);
         });
     });
 });

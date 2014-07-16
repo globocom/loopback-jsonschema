@@ -9,7 +9,7 @@ var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /item-schemas/:id', function() {
     describe('when schema exists', function() {
-        var itemSchema, itemSchemaId, response, schemeAndAuthority;
+        var itemSchema, itemSchemaResourceId, response, schemeAndAuthority;
 
         before(function(done) {
             ItemSchema.create({
@@ -24,14 +24,14 @@ describe('GET /item-schemas/:id', function() {
                 ]
             }, function(err, itemSchema) {
                 if (err) { throw err };
-                itemSchemaId = itemSchema.id;
+                itemSchemaResourceId = itemSchema.resourceId;
                 done();
             });
         });
 
         before(function(done) {
             request(app)
-                .get('/api/item-schemas/' + itemSchemaId)
+                .get('/api/item-schemas/' + itemSchemaResourceId)
                 .expect(200)
                 .end(function(err, res) {
                     if (err) { throw err };
@@ -77,7 +77,7 @@ describe('GET /item-schemas/:id', function() {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchemaId
+                        $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchemaResourceId
                     }
                 },
                 {

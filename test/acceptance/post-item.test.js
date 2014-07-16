@@ -8,7 +8,7 @@ var ItemSchema = require('../../lib/domain/item-schema');
 var app = support.newLoopbackJsonSchemaApp();
 
 describe('POST /:collection', function() {
-    var itemResponse, jsonSchemaId, schemeAndAuthority;
+    var itemResponse, jsonSchemaResourceId, schemeAndAuthority;
 
     describe('successfully', function() {
         before(function (done) {
@@ -21,7 +21,7 @@ describe('POST /:collection', function() {
                 properties: {}
             }, function(err, jsonSchema) {
                 if (err) { throw err };
-                jsonSchemaId = jsonSchema.id;
+                jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
         });
@@ -44,7 +44,7 @@ describe('POST /:collection', function() {
         });
 
         it('should correlate the item with its schema', function() {
-            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaId;
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaResourceId;
             expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel=describedby');
             expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
         });

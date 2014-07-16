@@ -10,7 +10,7 @@ var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /:collection', function () {
     describe('when the collection exists', function() {
-        var jsonSchemaId, response, schemeAndAuthority;
+        var jsonSchemaResourceId, response, schemeAndAuthority;
 
         before(function (done) {
             ItemSchema.create({
@@ -22,7 +22,7 @@ describe('GET /:collection', function () {
                 properties: {}
             }, function(err, jsonSchema) {
                 if (err) { throw err };
-                jsonSchemaId = jsonSchema.id;
+                jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
         });
@@ -40,7 +40,7 @@ describe('GET /:collection', function () {
         });
 
         it('should correlate the collection with its schema', function() {
-            var collectionSchemaUrl = schemeAndAuthority + '/api/collection-schemas/' + jsonSchemaId;
+            var collectionSchemaUrl = schemeAndAuthority + '/api/collection-schemas/' + jsonSchemaResourceId;
             expect(response.headers['link']).to.eq('<' + collectionSchemaUrl + '>; rel=describedby');
             expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + collectionSchemaUrl +'"');
         });

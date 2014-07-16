@@ -59,7 +59,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchema.id
+                            $ref: '/item-schemas/' + itemSchema.resourceId
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -81,7 +81,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchema.id
+                            $ref: '/item-schemas/' + itemSchema.resourceId
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
