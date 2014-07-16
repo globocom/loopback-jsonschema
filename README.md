@@ -164,11 +164,19 @@ Connection: keep-alive
     },
     {
       "rel": "previous",
-      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={previousOffset}"
+      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={previousOffset}{&paginateQs*}"
     },
     {
       "rel": "next",
-      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={nextOffset}"
+      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={nextOffset}{&paginateQs*}"
+    },
+    {
+      "rel": "page",
+      "href": "http://example.org/api/people?filter[limit]={limit}&filter[offset]={offset}{&paginateQs*}"
+    },
+    {
+      "rel": "order",
+      "href": "http://example.org/api/people?filter[order]={orderAttribute} {orderDirection}{&orderQs*}"
     }
   ]
 }
