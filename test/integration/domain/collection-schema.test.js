@@ -69,15 +69,15 @@ describe('CollectionSchema', function() {
                     },
                     {
                         rel: 'previous',
-                        href: '/people?filter[limit]={limit}&filter[offset]={previousOffset}&{+qs}'
+                        href: '/people?filter[limit]={limit}&filter[offset]={previousOffset}&{+paginateQs}'
                     },
                     {
                         rel: 'next',
-                        href: '/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+qs}'
+                        href: '/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+paginateQs}'
                     },
                     {
                         rel: 'order',
-                        href: '/people?filter[order]={field} {order}&{+orderQs}'
+                        href: '/people?filter[order]={orderAttribute} {orderDirection}&{+orderQs}'
                     },
                     {
                         rel: 'custom',

@@ -89,15 +89,15 @@ describe('GET /collection-schemas/:id', function () {
                 },
                 {
                     rel: 'previous',
-                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={previousOffset}&{+qs}'
+                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={previousOffset}&{+paginateQs}'
                 },
                 {
                     rel: 'next',
-                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+qs}'
+                    href: schemeAndAuthority + '/api/people?filter[limit]={limit}&filter[offset]={nextOffset}&{+paginateQs}'
                 },
                 {
                     rel: 'order',
-                    href: schemeAndAuthority + '/api/people?filter[order]={field} {order}&{+orderQs}'
+                    href: schemeAndAuthority + '/api/people?filter[order]={orderAttribute} {orderDirection}&{+orderQs}'
                 },
                 {
                     rel: 'custom',
