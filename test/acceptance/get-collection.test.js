@@ -42,7 +42,7 @@ describe('GET /:collection', function () {
         it('should correlate the collection with its schema', function() {
             var collectionSchemaUrl = schemeAndAuthority + '/api/collection-schemas/' + jsonSchemaId;
             expect(response.headers['link']).to.eq('<' + collectionSchemaUrl + '>; rel=describedby');
-            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile=' + collectionSchemaUrl);
+            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + collectionSchemaUrl +'"');
         });
     });
 
