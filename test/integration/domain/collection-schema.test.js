@@ -76,6 +76,10 @@ describe('CollectionSchema', function() {
                         href: '/people?filter[limit]={limit}&filter[offset]={nextOffset}{&paginateQs*}'
                     },
                     {
+                        rel: 'page',
+                        href: '/people?filter[limit]={limit}&filter[offset]={offset}{&paginateQs*}'
+                    },
+                    {
                         rel: 'order',
                         href: '/people?filter[order]={orderAttribute} {orderDirection}{&orderQs*}'
                     },
