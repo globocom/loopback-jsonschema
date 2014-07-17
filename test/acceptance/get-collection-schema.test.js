@@ -101,7 +101,7 @@ describe('GET /collection-schemas/:id', function () {
                 },
                 {
                     rel: 'order',
-                    href: schemeAndAuthority + '/api/people?filter[order]={orderAttribute} {orderDirection}{&orderQs*}'
+                    href: schemeAndAuthority + '/api/people?filter[order]={orderAttribute}%20{orderDirection}{&orderQs*}'
                 },
                 {
                     rel: 'custom',
