@@ -81,7 +81,7 @@ describe('CollectionSchema', function() {
                     },
                     {
                         rel: 'order',
-                        href: '/people?filter[order]={orderAttribute} {orderDirection}{&orderQs*}'
+                        href: '/people?filter[order]={orderAttribute}%20{orderDirection}{&orderQs*}'
                     },
                     {
                         rel: 'custom',
