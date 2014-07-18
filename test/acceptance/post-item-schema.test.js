@@ -43,7 +43,6 @@ describe('POST /item-schemas', function() {
 
         it('should return correct resourceId and id', function() {
             expect(itemSchema.resourceId).to.be.eq(itemSchemaResourceId);
-            expect(itemSchema.id).to.be.eq(itemSchemaResourceId);
         });
 
         it('should include default links', function() {
