@@ -13,6 +13,10 @@ describe('LJSUrl', function() {
                 ljsUrl = new LJSUrl('http://example.org/api/people/1?query=string');
             });
 
+            it('should return example.org as host', function() {
+                expect(ljsUrl.host).to.equal('example.org');
+            });
+
             it("should return 'people' as collectionName", function() {
                 expect(ljsUrl.collectionName).to.equal('people');
             });
@@ -31,6 +35,10 @@ describe('LJSUrl', function() {
                 ljsUrl = new LJSUrl('http://example.org/api/people?query=string');
             });
 
+            it('should return example.org as host', function() {
+                expect(ljsUrl.host).to.equal('example.org');
+            });
+
             it("should return 'people' as collectionName", function() {
                 expect(ljsUrl.collectionName).to.equal('people');
             });
@@ -41,6 +49,72 @@ describe('LJSUrl', function() {
 
             it("should return 'api' as restApiRoot", function() {
                 expect(ljsUrl.restApiRoot).to.equal('api');
+            });
+        });
+
+        describe('when url is undefined', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl(undefined);
+            });
+
+            it('should return undefined as host', function() {
+                expect(ljsUrl.host).to.be.undefined;
+            });
+
+            it("should return undefined collectionName", function() {
+                expect(ljsUrl.collectionName).to.be.undefined;
+            });
+
+            it("should return undefined as resourceId", function() {
+                expect(ljsUrl.resourceId).to.be.undefined;
+            });
+
+            it("should return undefined as restApiRoot", function() {
+                expect(ljsUrl.restApiRoot).to.be.undefined;
+            });
+        });
+
+        describe('when url is null', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl(null);
+            });
+
+            it('should return undefined as host', function() {
+                expect(ljsUrl.host).to.be.undefined;
+            });
+
+            it("should return undefined collectionName", function() {
+                expect(ljsUrl.collectionName).to.be.undefined;
+            });
+
+            it("should return undefined as resourceId", function() {
+                expect(ljsUrl.resourceId).to.be.undefined;
+            });
+
+            it("should return undefined as restApiRoot", function() {
+                expect(ljsUrl.restApiRoot).to.be.undefined;
+            });
+        });
+
+        describe('when url is empty strng', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('');
+            });
+
+            it('should return undefined as host', function() {
+                expect(ljsUrl.host).to.be.undefined;
+            });
+
+            it("should return undefined collectionName", function() {
+                expect(ljsUrl.collectionName).to.be.undefined;
+            });
+
+            it("should return undefined as resourceId", function() {
+                expect(ljsUrl.resourceId).to.be.undefined;
+            });
+
+            it("should return undefined as restApiRoot", function() {
+                expect(ljsUrl.restApiRoot).to.be.undefined;
             });
         });
     });
