@@ -181,4 +181,26 @@ describe('LJSUrl', function() {
             });
         });
     });
+
+    describe('#isRelative', function() {
+        describe('when url is relative', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('/api/people');
+            });
+
+            it('should be true', function() {
+                expect(ljsUrl.isRelative()).to.be.true;
+            });
+        });
+
+        describe('when url is absolute', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://example.org/api/people');
+            });
+
+            it('should be true', function() {
+                expect(ljsUrl.isRelative()).to.be.false;
+            });
+        });
+    });
 });
