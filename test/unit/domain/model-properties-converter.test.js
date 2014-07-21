@@ -9,9 +9,19 @@ var modelPropertiesConverter = require('../../../lib/domain/model-properties-con
 describe('modelPropertiesConverter', function() {
     describe('converting resourceId', function() {
         beforeEach(function() {
-            this.jsonSchema = new ItemSchema( { id : 1 , resourceId: 1 });
-            this.jsonSchema.__data.id = 1; // __data.id will be defined when a post is received
-            this.jsonSchema.__data.resourceId = 1; // __data.id will be defined when a post is received
+            this.jsonSchema = new ItemSchema( { properties : { id : "object" } });
+            this.jsonSchema.__data.properties = { id : "object" }; // __data will be defined when a post is received
+        });
+
+        describe('.convert', function() {
+            beforeEach(function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+            });
+
+            it('should remove id propety', function() {
+                expect(this.jsonSchema.properties.id).to.be.undefined;
+                expect(this.jsonSchema.__data.properties.id).to.be.undefined;
+            });
         });
 
         describe('.restore', function() {
@@ -21,9 +31,8 @@ describe('modelPropertiesConverter', function() {
             });
 
             it('should insert an id propety', function() {
-                expect(this.jsonSchema.__data.id).to.be.eq(1);
-                expect(this.jsonSchema.resourceId).to.be.eq(1);
-                expect(this.jsonSchema.__data.resourceId).to.be.eq(1);
+                expect(this.jsonSchema.properties.id).to.be.eql({ type: "string", title: "Unique identification of the resource"});
+                expect(this.jsonSchema.__data.properties.id).to.be.eql({ type: "string", title: "Unique identification of the resource"});
             });
         });
     });

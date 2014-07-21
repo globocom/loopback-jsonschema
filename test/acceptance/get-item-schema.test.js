@@ -59,7 +59,12 @@ describe('GET /item-schemas/:id', function() {
         });
 
         it('should include properties', function() {
-            expect(itemSchema['properties']).to.eql({});
+            expect(itemSchema['properties']).to.eql({
+                "id": {
+                  "title": "Unique identification of the resource",
+                  "type": "string"
+                }
+            });
         });
 
         it('should include links', function() {
