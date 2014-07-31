@@ -23,7 +23,7 @@ describe('GET /item-schemas', function() {
                     { rel: 'custom', href: '/custom' }
                 ]
             }, function(err, itemSchemas) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 itemSchemaResourceId = itemSchemas.resourceId;
                 done();
             });
@@ -34,7 +34,7 @@ describe('GET /item-schemas', function() {
                 .get('/api/item-schemas')
                 .expect(200)
                 .end(function(err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     response = res;
                     itemSchemas = JSON.parse(res.text);

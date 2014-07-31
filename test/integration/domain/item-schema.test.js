@@ -13,16 +13,14 @@ describe('ItemSchema', function() {
     describe('.findOne', function() {
         beforeEach(function(done) {
             ItemSchema.create({modelName: 'test'}, function(err, instance) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 done();
             });
         });
 
         it('should have $schema', function() {
             ItemSchema.findOne({where: {modelName: 'test'}}, function(err, itemSchema) {
-                if (err) {
-                    logger.log(err);
-                }
+                if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
             });
         });
@@ -31,18 +29,14 @@ describe('ItemSchema', function() {
     describe('.create', function() {
         it('should set $schema', function() {
             ItemSchema.create({modelName: 'test'}, function(err, itemSchema) {
-                if (err) {
-                    logger.log(err);
-                }
+                if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
             });
         });
 
         it('should create model defined by the json schema provided', function() {
             ItemSchema.create({modelName: 'test'}, function(err) {
-                if (err) {
-                    logger.log(err);
-                }
+                if (err) { return done(err); };
                 expect(loopback.getModel('test')).to.exist;
             });
         });
@@ -50,7 +44,7 @@ describe('ItemSchema', function() {
         it('should save custom links', function() {
             var customLinks = [{ rel: 'custom', href: '/custom' }];
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 expect(itemSchema.links).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
@@ -72,7 +66,7 @@ describe('ItemSchema', function() {
         it('should not allow overriding default links', function() {
             var customLinks = [{ rel: 'self', href: '/custom' }];
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 expect(itemSchema.links).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
@@ -101,7 +95,7 @@ describe('ItemSchema', function() {
             };
 
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 expect(itemSchema.links).to.eql([
                     { rel: 'custom', href: '/custom' }
                 ]);
@@ -124,14 +118,14 @@ describe('ItemSchema', function() {
             };
 
             ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 ItemSchema.findByCollectionName('people', callback);
             });
         });
 
         it('should log when collection JSON schema was not found', function(done) {
             var callback = function(err) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 expect(logger.warn).to.have.been.calledWith('JSON Schema for collectionName', 'people', 'not found.');
                 done();
             };
@@ -159,7 +153,7 @@ describe('ItemSchema', function() {
 
             it('should not return error when instance is valid', function(done) {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
-                    if (err) { throw err; }
+                    if (err) { return done(err); }
                     itemSchema.registerLoopbackModel(app);
 
                     var PersonInvalid = loopback.getModel('personInvalid');
@@ -175,7 +169,7 @@ describe('ItemSchema', function() {
 
             it('should return error when instance is invalid', function(done) {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
-                    if (err) { throw err; }
+                    if (err) { return done(err); }
                     itemSchema.registerLoopbackModel(app);
 
                     var PersonInvalid = loopback.getModel('personInvalid');

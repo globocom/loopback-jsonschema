@@ -23,7 +23,7 @@ describe('GET /item-schemas/:id', function() {
                     { rel: 'custom', href: '/custom' }
                 ]
             }, function(err, itemSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 itemSchemaResourceId = itemSchema.resourceId;
                 done();
             });
@@ -34,7 +34,7 @@ describe('GET /item-schemas/:id', function() {
                 .get('/api/item-schemas/' + itemSchemaResourceId)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     response = res;
                     itemSchema = JSON.parse(res.text);
@@ -104,7 +104,7 @@ describe('GET /item-schemas/:id', function() {
                 .get('/api/item-schemas/invalid-schema-id')
                 .expect(404)
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     expect(res.body).to.not.be.emtpy;
                     done();
             });

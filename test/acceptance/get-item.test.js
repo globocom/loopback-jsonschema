@@ -19,7 +19,7 @@ describe('GET /:collection/:id', function () {
             collectionName: 'people',
             properties: {}
         }, function(err, jsonSchema) {
-            if (err) { throw err };
+            if (err) { return done(err); };
             jsonSchemaResourceId = jsonSchema.resourceId;
             done();
         });
@@ -32,7 +32,7 @@ describe('GET /:collection/:id', function () {
             .send('{"name": "Alice"}')
             .expect(200)
             .end(function (err, res) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 itemId = res.body.id;
                 done();
             });
@@ -43,7 +43,7 @@ describe('GET /:collection/:id', function () {
             .get('/api/people/' + itemId)
             .expect(200)
             .end(function (err, res) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 schemeAndAuthority = 'http://' + res.req._headers.host;
                 response = res;
                 done();

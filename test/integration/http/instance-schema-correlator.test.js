@@ -19,7 +19,7 @@ describe('instanceSchemaCorrelator', function() {
                 type: 'object',
                 properties: {}
             }, function(err, data) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 itemSchema = data;
                 done();
             });

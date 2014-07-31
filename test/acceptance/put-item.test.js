@@ -20,7 +20,7 @@ describe('PUT /:collection/:id', function() {
                 type: 'object',
                 properties: {}
             }, function(err, jsonSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
@@ -32,7 +32,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, item) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemId = item.body.id;
                     done();
                 });
@@ -44,7 +44,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice", "age": 30}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     itemResponse = res;
                     done();
@@ -70,7 +70,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemResponse = res;
                     done();
                 });
@@ -101,7 +101,7 @@ describe('PUT /:collection/:id', function() {
                 },
                 required: ['name']
             }, function(err, jsonSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
@@ -113,7 +113,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, item) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemId = item.body.id;
                     done();
                 });
@@ -125,7 +125,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": ""}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemResponse = res;
                     done();
                 });

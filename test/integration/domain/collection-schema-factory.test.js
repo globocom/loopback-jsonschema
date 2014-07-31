@@ -27,7 +27,7 @@ describe('CollectionSchemaFactory', function() {
 
             beforeEach(function(done) {
                 ItemSchema.create({modelName: 'test'}, function(err, data) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
 
                     itemSchema = data;
                     done();

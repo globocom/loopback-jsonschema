@@ -21,7 +21,7 @@ describe('GET /:collection', function () {
                 type: 'object',
                 properties: {}
             }, function(err, jsonSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
@@ -32,7 +32,7 @@ describe('GET /:collection', function () {
                 .get('/api/people')
                 .expect(200)
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     response = res;
                     done();
@@ -52,7 +52,7 @@ describe('GET /:collection', function () {
                 .get('/api/non-existent')
                 .expect(404)
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     done();
             });
         });

@@ -20,7 +20,7 @@ describe('POST /item-schemas', function() {
                 .set('Content-Type', 'application/schema+json')
                 .send(JSON.stringify(schemaJson))
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemSchema = JSON.parse(res.text);
                     itemSchemaResourceId = itemSchema.resourceId;
 
@@ -28,7 +28,7 @@ describe('POST /item-schemas', function() {
                         .get('/api/item-schemas/' + itemSchemaResourceId)
                         .expect(200)
                         .end(function(err, res) {
-                            if (err) { throw err };
+                            if (err) { return done(err); };
                             schemeAndAuthority = 'http://' + res.req._headers.host;
                             response = res;
                             itemSchema = JSON.parse(res.text);
@@ -76,7 +76,7 @@ describe('POST /item-schemas', function() {
                 .set('Content-Type', 'text/plain')
                 .send(JSON.stringify(schemaJson))
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     response = res;
                     done();
                 });

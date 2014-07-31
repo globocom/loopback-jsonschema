@@ -25,7 +25,7 @@ describe('CollectionSchema', function() {
                         { rel: 'custom', href: '/custom' }
                     ]
                 }, function(err, itemSchema) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemSchemaResourceId = itemSchema.resourceId;
                     collectionSchema = new CollectionSchema(itemSchema);
                     done();

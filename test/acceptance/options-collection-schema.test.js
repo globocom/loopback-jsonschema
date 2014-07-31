@@ -15,7 +15,7 @@ describe('OPTION /collection-schemas/:id', function() {
             .set('Access-Control-Request-Headers', 'Content-Type')
             .expect(204)
             .end(function (err, res) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 response = res;
                 done();
         });

@@ -25,7 +25,7 @@ describe('instanceRequest', function() {
 
         it('should register loopback model for an existing collection JSON schema', function(done) {
             var callback = function(err) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 var Person = loopback.getModel('person');
                 expect(Person).to.not.be.null;
                 expect(Person.definition.name).to.equal('person');
@@ -34,7 +34,7 @@ describe('instanceRequest', function() {
             };
 
             ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
-                if (err) { throw err; }
+                if (err) { return done(err); }
                 instanceRequest.handle(ljsReq, res, callback);
             });
         });

@@ -9,9 +9,10 @@ var loopbackJsonSchema = require('../index');
 
 chai.use(sinonChai);
 
-afterEach(function() {
+afterEach(function(done) {
     ItemSchema.deleteAll(function(err) {
-        if (err) { throw err };
+        if (err) { return done(err); };
+        done();
     });
 });
 

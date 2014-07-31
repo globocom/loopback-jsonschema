@@ -24,7 +24,7 @@ describe('GET /collection-schemas/:id', function () {
                     { rel: 'custom', href: '/custom' }
                 ]
             }, function(err, itemSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 collectionSchemaId = itemSchema.resourceId;
                 done();
             });
@@ -35,7 +35,7 @@ describe('GET /collection-schemas/:id', function () {
                 .get('/api/collection-schemas/' + collectionSchemaId)
                 .expect(200)
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     collectionSchemaResponse = res;
                     collectionSchema = JSON.parse(res.text);
@@ -117,7 +117,7 @@ describe('GET /collection-schemas/:id', function () {
                 .get('/api/collection-schemas/invalid-schema-id')
                 .expect(404)
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     expect(res.body).to.not.be.emtpy;
                     done();
             });

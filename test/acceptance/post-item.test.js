@@ -20,7 +20,7 @@ describe('POST /:collection', function() {
                 type: 'object',
                 properties: {}
             }, function(err, jsonSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
                 done();
             });
@@ -32,7 +32,7 @@ describe('POST /:collection', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     itemResponse = res;
                     done();
@@ -58,7 +58,7 @@ describe('POST /:collection', function() {
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemResponse = res;
                     done();
                 });
@@ -88,7 +88,7 @@ describe('POST /:collection', function() {
                 },
                 required: ['name']
             }, function(err, jsonSchema) {
-                if (err) { throw err };
+                if (err) { return done(err); };
                 jsonSchemaId = jsonSchema.id;
                 done();
             });
@@ -100,7 +100,7 @@ describe('POST /:collection', function() {
                 .set('Content-Type', 'application/json')
                 .send('{}')
                 .end(function (err, res) {
-                    if (err) { throw err };
+                    if (err) { return done(err); };
                     itemResponse = res;
                     done();
                 });
