@@ -119,25 +119,6 @@ describe('LJSUrl', function() {
         });
     });
 
-    describe('.buildFromModel', function() {
-        beforeEach(function() {
-            var person = {
-                id: 1,
-                constructor: {
-                    pluralModelName: 'people'
-                }
-            };
-
-            var ljsReq = {};
-            ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
-            this.ljsUrl = LJSUrl.buildFromModel(ljsReq, person);
-        });
-
-        it('should build url from given model', function() {
-            expect(this.ljsUrl.url).to.eq('http://example.org/api/people/1');
-        });
-    });
-
     describe('.buildFromCollectionName', function() {
         beforeEach(function() {
             var ljsReq = {};
