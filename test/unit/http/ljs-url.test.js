@@ -119,18 +119,6 @@ describe('LJSUrl', function() {
         });
     });
 
-    describe('.buildFromCollectionName', function() {
-        beforeEach(function() {
-            var ljsReq = {};
-            ljsReq.baseUrl = this.sinon.stub().returns('http://example.org/api');
-            this.ljsUrl = LJSUrl.buildFromCollectionName(ljsReq, 'people');
-        });
-
-        it('should build url from given collection name', function() {
-            expect(this.ljsUrl.url).to.eq('http://example.org/api/people');
-        });
-    });
-
     describe('#isInstance', function() {
         describe('when url represents an item', function() {
             beforeEach(function() {
