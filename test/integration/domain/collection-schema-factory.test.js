@@ -14,7 +14,7 @@ describe('CollectionSchemaFactory', function() {
         describe('invalid item-schema', function(){
             it('should return undefined', function(done){
                 var callback = function(err, collectionSchema){
-                    expect(collectionSchema).to.be.undefined;
+                    expect(collectionSchema).to.be.null;
                     done();
                 };
 
