@@ -179,10 +179,12 @@ describe('ItemSchema', function() {
     describe('#registerLoopbackModel', function() {
         var Test;
 
-        beforeEach(function() {
+        beforeEach(function(done) {
             var itemSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
-            itemSchema.registerLoopbackModel(app);
-            Test = loopback.getModel('test');
+            itemSchema.registerLoopbackModel(app, function(err) {
+                Test = loopback.getModel('test');
+                done(err);
+            });
         });
 
         it('should create model defined by this json schema', function() {
@@ -196,10 +198,12 @@ describe('ItemSchema', function() {
         describe('with a beforeRegisterLoopbackModel hook', function() {
             var customItemSchema;
 
-            beforeEach(function() {
+            beforeEach(function(done) {
                 customItemSchema = new CustomItemSchema({modelName: 'test', collectionName: 'testplural'});
                 customItemSchema.beforeRegisterLoopbackModelCalled = false;
-                customItemSchema.registerLoopbackModel(app);
+                customItemSchema.registerLoopbackModel(app, function(err) {
+                    done(err);
+                });
             });
 
             it('should call hook immediately before registering model', function(done) {
@@ -227,7 +231,7 @@ describe('ItemSchema', function() {
 
 var CustomItemSchema = ItemSchema.extend('custom-item-schema');
 
-CustomItemSchema.prototype.beforeRegisterLoopbackModel = function(callback) {
+CustomItemSchema.prototype.beforeRegisterLoopbackModel = function(app, JsonSchemaModel, callback) {
     this.beforeRegisterLoopbackModelCalled = true;
     callback();
 };

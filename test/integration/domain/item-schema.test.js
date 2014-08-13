@@ -154,15 +154,16 @@ describe('ItemSchema', function() {
             it('should not return error when instance is valid', function(done) {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
                     if (err) { return done(err); }
-                    itemSchema.registerLoopbackModel(app);
 
-                    var PersonInvalid = loopback.getModel('personInvalid');
-                    var alice = new PersonInvalid({ firstName: 'Alice', age : 18 });
+                    itemSchema.registerLoopbackModel(app, function(err) {
+                        var PersonInvalid = loopback.getModel('personInvalid');
+                        var alice = new PersonInvalid({ firstName: 'Alice', age : 18 });
 
-                    alice.isValid(function(valid) {
-                        expect(valid).to.be.true;
-                        expect(alice.errors).to.be.false;
-                        done();
+                        alice.isValid(function(valid) {
+                            expect(valid).to.be.true;
+                            expect(alice.errors).to.be.false;
+                            done(err);
+                        });
                     });
                 });
             });
@@ -170,20 +171,21 @@ describe('ItemSchema', function() {
             it('should return error when instance is invalid', function(done) {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
                     if (err) { return done(err); }
-                    itemSchema.registerLoopbackModel(app);
 
-                    var PersonInvalid = loopback.getModel('personInvalid');
-                    var alice = new PersonInvalid({ age : 1 });
+                    itemSchema.registerLoopbackModel(app, function(err) {
+                        var PersonInvalid = loopback.getModel('personInvalid');
+                        var alice = new PersonInvalid({ age : 1 });
 
-                    alice.isValid(function(valid) {
-                        expect(valid).to.be.false;
-                        expect(alice.errors['/firstName'][0]).to.be.eql('Missing required property: firstName');
-                        expect(alice.errors['/age'][0]).to.be.eql('Value 1 is less than minimum 18');
-                        expect(alice.errors['_all'][0]).to.be.eql('Instance is invalid');
-                        expect(alice.errors.codes['/firstName'][0]).to.be.eql(302);
-                        expect(alice.errors.codes['/age'][0]).to.be.eql(101);
-                        expect(alice.errors.codes['_all'][0]).to.be.eql('custom');
-                        done();
+                        alice.isValid(function(valid) {
+                            expect(valid).to.be.false;
+                            expect(alice.errors['/firstName'][0]).to.be.eql('Missing required property: firstName');
+                            expect(alice.errors['/age'][0]).to.be.eql('Value 1 is less than minimum 18');
+                            expect(alice.errors['_all'][0]).to.be.eql('Instance is invalid');
+                            expect(alice.errors.codes['/firstName'][0]).to.be.eql(302);
+                            expect(alice.errors.codes['/age'][0]).to.be.eql(101);
+                            expect(alice.errors.codes['_all'][0]).to.be.eql('custom');
+                            done(err);
+                        });
                     });
                 });
             });
