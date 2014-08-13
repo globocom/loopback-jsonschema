@@ -180,8 +180,8 @@ describe('ItemSchema', function() {
         var Test;
 
         beforeEach(function() {
-            var jsonSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
-            jsonSchema.registerLoopbackModel(app);
+            var itemSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
+            itemSchema.registerLoopbackModel(app);
             Test = loopback.getModel('test');
         });
 
@@ -191,6 +191,21 @@ describe('ItemSchema', function() {
 
         it("should use collectionName as model's plural", function() {
             expect(Test.pluralModelName).to.equal('testplural');
+        });
+
+        describe('with a beforeRegisterLoopbackModel hook', function() {
+            var customItemSchema;
+
+            beforeEach(function() {
+                customItemSchema = new CustomItemSchema({modelName: 'test', collectionName: 'testplural'});
+                customItemSchema.beforeRegisterLoopbackModelCalled = false;
+                customItemSchema.registerLoopbackModel(app);
+            });
+
+            it('should call hook immediately before registering model', function(done) {
+                expect(customItemSchema.beforeRegisterLoopbackModelCalled).to.be.true;
+                done();
+            });
         });
     });
 
@@ -209,3 +224,10 @@ describe('ItemSchema', function() {
         });
     });
 });
+
+var CustomItemSchema = ItemSchema.extend('custom-item-schema');
+
+CustomItemSchema.prototype.beforeRegisterLoopbackModel = function(callback) {
+    this.beforeRegisterLoopbackModelCalled = true;
+    callback();
+};
