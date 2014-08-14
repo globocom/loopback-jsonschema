@@ -208,7 +208,7 @@ It is possible to include custom links in an item schema. To do so, just include
 
 ### Including custom links in a collection schema
 
-It is possible to include custom links in an item schema. To do so, just include them in the `collectionLinks` property of the **item schema** used to define a Loopback model:
+It is possible to include custom links in a collection schema. To do so, just include them in the `collectionLinks` property of the **item schema** used to define a Loopback model:
 
 ```
 {
