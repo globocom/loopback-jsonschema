@@ -213,6 +213,20 @@ describe('ItemSchema', function() {
         });
     });
 
+    describe.only('#model', function() {
+        var itemSchema;
+
+        beforeEach(function() {
+            var Test = loopback.Model.extend('test');
+            app.model(Test);
+            itemSchema = new ItemSchema({ modelName: 'test' });
+        });
+
+        it('should return the model represented by this item schema', function() {
+            expect(itemSchema.model()).to.eq(loopback.getModel('test'));
+        });
+    });
+
     describe('#collectionSchema', function() {
         var collectionSchema, schemaResourceId;
 
