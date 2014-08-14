@@ -31,6 +31,10 @@ By default, Loopback's `Model` is used as the base for dynamically defined model
 loopbackJsonSchema.init(app, { Model: MyCustomModel });
 ```
 
+### Hook: beforeRegisterLoopbackModel
+
+Immediately before registering a Loopback model from an item schema, the method `ItemSchema#beforeRegisterLoopbackModel(app, JsonSchemaModel, callback)` is called. This hook can be used for any customizations that are needed before a model is registered.
+
 ### Overriding the default collection schema
 
 It is possible to override the default collection schema by passing a custom `CollectionSchema` implementation to the `init` function:
