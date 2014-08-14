@@ -30,20 +30,8 @@ debug:
 
 .PHONY: test
 
-bump_patch_version:
-	npm version patch
+bump_%_version:
+	npm version $*
 	git push origin master
 	git push origin --tags
-	npm publish
-
-bump_minor_version:
-	npm version minor
-	git push origin master
-	git push origin --tags
-	npm publish
-
-bump_major_version:
-	npm version major
-	git push origin master
-	git push origin --tags
-	npm publish
+	npm publish --registry https://registry.npmjs.org/
