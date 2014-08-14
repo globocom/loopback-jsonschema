@@ -213,7 +213,7 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe.only('#model', function() {
+    describe('#model', function() {
         var itemSchema;
 
         beforeEach(function() {
