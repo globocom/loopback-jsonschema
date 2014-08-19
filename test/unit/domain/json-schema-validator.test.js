@@ -11,7 +11,9 @@ describe('JsonSchemaValidator', function() {
 
     it('should return null when the json schema version is not supported', function () {
         jsonSchemaValidator = new JsonSchemaValidator('unsupported-version');
-        expect(jsonSchemaValidator.validate({}, {})).to.be.null;
+        var data = {};
+        data.toObject = this.sinon.stub().returns({});
+        expect(jsonSchemaValidator.validate({}, data)).to.be.null;
     });
 
     describe('draft3', function() {
