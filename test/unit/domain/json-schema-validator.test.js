@@ -25,7 +25,7 @@ describe('JsonSchemaValidator', function() {
         });
 
         describe('#validate', function() {
-            var schema, data;
+            var schema;
 
             beforeEach(function () {
                 schema = {
@@ -46,13 +46,18 @@ describe('JsonSchemaValidator', function() {
             });
 
             it('should return the formatted errors and the count', function() {
-                var errors = jsonSchemaValidator.validate({}, {});
+                var data = {};
+                data.toObject = this.sinon.stub().returns({});
+                var errors = jsonSchemaValidator.validate({}, data);
                 expect(errors).to.have.keys(['items', 'itemCount']);
             });
 
             describe('required fields', function() {
                 it('should return a list of fields with error', function () {
-                    data = {age: 1};
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        age: 1
+                    });
 
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(2);
@@ -78,7 +83,9 @@ describe('JsonSchemaValidator', function() {
                     };
                     this.sinon.stub(JSV, 'createEnvironment').returns(env);
 
-                    data = {};
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({});
+
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(1);
                     expect(errors.items).to.eql([{
@@ -97,7 +104,10 @@ describe('JsonSchemaValidator', function() {
                         }
                     };
 
-                    data = {age: 50};
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        age: 50
+                    });
 
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(1);
@@ -123,7 +133,11 @@ describe('JsonSchemaValidator', function() {
                         "uniqueItems": true
                     };
 
-                    var data = {tags: []};
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        tags: []
+                    });
+
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(3);
                     expect(errors.items).to.eql([{
@@ -158,7 +172,9 @@ describe('JsonSchemaValidator', function() {
         });
 
         it('should be able to validate a schema following draft4 rules', function () {
-            expect(jsonSchemaValidator.validate({}, {})).to.not.be.null;
+            var data = {};
+            data.toObject = this.sinon.stub().returns({});
+            expect(jsonSchemaValidator.validate({}, data)).to.not.be.null;
         });
 
         describe('#validate', function() {
@@ -180,7 +196,9 @@ describe('JsonSchemaValidator', function() {
             });
 
             it('should return the formatted errors and the count', function() {
-                var errors = jsonSchemaValidator.validate({}, {});
+                var data = {};
+                data.toObject = this.sinon.stub().returns({});
+                var errors = jsonSchemaValidator.validate({}, data);
                 expect(errors).to.have.keys(['items', 'itemCount']);
             });
 
@@ -189,6 +207,7 @@ describe('JsonSchemaValidator', function() {
                     schema.required = ["firstName", "age"];
 
                     var data = {};
+                    data.toObject = this.sinon.stub().returns({});
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(2);
                     expect(errors.items).to.eql([{
@@ -219,7 +238,10 @@ describe('JsonSchemaValidator', function() {
                         "uniqueItems": true
                     };
 
-                    var data = {tags: []};
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        tags: []
+                    });
                     var errors = jsonSchemaValidator.validate(schema, data);
                     expect(errors.itemCount).to.eq(1);
                     expect(errors.items).to.eql([{
