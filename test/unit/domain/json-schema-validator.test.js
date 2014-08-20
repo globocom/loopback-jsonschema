@@ -22,7 +22,7 @@ describe('JsonSchemaValidator', function() {
             config.jsonSchemaValidatorTranslation = {};
         });
 
-        it('should be able to validate a schema following draft4 rules', function () {
+        it('should be able to validate a schema following draft3 rules', function () {
             expect(jsonSchemaValidator).to.not.be.null;
         });
 
@@ -38,10 +38,16 @@ describe('JsonSchemaValidator', function() {
                             "type": "string",
                             "required": true
                         },
+                        "lastName": {
+                            "type": "string",
+                        },
                         "age": {
                             "type": "integer",
                             "minimum": 10,
                             "required": true
+                        },
+                        "count": {
+                            "type": "integer"
                         }
                     }
                 };
@@ -165,6 +171,20 @@ describe('JsonSchemaValidator', function() {
                     }]);
                 });
             });
+
+            describe('with null and undefined properties', function() {
+                it('should remove null and undefined properties before validating', function() {
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        firstName: 'Alice',
+                        lastName: null,
+                        age: 30,
+                        count: undefined
+                    });
+                    var errors = jsonSchemaValidator.validate(schema, data);
+                    expect(errors.itemCount).to.eq(0);
+                });
+            });
         });
     });
 
@@ -253,6 +273,18 @@ describe('JsonSchemaValidator', function() {
                         message: "Array is too short (0), minimum 1",
                         schemaPath: "/properties/tags/minItems"
                     }]);
+                });
+            });
+
+            describe('with null and undefined properties', function() {
+                it('should remove null and undefined properties before validating', function() {
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({
+                        firstName: null,
+                        age: undefined
+                    });
+                    var errors = jsonSchemaValidator.validate(schema, data);
+                    expect(errors.itemCount).to.eq(0);
                 });
             });
         });
