@@ -258,6 +258,37 @@ If you want to use draft-3, you need to override the `$schema` property, for ins
 
 ```
 
+### Indexes
+It's possible to create indexes by adding a key called `indexes`:
+
+```
+{
+    "type": "object",
+    "title": "Task",
+    "collectionTitle": "To-Do List",
+    "modelName": "task",
+    "collectionName": "tasks",
+    "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "integer"
+        }
+    },
+    "indexes": {
+        "title_value_index": {
+            "keys": {"title": 1, "value": -1}
+        },
+        "title_index": {"title": 1}
+    }
+}
+
+```
+
+
 
 ## Sample App
 
