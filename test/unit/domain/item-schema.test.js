@@ -11,6 +11,8 @@ var app = loopback();
 app.set('restApiRoot', '/api');
 
 describe('ItemSchema', function() {
+    var itemSchema;
+
     describe('#allLinks', function() {
         beforeEach(function() {
             itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
@@ -102,8 +104,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#defaultLinks', function() {
-        var itemSchema;
-
         beforeEach(function() {
             itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
         });
@@ -127,8 +127,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#url', function() {
-        var itemSchema;
-
         beforeEach(function() {
             itemSchema = new ItemSchema({ resourceId: 1 });
         });
@@ -139,8 +137,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#itemUrlTemplate', function() {
-        var itemSchema;
-
         beforeEach(function() {
             itemSchema = new ItemSchema({ collectionName: 'people' });
         });
@@ -151,8 +147,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#collectionUrl', function() {
-        var itemSchema;
-
         beforeEach(function() {
             itemSchema = new ItemSchema({ collectionName: 'people' });
         });
@@ -180,7 +174,7 @@ describe('ItemSchema', function() {
         var Test;
 
         beforeEach(function(done) {
-            var itemSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
+            itemSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
             itemSchema.registerLoopbackModel(app, function(err) {
                 Test = loopback.getModel('test');
                 done(err);
@@ -214,8 +208,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#model', function() {
-        var itemSchema;
-
         beforeEach(function() {
             var Test = loopback.Model.extend('test');
             app.model(Test);
@@ -232,13 +224,54 @@ describe('ItemSchema', function() {
 
         beforeEach(function() {
             schemaResourceId = 1;
-            var itemSchema = new ItemSchema({resourceId: schemaResourceId});
+            itemSchema = new ItemSchema({resourceId: schemaResourceId});
             collectionSchema = itemSchema.collectionSchema();
         });
 
         it('should return a collection schema that corresponds to this item schema', function() {
             expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
             expect(collectionSchema.itemSchema.resourceId).to.eq(schemaResourceId);
+        });
+    });
+
+    describe('#createIndexes', function(){
+        var dataSource;
+        var database;
+
+        describe('mongodb as datasource', function(){
+            beforeEach(function(){
+                itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
+                database = {
+                    connector: {
+                        name: 'MONGODB',
+                        autoupdate: this.sinon.spy()
+                    }
+                };
+                itemSchema.getDataSource = this.sinon.stub().returns(database);
+            });
+
+            it('should create indexes', function(){
+                itemSchema.createIndexes();
+                expect(database.connector.autoupdate).to.have.been.calledWith(['person']);
+            });
+        });
+
+        describe('memory as datasource', function(){
+            beforeEach(function(){
+                itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
+                database = {
+                    connector: {
+                        name: 'MEMORY',
+                        autoupdate: this.sinon.spy()
+                    }
+                };
+                itemSchema.getDataSource = this.sinon.stub().returns(database);
+            });
+
+            it('should not create indexes', function(){
+                itemSchema.createIndexes();
+                expect(database.connector.autoupdate).to.have.not.been.called;
+            });
         });
     });
 });
