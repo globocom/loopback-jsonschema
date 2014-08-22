@@ -238,39 +238,44 @@ describe('ItemSchema', function() {
         var dataSource;
         var database;
 
-        describe('mongodb as datasource', function(){
+        describe('datasource with autoupdate method', function(){
             beforeEach(function(){
                 itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
                 database = {
                     connector: {
-                        name: 'MONGODB',
+                        name: 'GLOBODB',
                         autoupdate: this.sinon.spy()
                     }
                 };
                 itemSchema.getDataSource = this.sinon.stub().returns(database);
             });
 
-            it('should create indexes', function(){
-                itemSchema.createIndexes();
+            it('should create indexes', function(done){
+                itemSchema.createIndexes(function(err, created) {
+                });
                 expect(database.connector.autoupdate).to.have.been.calledWith(['person']);
+                done();
+
             });
         });
 
-        describe('memory as datasource', function(){
+        describe('datasource without autoupdate method', function(){
             beforeEach(function(){
                 itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
                 database = {
                     connector: {
-                        name: 'MEMORY',
-                        autoupdate: this.sinon.spy()
+                        name: 'MEMORY'
                     }
                 };
                 itemSchema.getDataSource = this.sinon.stub().returns(database);
             });
 
-            it('should not create indexes', function(){
-                itemSchema.createIndexes();
-                expect(database.connector.autoupdate).to.have.not.been.called;
+            it('should not create indexes', function(done){
+                itemSchema.createIndexes(function (err, created) {
+                    expect(err).to.be.null;
+                    expect(created).to.be.false;
+                    done();
+                });
             });
         });
     });
