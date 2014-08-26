@@ -174,7 +174,36 @@ describe('ItemSchema', function() {
         var Test;
 
         beforeEach(function(done) {
-            itemSchema = new ItemSchema({modelName: 'test', collectionName: 'testplural'});
+            itemSchema = new ItemSchema({
+                modelName: 'test',
+                collectionName: 'testplural',
+                properties: {
+                    myArray: {
+                        type: 'array',
+                        items: {
+                            type: 'string'
+                        }
+                    },
+                    myBoolean: {
+                        type: 'boolean'
+                    },
+                    myInteger: {
+                        type: 'integer'
+                    },
+                    myNumber: {
+                        type: 'number'
+                    },
+                    myNull: {
+                        type: 'null'
+                    },
+                    myObject: {
+                        type: 'object'
+                    },
+                    myString: {
+                        type: 'string'
+                    }
+                }
+            });
             itemSchema.registerLoopbackModel(app, function(err) {
                 Test = loopback.getModel('test');
                 done(err);
@@ -187,6 +216,31 @@ describe('ItemSchema', function() {
 
         it("should use collectionName as model's plural", function() {
             expect(Test.pluralModelName).to.equal('testplural');
+        });
+
+        it('should have properties defined by this json schema', function() {
+            var rawProperties = Test.definition.rawProperties;
+            delete rawProperties.id;
+            expect(Test.definition.rawProperties).to.eql({
+                myBoolean: {
+                    type: 'boolean'
+                },
+                myInteger: {
+                    type: 'number'
+                },
+                myNumber: {
+                    type: 'number'
+                },
+                myNull: {
+                    type: 'null'
+                },
+                myObject: {
+                    type: 'object'
+                },
+                myString: {
+                    type: 'string'
+                }
+            });
         });
 
         describe('with a beforeRegisterLoopbackModel hook', function() {
