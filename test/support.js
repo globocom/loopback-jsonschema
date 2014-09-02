@@ -21,6 +21,7 @@ var support = {
         var app = loopback();
         app.set('restApiRoot', '/api');
         loopbackJsonSchema.init(app);
+        loopbackJsonSchema.enableJsonSchemaMiddleware(app);
         app.use(app.get('restApiRoot'), loopback.rest());
         app.use(loopback.errorHandler());
         return app;

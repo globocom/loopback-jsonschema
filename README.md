@@ -17,6 +17,7 @@ Add the following code after calling `app.boot();`
 ```js
 var loopbackJsonSchema = require('loopback-jsonschema');
 loopbackJsonSchema.init(app);
+loopbackJsonSchema.enableJsonSchemaMiddleware(app);
 ```
 
 ### Configuring a DataSource
