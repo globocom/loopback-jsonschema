@@ -17,7 +17,7 @@ describe('register-loopback-model.middleware', function() {
                 var body = JSON.parse(res.text);
                 expect(body.modelName).to.eq('person');
                 expect(body.collectionName).to.eq('people');
-                
+
                 request(app)
                     .post('/api/people')
                     .set('Content-Type', 'application/json')
