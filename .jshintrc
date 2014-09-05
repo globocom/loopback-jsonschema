@@ -1,0 +1,21 @@
+{
+    "boss": false,
+    "browser": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": false,
+    "expr": true,
+    "jquery": true,
+    "mocha": true,
+    "multistr": true,
+    "newcap": true,
+    "node": true,
+    "predef": ["xit", "xdescribe"],
+    "quotmark": true,
+    "strict": false,
+    "sub": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+}
