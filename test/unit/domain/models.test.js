@@ -23,9 +23,5 @@ describe('models', function() {
         it('should return Model class from plural model name', function() {
             expect(Model.modelName).to.eq('person-test-models');
         });
-
-        it('should be cached', function() {
-            expect(models.fromPluralModelName.flush).to.exist;
-        });
     });
 });
