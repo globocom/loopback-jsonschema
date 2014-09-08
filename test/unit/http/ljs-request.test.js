@@ -98,12 +98,15 @@ describe('LJSRequest', function() {
 
     describe('#isContentTypeSupported', function() {
         beforeEach(function() {
-            req = {headers: {}};
+            req = {
+                headers: {},
+                method: ''
+            };
         });
 
-        describe('when request does not have body', function() {
+        describe('when request is a GET', function() {
             beforeEach(function() {
-                req.headers['content-length'] = 0;
+                req.method = 'GET';
                 ljsReq = new LJSRequest(req, req.app);
             });
 
@@ -112,7 +115,7 @@ describe('LJSRequest', function() {
             });
         });
 
-        describe('when request has body', function() {
+        describe('when request has content length > 0', function() {
             beforeEach(function() {
                 req.headers['content-length'] = 1;
             });
