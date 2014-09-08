@@ -104,6 +104,18 @@ describe('LJSRequest', function() {
         describe('when request does not have content length', function() {
             beforeEach(function() {
                 req.headers['content-length'] = undefined;
+                ljsReq = new LJSRequest(req, req.app);
+            });
+
+            it('should be true', function() {
+                expect(ljsReq.isContentTypeSupported()).to.be.true;
+            });
+        });
+
+        describe('when request has content length 0', function() {
+            beforeEach(function() {
+                req.headers['content-length'] = '0';
+                ljsReq = new LJSRequest(req, req.app);
             });
 
             it('should be true', function() {
@@ -113,7 +125,7 @@ describe('LJSRequest', function() {
 
         describe('when request has content length > 0', function() {
             beforeEach(function() {
-                req.headers['content-length'] = 1;
+                req.headers['content-length'] = '1';
             });
 
             describe('and Content-Type is application/json', function() {
