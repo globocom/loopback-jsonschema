@@ -57,7 +57,7 @@ describe('PUT /:collection/:id', function() {
 
         it('should correlate the item with its schema', function() {
             var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaResourceId;
-            expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel=describedby');
+            expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
         });
     });

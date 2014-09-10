@@ -38,7 +38,7 @@ describe('instanceSchemaCorrelator', function() {
             it('should correlate to the corresponding item schema', function() {
                 var schemaUrl = 'http://example.org/api/item-schemas/' + itemSchema.resourceId;;
                 expect(res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
-                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel=describedby');
+                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
             });
         });
 
@@ -52,7 +52,7 @@ describe('instanceSchemaCorrelator', function() {
             it('should correlate to the corresponding collection schema', function() {
                 var schemaUrl = 'http://example.org/api/collection-schemas/' + itemSchema.resourceId;
                 expect(res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
-                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel=describedby');
+                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
             });
         });
 
@@ -66,7 +66,7 @@ describe('instanceSchemaCorrelator', function() {
             it('should correlate to the corresponding item schema', function() {
                 var schemaUrl = 'http://example.org/api/item-schemas/' + itemSchema.resourceId;
                 expect(res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
-                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel=describedby');
+                expect(res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
             });
         });
     });
