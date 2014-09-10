@@ -295,12 +295,16 @@ describe('ItemSchema', function() {
         describe('datasource with autoupdate method', function(){
             beforeEach(function(){
                 itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
-                database = {
-                    connector: {
-                        name: 'GLOBODB',
-                        autoupdate: this.sinon.spy()
-                    }
+                var Connector = function (){
+                    this.name = 'GLOBODB';
                 };
+
+                Connector.prototype.autoupdate = this.sinon.spy();
+
+                database = {
+                    connector: new Connector()
+                };
+
                 itemSchema.getDataSource = this.sinon.stub().returns(database);
             });
 
@@ -309,17 +313,18 @@ describe('ItemSchema', function() {
                 });
                 expect(database.connector.autoupdate).to.have.been.calledWith(['person']);
                 done();
-
             });
         });
 
         describe('datasource without autoupdate method', function(){
             beforeEach(function(){
                 itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
+                var Connector = function (){
+                    this.name = 'MEMORY';
+                };
+
                 database = {
-                    connector: {
-                        name: 'MEMORY'
-                    }
+                    connector: new Connector()
                 };
                 itemSchema.getDataSource = this.sinon.stub().returns(database);
             });
