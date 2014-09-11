@@ -260,7 +260,9 @@ If you want to use draft-3, you need to override the `$schema` property, for ins
 ```
 
 ### Indexes
-It's possible to create indexes by adding a key called `indexes`:
+It's possible to create indexes by adding a key called `indexes`.
+
+The structure is the same used on [MongoDB indexes](http://docs.mongodb.org/manual/core/index-creation/), where `keys` contains the fields involved in the index and `options` might be used to define index options like `unique`.
 
 ```
 {
@@ -274,6 +276,10 @@ It's possible to create indexes by adding a key called `indexes`:
           "title": "Title",
           "type": "string"
         },
+        "slug": {
+          "title": "Slug",
+          "type": "string"
+        },
         "value": {
           "title": "Value",
           "type": "integer"
@@ -283,7 +289,11 @@ It's possible to create indexes by adding a key called `indexes`:
         "title_value_index": {
             "keys": {"title": 1, "value": -1}
         },
-        "title_index": {"title": 1}
+        "title_index": {"title": 1},
+        "slug_index": {
+            "keys": {"slug": 1},
+            "options": {"unique": True}
+        }
     }
 }
 
