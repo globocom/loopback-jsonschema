@@ -260,9 +260,10 @@ If you want to use draft-3, you need to override the `$schema` property, for ins
 ```
 
 ### Indexes
+
 It's possible to create indexes by adding a key called `indexes`.
 
-The structure is the same used on [MongoDB indexes](http://docs.mongodb.org/manual/core/index-creation/), where `keys` contains the fields involved in the index and `options` might be used to define index options like `unique`.
+See [Indexes](http://docs.strongloop.com/display/LB/Model+definition+JSON+file#ModeldefinitionJSONfile-Indexes) in Loopback documentation for more information.
 
 ```
 {
@@ -292,7 +293,7 @@ The structure is the same used on [MongoDB indexes](http://docs.mongodb.org/manu
         "title_index": {"title": 1},
         "slug_index": {
             "keys": {"slug": 1},
-            "options": {"unique": True}
+            "options": {"unique": true}
         }
     }
 }
