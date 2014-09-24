@@ -20,8 +20,8 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     app.model(ItemSchema);
 
-    app.use(app.get('restApiRoot') || '/api', registerLoopbackModelMiddleware(app));
     app.use(app.get('restApiRoot') || '/api', validateRequestMiddleware(app));
+    app.use(app.get('restApiRoot') || '/api', registerLoopbackModelMiddleware(app));
 };
 
 loopbackJsonSchema.enableJsonSchemaMiddleware = function(app) {
