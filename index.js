@@ -6,6 +6,7 @@ var loopback = require('loopback');
 var config = require('./lib/support/config');
 var ItemSchema = require('./lib/domain/item-schema');
 var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-model.middleware');
+var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
 var jsonSchemaMiddleware = require('./lib/http/json-schema.middleware');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var logger = require('./lib/support/logger');
@@ -20,6 +21,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
     app.model(ItemSchema);
 
     app.use(app.get('restApiRoot') || '/api', registerLoopbackModelMiddleware(app));
+    app.use(app.get('restApiRoot') || '/api', validateRequestMiddleware(app));
 };
 
 loopbackJsonSchema.enableJsonSchemaMiddleware = function(app) {
