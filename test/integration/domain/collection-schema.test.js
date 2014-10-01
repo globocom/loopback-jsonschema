@@ -52,6 +52,11 @@ describe('CollectionSchema', function() {
                 expect(data.modelName).to.eq('person');
             });
 
+            it('should include collectionName from ItemSchema', function () {
+                var data = collectionSchema.data();
+                expect(data.collectionName).to.eq('people');
+            });
+
             it('should use the property "collectionTitle" from ItemSchema as title', function () {
                 var data = collectionSchema.data();
                 expect(data.title).to.eq('People');
