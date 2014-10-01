@@ -47,6 +47,11 @@ describe('CollectionSchema', function() {
                 expect(data.$schema).to.eq('http://json-schema.org/draft-04/hyper-schema#');
             });
 
+            it('should include modelName from ItemSchema', function () {
+                var data = collectionSchema.data();
+                expect(data.modelName).to.eq('person');
+            });
+
             it('should use the property "collectionTitle" from ItemSchema as title', function () {
                 var data = collectionSchema.data();
                 expect(data.title).to.eq('People');
