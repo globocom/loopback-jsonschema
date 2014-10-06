@@ -23,7 +23,7 @@
     "JSV": "4.x.x",
     "stack-trace": "",
     "traverse": "",
-    "tv4": "",
+    "tv4": "1.0.x",
     "type-is": "1.x.x",
     "underscore": "1.x",
     "winston": "0.x"
