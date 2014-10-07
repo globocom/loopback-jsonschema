@@ -17,10 +17,11 @@
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
   "dependencies": {
+    "JSV": "4.x.x",
     "cors": "2.x",
     "debug": "",
+    "errorhandler": "1.x",
     "json-path": "",
-    "JSV": "4.x.x",
     "stack-trace": "",
     "traverse": "",
     "tv4": "",
@@ -29,11 +30,11 @@
     "winston": "0.x"
   },
   "peerDependencies": {
-    "loopback": "1.x"
+    "loopback": "2.x"
   },
   "devDependencies": {
     "chai": "",
-    "loopback": "1.x",
+    "loopback": "2.x",
     "mocha": "",
     "mocha-sinon": "",
     "sinon": "",
