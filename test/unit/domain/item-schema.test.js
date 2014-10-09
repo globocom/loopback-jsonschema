@@ -290,7 +290,6 @@ describe('ItemSchema', function() {
                     model = registredModelSchema.model();
                     done();
                 });
-
             });
 
             it('should return a model instance', function() {
