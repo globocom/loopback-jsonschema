@@ -13,8 +13,8 @@ app.set('restApiRoot', '/api');
 describe('ItemSchema', function() {
     var itemSchema;
 
-    it('should isinstance of loopback.Model', function(){
-        expect(ItemSchema.prototype).to.be.an.instanceof(loopback.Model);
+    it('should be an instance of loopback.PersistedModel', function(){
+        expect(ItemSchema.prototype).to.be.an.instanceof(loopback.PersistedModel);
     });
 
     describe('#allLinks', function() {
