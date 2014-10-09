@@ -266,14 +266,40 @@ describe('ItemSchema', function() {
     });
 
     describe('#model', function() {
-        beforeEach(function() {
-            var Test = loopback.Model.extend('test');
-            app.model(Test);
-            itemSchema = new ItemSchema({ modelName: 'test' });
+        describe('when ItemSchema not is registred', function(){
+            var unregistredModelSchema;
+
+            before(function() {
+                unregistredModelSchema = new ItemSchema({modelName: 'unregistred-model'});
+            });
+
+            it('should return null', function(){
+                expect(unregistredModelSchema.model()).to.be.null;
+            });
         });
 
-        it('should return the model represented by this item schema', function() {
-            expect(itemSchema.model()).to.eq(loopback.getModel('test'));
+        describe('when ItemSchema is registred', function(){
+            var registredModelSchema;
+            var model;
+
+            before(function(done) {
+                registredModelSchema = new ItemSchema({modelName: 'registred-model'});
+
+                registredModelSchema.registerLoopbackModel(app, function(err) {
+                    if (err) { return done(err); }
+                    model = registredModelSchema.model();
+                    done();
+                });
+
+            });
+
+            it('should return a model instance', function() {
+                expect(model.prototype).to.be.an.instanceof(loopback.PersistedModel);
+            });
+
+            it('should return the model represented by this item schema', function() {
+                expect(model).to.eq(loopback.getModel('registred-model'));
+            });
         });
     });
 
