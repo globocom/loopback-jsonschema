@@ -32,6 +32,17 @@ describe('loopbackJsonSchema', function() {
             });
         });
 
+        it('should set strong-remoting params', function(){
+            loopbackJsonSchema.init(app, { CollectionSchemaClass: CollectionSchema });
+            expect(app.get('remoting')).to.eql({
+                json: {
+                    type: [
+                        'json',
+                        '+json'
+                    ]
+                }});
+        });
+
         after(function() {
             loopbackJsonSchema.init(app, { CollectionSchemaClass: CollectionSchema });
         });
