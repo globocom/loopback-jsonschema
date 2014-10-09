@@ -105,6 +105,40 @@ describe('ItemSchema', function() {
         });
     });
 
+    describe('.model', function(){
+        describe('when ItemSchema not is registred', function(){
+            var unregistredModelSchema;
+
+            before(function() {
+                unregistredModelSchema = new ItemSchema({modelName: 'unregistred-model'});
+            });
+
+            it('should return null', function(){
+                expect(unregistredModelSchema.model()).to.be.null;
+            });
+
+        });
+
+        describe('when ItemSchema is registred', function(){
+            var registredModelSchema;
+            var model;
+
+            before(function(done) {
+                registredModelSchema = new ItemSchema({modelName: 'registred-model'});
+                registredModelSchema.registerLoopbackModel(app, function(err) {
+                    if (err) { return done(err); }
+                    model = registredModelSchema.model();
+                    done();
+                });
+            });
+
+            it('should return a model instance', function() {
+                expect(model.prototype).to.be.an.instanceof(loopback.PersistedModel);
+            });
+        });
+    });
+
+
     describe('.findByCollectionName', function() {
         beforeEach(function() {
             this.sinon.stub(logger, 'info');
