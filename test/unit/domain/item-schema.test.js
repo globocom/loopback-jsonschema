@@ -13,6 +13,10 @@ app.set('restApiRoot', '/api');
 describe('ItemSchema', function() {
     var itemSchema;
 
+    it('should isinstance of loopback.Model', function(){
+        expect(ItemSchema.prototype).to.be.an.instanceof(loopback.Model);
+    });
+
     describe('#allLinks', function() {
         beforeEach(function() {
             itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});

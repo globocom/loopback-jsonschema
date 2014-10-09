@@ -13,14 +13,14 @@ var logger = require('./lib/support/logger');
 
 loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
+    app.set('remoting', {json: {type: ['json', '+json']}});
+
     logger.transports.console.level = config.logLevel;
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
-
     app.model(ItemSchema);
 
-    app.set('remoting', {json: {type: ['json', '+json']}});
 
     app.use(app.get('restApiRoot') || '/api', validateRequestMiddleware(app));
     app.use(app.get('restApiRoot') || '/api', registerLoopbackModelMiddleware(app));
