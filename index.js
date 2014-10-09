@@ -21,14 +21,21 @@ loopbackJsonSchema.init = function(app, customConfig) {
     ItemSchema.attachTo(db);
     app.model(ItemSchema);
 
-
-    app.use(app.get('restApiRoot') || '/api', validateRequestMiddleware(app));
-    app.use(app.get('restApiRoot') || '/api', registerLoopbackModelMiddleware(app));
+    var restApiRoot = app.get('restApiRoot') || '/api';
+    app.use(restApiRoot, [
+        validateRequestMiddleware(app),
+        registerLoopbackModelMiddleware(app)
+    ]);
 };
 
 loopbackJsonSchema.enableJsonSchemaMiddleware = function(app) {
-    app.use(app.get('restApiRoot') || '/api', jsonSchemaMiddleware());
-    jsonSchemaRoutes.draw(app);
+    var corsOptions = (app.get('remoting') && app.get('remoting').cors) || {};
+    var restApiRoot = app.get('restApiRoot') || '/api';
+
+    app.use(restApiRoot, [
+        jsonSchemaMiddleware(),
+        jsonSchemaRoutes.drawRouter(corsOptions)
+    ]);
 };
 
 loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
