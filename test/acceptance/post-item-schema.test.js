@@ -13,7 +13,14 @@ describe('POST /item-schemas', function() {
             var schemaJson = {
                 'type': 'object',
                 'modelName': 'person',
-                'collectionName': 'people'
+                'collectionName': 'people',
+                links: [
+                    {
+                        rel: 'blog',
+                        method: 'GET',
+                        href: '{+blog}'
+                    }
+                ]
             };
             request(app)
                 .post('/api/item-schemas')
@@ -58,7 +65,8 @@ describe('POST /item-schemas', function() {
                         }
                     },
                     { rel: 'update', method: 'PUT', href: schemeAndAuthority + '/api/people/{id}' },
-                    { rel: 'delete', method: 'DELETE', href: schemeAndAuthority + '/api/people/{id}' }
+                    { rel: 'delete', method: 'DELETE', href: schemeAndAuthority + '/api/people/{id}' },
+                    { rel: 'blog', method: 'GET', href: '{+blog}' }
                 ]);
         });
     });
