@@ -1,4 +1,4 @@
-{
+ {
   "name": "loopback-jsonschema",
   "version": "1.0.5",
   "description": "JSON Schema support for Loopback",
@@ -27,7 +27,8 @@
     "tv4": "",
     "type-is": "1.x.x",
     "underscore": "1.x",
-    "winston": "0.x"
+    "winston": "0.x",
+    "q": "1.x"
   },
   "peerDependencies": {
     "loopback": "2.x"

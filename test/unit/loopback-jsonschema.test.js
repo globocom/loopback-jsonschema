@@ -4,13 +4,20 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var CollectionSchema = require('../../lib/domain/collection-schema');
+var ItemSchema = require('../../lib/domain/item-schema');
+
 var config = require('../../lib/support/config');
 var loopbackJsonSchema = require('../../index');
 
-var app = loopback();
 
 describe('loopbackJsonSchema', function() {
     describe('.init', function() {
+        var app;
+
+        before(function() {
+            app = loopback();
+        });
+
         it('should allow overriding default config', function() {
             var myConfig = {
                 CollectionSchemaClass: 'MyCollectionSchemaClass',
@@ -28,7 +35,8 @@ describe('loopbackJsonSchema', function() {
                 },
                 logLevel: 'info',
                 Model: 'MyModel',
-                myConfigOption: 'myValue'
+                myConfigOption: 'myValue',
+                registerItemSchemaAtRequest: true
             });
         });
 
@@ -43,8 +51,35 @@ describe('loopbackJsonSchema', function() {
                 }});
         });
 
-        after(function() {
-            loopbackJsonSchema.init(app, { CollectionSchemaClass: CollectionSchema });
+
+        describe('when registerItemSchemaAtRequest is false', function(){
+            var app, findStub, itemSchemas;
+
+            before(function(done) {
+                app = loopback();
+
+                itemSchemas = ['people', 'pencils'].map(function(collectionName) {
+                    return {
+                        collectionName: collectionName,
+                        registerLoopbackModel: function(app, callback) {
+                            setTimeout(function() {
+                                callback(null);
+                            }, 100);
+                        }
+                    };
+                });
+
+                findStub = this.sinon.stub(ItemSchema, 'find').yields(null, itemSchemas);
+                loopbackJsonSchema.init(app, { registerItemSchemaAtRequest: false });
+
+                app.once('loadSchemas', function() {
+                    done();
+                });
+            });
+
+            it('ItemSchema.find to have been called with {}', function(){
+                expect(findStub).to.have.been.calledWith({});
+            });
         });
     });
 });
