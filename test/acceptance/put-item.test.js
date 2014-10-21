@@ -5,10 +5,12 @@ var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
 
-var app = support.newLoopbackJsonSchemaApp();
 
 describe('PUT /:collection/:id', function() {
-    var itemResponse, itemId, jsonSchemaResourceId, schemeAndAuthority;
+    var app, itemResponse, itemId, jsonSchemaResourceId, schemeAndAuthority;
+    before(function() {
+        app = support.newLoopbackJsonSchemaApp();
+    });
 
     describe('successfully', function() {
         before(function(done) {
@@ -64,6 +66,7 @@ describe('PUT /:collection/:id', function() {
 
     describe('with unsupported Content-Type', function() {
         before(function(done) {
+
             request(app)
                 .put('/api/people/123')
                 .set('Accept', 'application/json')

@@ -3,13 +3,12 @@ var support = require('../support');
 var expect = require('chai').expect;
 var request = require('supertest');
 
-var app = support.newLoopbackJsonSchemaApp();
-
 describe('POST /item-schemas', function() {
-    var itemSchema, itemSchemaResourceId, response, schemeAndAuthority;
+    var app, itemSchema, itemSchemaResourceId, response, schemeAndAuthority;
 
     describe('successfully', function() {
         before(function(done) {
+            app = support.newLoopbackJsonSchemaApp();
             var schemaJson = {
                 'type': 'object',
                 'modelName': 'person',
@@ -22,6 +21,7 @@ describe('POST /item-schemas', function() {
                     }
                 ]
             };
+
             request(app)
                 .post('/api/item-schemas')
                 .set('Content-Type', 'application/schema+json')
@@ -73,6 +73,7 @@ describe('POST /item-schemas', function() {
 
     describe('with unsupported Content-Type', function() {
         before(function(done) {
+            app = support.newLoopbackJsonSchemaApp();
             var schemaJson = {
                 'type': 'object',
                 'modelName': 'person',

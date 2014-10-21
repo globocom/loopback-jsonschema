@@ -6,9 +6,14 @@ var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
 
-var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /:collection', function () {
+    var app;
+
+    before(function() {
+        app = support.newLoopbackJsonSchemaApp();
+    });
+
     describe('when the collection exists', function() {
         var jsonSchemaResourceId, response, schemeAndAuthority;
 

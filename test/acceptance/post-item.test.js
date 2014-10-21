@@ -5,13 +5,13 @@ var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
 
-var app = support.newLoopbackJsonSchemaApp();
 
 describe('POST /:collection', function() {
-    var itemResponse, jsonSchemaResourceId, schemeAndAuthority;
+    var app, itemResponse, jsonSchemaResourceId, schemeAndAuthority;
 
     describe('successfully', function() {
         before(function (done) {
+            app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
                 modelName: 'person',
                 collectionName: 'people',
@@ -52,6 +52,7 @@ describe('POST /:collection', function() {
 
     describe('with unsupported Content-Type', function() {
         before(function(done) {
+            app = support.newLoopbackJsonSchemaApp();
             request(app)
                 .post('/api/people')
                 .set('Accept', 'application/json')
@@ -75,6 +76,7 @@ describe('POST /:collection', function() {
 
     describe('with validation errors', function() {
         before(function(done) {
+            app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
                 modelName: 'person',
                 collectionName: 'people',

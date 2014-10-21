@@ -4,10 +4,9 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 var request = require('supertest');
 
-var app = support.newLoopbackJsonSchemaApp();
-
 describe('register-loopback-model.middleware', function() {
     it('should register the loopback model', function (done) {
+        var app = support.newLoopbackJsonSchemaApp();
         request(app)
             .post('/api/item-schemas')
             .set('Content-Type', 'application/json')

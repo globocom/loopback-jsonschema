@@ -5,11 +5,14 @@ var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
 
-var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /:collection/:id', function () {
     var itemId, jsonSchemaResourceId, response, schemeAndAuthority;
+    var app;
 
+    before(function() {
+        app = support.newLoopbackJsonSchemaApp();
+    });
     before(function(done) {
         ItemSchema.create({
             type: 'object',
