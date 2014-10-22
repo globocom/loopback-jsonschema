@@ -19,6 +19,9 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     logger.transports.console.level = config.logLevel;
 
+    // save app pointer
+    ItemSchema.app = app;
+
     var db = dataSource(app);
     ItemSchema.attachTo(db);
     app.model(ItemSchema);
