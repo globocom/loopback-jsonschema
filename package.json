@@ -36,7 +36,7 @@
   "devDependencies": {
     "chai": "",
     "loopback": "2.x",
-    "mocha": "",
+    "mocha": "1.x",
     "mocha-sinon": "",
     "sinon": "",
     "sinon-chai": "",
