@@ -118,7 +118,7 @@ describe('GET /collection-schemas/:id', function () {
                 .expect(404)
                 .end(function (err, res) {
                     if (err) { return done(err); };
-                    expect(res.body).to.not.be.emtpy;
+                    expect(res.body).to.be.eql({});
                     done();
             });
         });
