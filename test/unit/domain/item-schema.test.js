@@ -208,8 +208,10 @@ describe('ItemSchema', function() {
                     }
                 }
             });
-            itemSchema.registerLoopbackModel(app, function(err) {
-                Test = loopback.getModel('test');
+
+            Test = itemSchema.constructModel();
+
+            itemSchema.registerModel(Test, function(err) {
                 done(err);
             });
         });
@@ -253,7 +255,8 @@ describe('ItemSchema', function() {
             beforeEach(function(done) {
                 customItemSchema = new CustomItemSchema({modelName: 'test', collectionName: 'testplural'});
                 customItemSchema.beforeRegisterLoopbackModelCalled = false;
-                customItemSchema.registerLoopbackModel(app, function(err) {
+                var model = customItemSchema.constructModel();
+                customItemSchema.registerModel(model, function(err) {
                     done(err);
                 });
             });
@@ -284,8 +287,8 @@ describe('ItemSchema', function() {
 
             before(function(done) {
                 registredModelSchema = new ItemSchema({modelName: 'registred-model'});
-
-                registredModelSchema.registerLoopbackModel(app, function(err) {
+                var contructedModel = registredModelSchema.constructModel();
+                registredModelSchema.registerModel(contructedModel, function(err) {
                     if (err) { return done(err); }
                     model = registredModelSchema.model();
                     done();
@@ -365,6 +368,67 @@ describe('ItemSchema', function() {
                     done();
                 });
             });
+        });
+
+
+    });
+    describe('#preLoadModels', function(){
+        var attachModelStub, itemSchemaFindStub;
+        var model1, model2;
+        var itemSchemaRegisterModel1Called, itemSchemaRegisterModel2Called;
+        var itemSchemaConstructModelStub1, itemSchemaConstructModelStub2;
+
+        beforeEach(function(done) {
+            ItemSchema.app = loopback();
+            var schema1 = new ItemSchema({modelName: 'PreLoadedModel1'});
+            var schema2 = new ItemSchema({modelName: 'PreLoadedModel2'});
+
+            var Model = function () {};
+            model1 = new Model();
+            model2 = new Model();
+
+            itemSchemaFindStub = this.sinon.stub(ItemSchema, 'find').yields(null, [schema1, schema2]);
+
+            itemSchemaConstructModelStub1 = this.sinon.stub(schema1, 'constructModel').returns(model1);
+            itemSchemaConstructModelStub2 = this.sinon.stub(schema2, 'constructModel').returns(model2);
+
+            attachModelStub = this.sinon.stub(ItemSchema, 'attachModel').returns(null);
+
+            itemSchemaRegisterModel1Called = false;
+            this.sinon.stub(schema1, 'registerModel', function(model, callback) {
+                itemSchemaRegisterModel1Called = true;
+            });
+
+            itemSchemaRegisterModel2Called = false;
+            this.sinon.stub(schema2, 'registerModel', function(model, callback) {
+                itemSchemaRegisterModel2Called = true;
+            });
+
+            ItemSchema.preLoadModels();
+
+            ItemSchema.app.once('loadModels', function() {
+                done();
+            });
+        });
+
+        it('calls ItemSchema.find', function(){
+            expect(itemSchemaFindStub).to.have.been.calledWith({});
+        });
+
+        it('calls itemSchema.constructModel', function(){
+            expect(itemSchemaConstructModelStub1).to.have.been.called;
+            expect(itemSchemaConstructModelStub2).to.have.been.called;
+        });
+
+
+        it('calls ItemSchema.attachModel', function(){
+            expect(attachModelStub).to.have.been.calledWith(model1);
+            expect(attachModelStub).to.have.been.calledWith(model2);
+        });
+
+        it('calls itemSchema.registerModel', function(){
+            expect(itemSchemaRegisterModel1Called).to.be.true;
+            expect(itemSchemaRegisterModel2Called).to.be.true;
         });
     });
 });

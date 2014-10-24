@@ -1,6 +1,6 @@
 
 var _ = require('underscore');
-var Q = require('q');
+
 
 var loopback = require('loopback');
 
@@ -35,7 +35,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
         middlewares.push(registerLoopbackModelMiddleware(app));
     } else {
         // load all item schemas at boot
-        loadItemSchemas(app);
+        ItemSchema.preLoadModels();
     }
 
     app.use(restApiRoot, middlewares);
@@ -58,38 +58,4 @@ loopbackJsonSchema.LJSUrl = require('./lib/http/ljs-url');
 
 function dataSource(app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
-}
-
-function loadItemSchema(app, itemSchema) {
-    var deferred = Q.defer();
-
-    itemSchema.registerLoopbackModel(app, function(err) {
-        if (err) {
-            logger.error('Register itemSchema error: ' + err);
-        } else {
-            logger.info('Loaded JSON Schema collectionName: ' + itemSchema.collectionName);
-        }
-
-        deferred.resolve();
-    });
-
-    return deferred.promise;
-}
-
-
-function loadItemSchemas(app) {
-    ItemSchema.find({}, function(err, itemSchemas) {
-        if (err) {
-            logger.error('Find all itemschemas error: ' + err.message);
-            return;
-        }
-
-        var promisses = itemSchemas.map(function(itemSchema) {
-            return loadItemSchema(app, itemSchema);
-        });
-
-        Q.allSettled(promisses).then(function() {
-            app.emit('loadSchemas', itemSchemas);
-        });
-    });
 }

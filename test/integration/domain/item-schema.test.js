@@ -134,7 +134,7 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe('#registerLoopbackModel', function() {
+    describe('#registerModel', function() {
         describe('validation', function() {
             var schemaDefinition = {
                 modelName: 'personInvalid',
@@ -155,10 +155,10 @@ describe('ItemSchema', function() {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
                     if (err) { return done(err); }
 
-                    itemSchema.registerLoopbackModel(app, function(err) {
-                        var PersonInvalid = loopback.getModel('personInvalid');
-                        var alice = new PersonInvalid({ firstName: 'Alice', age : 18 });
+                    var PersonInvalid = itemSchema.constructModel();
 
+                    itemSchema.registerModel(PersonInvalid, function(err) {
+                        var alice = new PersonInvalid({ firstName: 'Alice', age : 18 });
                         alice.isValid(function(valid) {
                             expect(valid).to.be.true;
                             expect(alice.errors).to.be.false;
@@ -172,8 +172,9 @@ describe('ItemSchema', function() {
                 ItemSchema.create(schemaDefinition, function(err, itemSchema) {
                     if (err) { return done(err); }
 
-                    itemSchema.registerLoopbackModel(app, function(err) {
-                        var PersonInvalid = loopback.getModel('personInvalid');
+                    var PersonInvalid = itemSchema.constructModel();
+
+                    itemSchema.registerModel(PersonInvalid, function(err) {
                         var alice = new PersonInvalid({ age : 1 });
 
                         alice.isValid(function(valid) {
