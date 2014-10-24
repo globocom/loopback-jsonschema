@@ -58,21 +58,10 @@ describe('loopbackJsonSchema', function() {
             before(function(done) {
                 app = loopback();
 
-                itemSchemas = ['people', 'pencils'].map(function(collectionName) {
-                    return {
-                        collectionName: collectionName,
-                        registerLoopbackModel: function(app, callback) {
-                            setTimeout(function() {
-                                callback(null);
-                            }, 100);
-                        }
-                    };
-                });
-
-                findStub = this.sinon.stub(ItemSchema, 'find').yields(null, itemSchemas);
+                findStub = this.sinon.stub(ItemSchema, 'find').yields(null, []);
                 loopbackJsonSchema.init(app, { registerItemSchemaAtRequest: false });
 
-                app.once('loadSchemas', function() {
+                app.once('loadModels', function() {
                     done();
                 });
             });

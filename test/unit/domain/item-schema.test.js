@@ -208,8 +208,10 @@ describe('ItemSchema', function() {
                     }
                 }
             });
-            itemSchema.registerLoopbackModel(app, function(err) {
-                Test = loopback.getModel('test');
+
+            Test = itemSchema.constructModel();
+
+            itemSchema.registerModel(Test, function(err) {
                 done(err);
             });
         });
@@ -253,7 +255,8 @@ describe('ItemSchema', function() {
             beforeEach(function(done) {
                 customItemSchema = new CustomItemSchema({modelName: 'test', collectionName: 'testplural'});
                 customItemSchema.beforeRegisterLoopbackModelCalled = false;
-                customItemSchema.registerLoopbackModel(app, function(err) {
+                var model = customItemSchema.constructModel();
+                customItemSchema.registerModel(model, function(err) {
                     done(err);
                 });
             });
@@ -284,8 +287,8 @@ describe('ItemSchema', function() {
 
             before(function(done) {
                 registredModelSchema = new ItemSchema({modelName: 'registred-model'});
-
-                registredModelSchema.registerLoopbackModel(app, function(err) {
+                var contructedModel = registredModelSchema.constructModel();
+                registredModelSchema.registerModel(contructedModel, function(err) {
                     if (err) { return done(err); }
                     model = registredModelSchema.model();
                     done();
