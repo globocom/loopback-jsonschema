@@ -28,7 +28,8 @@
     "type-is": "1.x.x",
     "underscore": "1.x",
     "winston": "0.x",
-    "q": "1.x"
+    "q": "1.x",
+    "fast-url-parser": "1.0.6-0"
   },
   "peerDependencies": {
     "loopback": "2.x"

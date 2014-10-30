@@ -1,3 +1,4 @@
+require("fast-url-parser").replace();
 
 var _ = require('underscore');
 
