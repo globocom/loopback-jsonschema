@@ -36,7 +36,14 @@ loopbackJsonSchema.init = function(app, customConfig) {
         middlewares.push(registerLoopbackModelMiddleware(app));
     } else {
         // load all item schemas at boot
-        ItemSchema.preLoadModels();
+        db.connector.connect(function(err, db) {
+            if (err) {
+                logger.error('[ItemSchema.preLoadModels] Failed to connect into database.');
+                return;
+            }
+
+            ItemSchema.preLoadModels();
+        });
     }
 
     app.use(restApiRoot, middlewares);
