@@ -135,6 +135,34 @@ describe('ItemSchema', function() {
     });
 
     describe('#registerModel', function() {
+        describe('hooks', function(){
+            describe('when called twice', function() {
+                var citySchema;
+
+                beforeEach(function(done) {
+                    ItemSchema.defineRemoteHooks = this.sinon.spy(ItemSchema.defineRemoteHooks);
+                    citySchema = new ItemSchema({
+                        modelName: 'city', collectionName: 'cities'
+                    });
+
+                    var cityModel = citySchema.constructModel();
+
+                    citySchema.registerModel(cityModel, function(err) {
+                        if (err) { return done(err); }
+
+                        citySchema.registerModel(cityModel, function(err) {
+                            if (err) { return done(err); }
+                            done();
+                        });
+                    });
+                });
+
+                it('should register remote hooks only once', function() {
+                    expect(ItemSchema.defineRemoteHooks).to.have.callCount(1);
+                });
+            });
+        });
+
         describe('validation', function() {
             var schemaDefinition = {
                 modelName: 'personInvalid',
