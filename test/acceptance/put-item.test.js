@@ -64,9 +64,110 @@ describe('PUT /:collection/:id', function() {
         });
     });
 
+    describe('successfully with a readOnly field', function() {
+         before(function (done) {
+            app = support.newLoopbackJsonSchemaApp();
+            ItemSchema.create({
+                modelName: 'person-readonly',
+                collectionName: 'people-readonly',
+                title: 'Person',
+                collectionTitle: 'People-readonly',
+                type: 'object',
+                properties: {
+                    status: {
+                        type: 'string',
+                        readOnly: true
+                    }
+                }
+            }, function(err, jsonSchema) {
+                if (err) { return done(err); };
+                jsonSchemaResourceId = jsonSchema.resourceId;
+                done();
+            });
+        });
+
+        before(function(done) {
+            request(app)
+                .post('/api/people-readonly')
+                .set('Content-Type', 'application/json')
+                .send('{"name": "Alice"}')
+                .end(function (err, item) {
+                    if (err) { return done(err); };
+                    itemId = item.body.id;
+                    done();
+                });
+        });
+
+        before(function(done) {
+            request(app)
+                .put('/api/people-readonly/' + itemId)
+                .set('Content-Type', 'application/json')
+                .send('{"name": "Alice", "status": "top"}')
+                .end(function (err, res) {
+                    if (err) { return done(err); };
+                    itemResponse = res;
+                    done();
+                });
+        });
+
+        it('should ignore posted property', function() {
+            expect(itemResponse.body).to.not.include.keys('status');
+        });
+    });
+
+    describe('successfully when the schema includes a default value', function(){
+        before(function (done) {
+            app = support.newLoopbackJsonSchemaApp();
+            ItemSchema.create({
+                modelName: 'person-readonly',
+                collectionName: 'people-readonly',
+                title: 'Person',
+                collectionTitle: 'People-readonly',
+                type: 'object',
+                properties: {
+                    status: {
+                        type: 'string',
+                        default: 'inactive'
+                    }
+                }
+            }, function(err, jsonSchema) {
+                if (err) { return done(err); };
+                jsonSchemaResourceId = jsonSchema.resourceId;
+                done();
+            });
+        });
+
+        before(function(done) {
+            request(app)
+                .post('/api/people-readonly')
+                .set('Content-Type', 'application/json')
+                .send('{"name": "Alice"}')
+                .end(function (err, res) {
+                    if (err) { return done(err); };
+                    itemId = res.body.id;
+                    done();
+                });
+        });
+
+        before(function(done) {
+            request(app)
+                .put('/api/people-readonly/' + itemId)
+                .set('Content-Type', 'application/json')
+                .send('{"name": "Alice"}')
+                .end(function (err, res) {
+                    if (err) { return done(err); };
+                    itemResponse = res;
+                    done();
+                });
+        });
+
+        it('should set default value', function() {
+            expect(itemResponse.body.status).to.eql('inactive');
+        });
+    });
+
     describe('with unsupported Content-Type', function() {
         before(function(done) {
-
             request(app)
                 .put('/api/people/123')
                 .set('Accept', 'application/json')

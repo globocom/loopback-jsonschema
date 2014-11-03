@@ -21,6 +21,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     // save app pointer
     ItemSchema.app = app;
+    ItemSchema.app._registeredLoopbackHooks = {};
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
