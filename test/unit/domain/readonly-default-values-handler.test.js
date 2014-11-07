@@ -468,7 +468,14 @@ describe('readOnlyDefaultValuesHandler', function() {
                                             active: {type: "boolean", default: true}
                                         }
                                     }
-                                ]
+                                ],
+                                additionalItems: {
+                                    type: "object",
+                                    properties: {
+                                        extra: {type: "string", readOnly: true, default: true},
+                                        number: {type: "string", default: "not definied"}
+                                    }
+                                }
                             }
                         }
                     }
@@ -488,7 +495,11 @@ describe('readOnlyDefaultValuesHandler', function() {
                 ctx.req.body = {
                     telephones: [
                         {contact: 'bob', available: false},
-                        {city: 'Rio de Janeiro'}
+                        {city: 'Rio de Janeiro'},
+                        {extra: false, number: 'definied'},
+                        {extra: false},
+                        {extra: true},
+                        {}
                     ]
                 };
                 var body = readOnlyDefaultValuesHandler(ctx);
@@ -496,7 +507,11 @@ describe('readOnlyDefaultValuesHandler', function() {
                 expect(body).to.be.eql({
                     telephones: [
                         {contact: 'bob', available: true},
-                        {city: 'Rio de Janeiro', active: true}
+                        {city: 'Rio de Janeiro', active: true},
+                        {extra: true, number: 'definied'},
+                        {extra: true, number: 'not definied'},
+                        {extra: true, number: 'not definied'},
+                        {extra: true, number: 'not definied'}
                     ]
                 });
             });
