@@ -86,7 +86,6 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
         });
 
-
         describe('when schema has a nested objects', function(){
             beforeEach(function() {
                 model = {
@@ -160,6 +159,60 @@ describe('readOnlyDefaultValuesHandler', function() {
                     }
                 }
             };
+        });
+
+        describe('when schema has a array object of a one type', function(){
+            beforeEach(function() {
+                model = {
+                    definition: {
+                        properties: {
+                            medias: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        path: {type: 'string'},
+                                        author: {type: 'string', default: 'Paulo Coelho'}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                ctx = {
+                    method: {
+                        ctor: model
+                    },
+                    req: {
+                        body: {}
+                    }
+                };
+            });
+
+            it('should apply default value', function(){
+                ctx.req.body = {
+                    medias: [
+                        {path: '/user/tmp'},
+                        {path: '/tmp/imgs'}
+                    ]
+                };
+                var body = readOnlyDefaultValuesHandler(ctx);
+
+                expect(body).to.be.eql({
+                    medias: [
+                        {path: '/user/tmp', author: 'Paulo Coelho'},
+                        {path: '/tmp/imgs', author: 'Paulo Coelho'}
+                    ]
+                });
+            });
+
+            it('should handle invalid payload', function(){
+                ctx.req.body = {};
+                var body = readOnlyDefaultValuesHandler(ctx);
+
+                expect(body).to.be.eql({});
+            });
         });
 
         describe('when default value is applied', function() {
@@ -390,6 +443,62 @@ describe('readOnlyDefaultValuesHandler', function() {
             expect(body).to.be.eql({
                 name: 'wilson',
                 status: 'active'
+            });
+        });
+
+        describe('when schema has a array object of a one type', function(){
+            beforeEach(function() {
+                model = {
+                    definition: {
+                        properties: {
+                            telephones: {
+                                type: "array",
+                                items: [
+                                    {
+                                        type: "object",
+                                        properties: {
+                                            contact: {type: "string"},
+                                            available: {type: "boolean", readOnly: true, default: true}
+                                        }
+                                    },
+                                    {
+                                        type: "object",
+                                        properties: {
+                                            city: {type: "string"},
+                                            active: {type: "boolean", default: true}
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+
+                ctx = {
+                    method: {
+                        ctor: model
+                    },
+                    req: {
+                        body: {}
+                    }
+                };
+            });
+
+            it('should handle properties', function(){
+                ctx.req.body = {
+                    telephones: [
+                        {contact: 'bob', available: false},
+                        {city: 'Rio de Janeiro'}
+                    ]
+                };
+                var body = readOnlyDefaultValuesHandler(ctx);
+
+                expect(body).to.be.eql({
+                    telephones: [
+                        {contact: 'bob', available: true},
+                        {city: 'Rio de Janeiro', active: true}
+                    ]
+                });
             });
         });
     });
