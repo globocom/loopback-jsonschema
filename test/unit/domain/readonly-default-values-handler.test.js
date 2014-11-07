@@ -3,30 +3,20 @@ var expect = require('chai').expect;
 var readOnlyDefaultValuesHandler = require('../../../lib/domain/readonly-default-values-handler');
 
 describe('readOnlyDefaultValuesHandler', function() {
-    var model;
-    var ctx;
+    var properties;
+    var payload;
 
     describe('readOnly', function(){
         it('should remove property', function(){
-            model = {
-                definition: {
-                    properties: {
-                        name: {type: String},
-                        status: {readOnly: true, type: String}
-                    }
-                }
+            properties = {
+                name: {type: 'string'},
+                status: {readOnly: true, type: 'string'}
             };
 
-            ctx = {
-                method: {
-                    ctor: model
-                },
-                req: {
-                    body: {name: 'wilson', status: 'single'}
-                }
-            };
+            payload = {name: 'wilson', status: 'single'};
 
-            var body = readOnlyDefaultValuesHandler(ctx);
+
+            var body = readOnlyDefaultValuesHandler(properties, payload);
             expect(body).to.be.eql({
                 name: 'wilson'
             });
@@ -34,41 +24,29 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                model = {
-                    definition: {
-                        properties: {
-                            medias: {
-                                type: "array",
-                                items: {
-                                    type: "object",
-                                    properties: {
-                                        path: {type: "string"},
-                                        author: {type: "string", readOnly: true}
-                                    }
-                                }
+                properties = {
+                    medias: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                path: {type: "string"},
+                                author: {type: "string", readOnly: true}
                             }
                         }
-                    }
-                };
 
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {}
                     }
                 };
             });
 
             it('should remove property', function(){
-                ctx.req.body = {
+                payload = {
                     medias: [
                         {path: '/user/tmp', author: 'wilson'},
                         {path: '/tmp/imgs', author: 'isa'}
                     ]
                 };
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     medias: [
@@ -79,49 +57,35 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should handle invalid payload', function(){
-                ctx.req.body = {};
-                var body = readOnlyDefaultValuesHandler(ctx);
-
+                payload = {};
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({});
             });
         });
 
         describe('when schema has a nested objects', function(){
             beforeEach(function() {
-                model = {
-                    definition: {
+                properties = {
+                    name: {type: 'string'},
+                    contact: {
+                        type: 'object',
                         properties: {
-                            name: {type: String},
-                            contact: {
-                                type: 'object',
-                                properties: {
-                                    age: {type: Number},
-                                    status: {readOnly: true, type: String}
-                                }
-                            }
+                            age: {type: 'number'},
+                            status: {readOnly: true, type: 'string'}
                         }
-                    }
-                };
-
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {}
                     }
                 };
             });
 
             it('should remove property', function(){
-                ctx.req.body = {
+                payload = {
                     name: 'wilson',
                     contact: {
                         status: 'single',
                         age: 12
                     }
                 };
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     name: 'wilson',
@@ -132,14 +96,14 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should keep parent key', function(){
-                ctx.req.body = {
+                payload = {
                     name: 'wilson',
                     contact: {
                         status: 'single'
                     }
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     name: 'wilson',
@@ -151,53 +115,36 @@ describe('readOnlyDefaultValuesHandler', function() {
 
     describe('default value', function(){
         beforeEach(function() {
-            model = {
-                definition: {
-                    properties: {
-                        name: {type: String},
-                        status: {default: 'default_status', type: String}
-                    }
-                }
+            properties = {
+                name: {type: 'string'},
+                status: {default: 'default_status', type: 'string'}
             };
         });
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                model = {
-                    definition: {
-                        properties: {
-                            medias: {
-                                type: 'array',
-                                items: {
-                                    type: 'object',
-                                    properties: {
-                                        path: {type: 'string'},
-                                        author: {type: 'string', default: 'Paulo Coelho'}
-                                    }
-                                }
+                properties = {
+                    medias: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                path: {type: 'string'},
+                                author: {type: 'string', default: 'Paulo Coelho'}
                             }
                         }
-                    }
-                };
-
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {}
                     }
                 };
             });
 
             it('should apply default value', function(){
-                ctx.req.body = {
+                payload = {
                     medias: [
                         {path: '/user/tmp'},
                         {path: '/tmp/imgs'}
                     ]
                 };
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     medias: [
@@ -208,25 +155,19 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should handle invalid payload', function(){
-                ctx.req.body = {};
-                var body = readOnlyDefaultValuesHandler(ctx);
-
+                payload = {};
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({});
             });
         });
 
         describe('when default value is applied', function() {
             it('should use the default value when property is not defined', function(){
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {name: 'wilson'}
-                    }
+                payload = {
+                    name: 'wilson'
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     status: 'default_status'
@@ -234,16 +175,9 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should not ignore property with null value', function(){
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {name: 'wilson', status: null}
-                    }
-                };
+                payload = {name: 'wilson', status: null};
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     status: null
@@ -253,38 +187,27 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has nested objects', function(){
             beforeEach(function() {
-                model = {
-                    definition: {
+                properties = {
+                    name: {type: 'string'},
+                    contact: {
+                        type: 'object',
                         properties: {
-                            name: {type: String},
-                            contact: {
-                                type: 'object',
-                                properties: {
-                                    age: {type: Number},
-                                    status: {default: 'active', type: String}
-                                }
-                            }
+                            age: {type: 'number'},
+                            status: {default: 'active', type: 'string'}
                         }
                     }
                 };
             });
 
             it('should apply default value', function(){
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {
-                            name: 'wilson',
-                            contact: {
-                                age: 12
-                            }
-                        }
+                payload = {
+                    name: 'wilson',
+                    contact: {
+                        age: 12
                     }
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     contact: {
@@ -296,18 +219,11 @@ describe('readOnlyDefaultValuesHandler', function() {
 
 
             it('should apply default value for nested object', function(){
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {
-                            name: 'wilson'
-                        }
-                    }
+                payload = {
+                    name: 'wilson'
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     contact: {
@@ -319,16 +235,9 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when default value is not applied', function() {
             it('should ignore the default value', function(){
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {name: 'wilson', status: 'custom_status'}
-                    }
-                };
+                payload = {name: 'wilson', status: 'custom_status'};
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     status: 'custom_status'
@@ -336,25 +245,16 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should ignore the default value even for boolean types', function(){
-                model = {
-                    definition: {
-                        properties: {
-                            name: {type: String},
-                            active: {default: true, type: Boolean}
-                        }
-                    }
+                properties = {
+                    name: {type: 'string'},
+                    active: {default: true, type: 'boolean'}
                 };
 
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {name: 'wilson', active: false}
-                    }
+                payload = {
+                    name: 'wilson', active: false
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     name: 'wilson',
@@ -363,25 +263,16 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should ignore the default value even for number types', function(){
-                model = {
-                    definition: {
-                        properties: {
-                            name: {type: String},
-                            time: {default: 60, type: Number}
-                        }
-                    }
+                properties = {
+                    name: {type: 'string'},
+                    time: {default: 60, type: 'number'}
                 };
 
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {name: 'wilson', time: 0}
-                    }
+                payload = {
+                    name: 'wilson', time: 0
                 };
 
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
                 expect(body).to.be.eql({
                     name: 'wilson',
                     time: 0
@@ -392,27 +283,16 @@ describe('readOnlyDefaultValuesHandler', function() {
 
     describe('when the field is readOnly and has default value', function(){
         beforeEach(function(){
-            ctx = {
-                method: {
-                    ctor: {}
-                },
-                req: {
-                    body: {name: 'wilson', status: 'single'}
-                }
-            };
+            payload = {name: 'wilson', status: 'single'};
         });
 
         it('should not replace current value when readOnly is false', function(){
-            ctx.method.ctor = {
-                definition: {
-                    properties: {
-                        name: {type: String},
-                        status: {readOnly: false, type: String, default: 'active'}
-                    }
-                }
+            properties = {
+                name: {type: 'string'},
+                status: {readOnly: false, type: 'string', default: 'active'}
             };
 
-            var body = readOnlyDefaultValuesHandler(ctx);
+            var body = readOnlyDefaultValuesHandler(properties, payload);
             expect(body).to.be.eql({
                 name: 'wilson',
                 status: 'single'
@@ -421,25 +301,14 @@ describe('readOnlyDefaultValuesHandler', function() {
         });
 
         it('should replace current value with default value', function(){
-            model = {
-                definition: {
-                    properties: {
-                        name: {type: String},
-                        status: {readOnly: true, type: String, default: 'active'}
-                    }
-                }
+            properties = {
+                        name: {type: 'string'},
+                        status: {readOnly: true, type: 'string', default: 'active'}
             };
 
-            ctx = {
-                method: {
-                    ctor: model
-                },
-                req: {
-                    body: {name: 'wilson', status: 'single'}
-                }
-            };
+            payload = {name: 'wilson', status: 'single'};
 
-            var body = readOnlyDefaultValuesHandler(ctx);
+            var body = readOnlyDefaultValuesHandler(properties, payload);
             expect(body).to.be.eql({
                 name: 'wilson',
                 status: 'active'
@@ -448,51 +317,38 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                model = {
-                    definition: {
-                        properties: {
-                            telephones: {
-                                type: "array",
-                                items: [
-                                    {
-                                        type: "object",
-                                        properties: {
-                                            contact: {type: "string"},
-                                            available: {type: "boolean", readOnly: true, default: true}
-                                        }
-                                    },
-                                    {
-                                        type: "object",
-                                        properties: {
-                                            city: {type: "string"},
-                                            active: {type: "boolean", default: true}
-                                        }
-                                    }
-                                ],
-                                additionalItems: {
-                                    type: "object",
-                                    properties: {
-                                        extra: {type: "string", readOnly: true, default: true},
-                                        number: {type: "string", default: "not definied"}
-                                    }
+                properties = {
+                    telephones: {
+                        type: "array",
+                        items: [
+                            {
+                                type: "object",
+                                properties: {
+                                    contact: {type: "string"},
+                                    available: {type: "boolean", readOnly: true, default: true}
+                                }
+                            },
+                            {
+                                type: "object",
+                                properties: {
+                                    city: {type: "string"},
+                                    active: {type: "boolean", default: true}
                                 }
                             }
+                        ],
+                        additionalItems: {
+                            type: "object",
+                            properties: {
+                                extra: {type: "string", readOnly: true, default: true},
+                                number: {type: "string", default: "not definied"}
+                            }
                         }
-                    }
-                };
-
-                ctx = {
-                    method: {
-                        ctor: model
-                    },
-                    req: {
-                        body: {}
                     }
                 };
             });
 
             it('should handle properties', function(){
-                ctx.req.body = {
+                payload = {
                     telephones: [
                         {contact: 'bob', available: false},
                         {city: 'Rio de Janeiro'},
@@ -502,7 +358,7 @@ describe('readOnlyDefaultValuesHandler', function() {
                         {}
                     ]
                 };
-                var body = readOnlyDefaultValuesHandler(ctx);
+                var body = readOnlyDefaultValuesHandler(properties, payload);
 
                 expect(body).to.be.eql({
                     telephones: [
