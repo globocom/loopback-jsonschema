@@ -64,8 +64,8 @@ describe('PUT /:collection/:id', function() {
         });
     });
 
-    describe('successfully with a readOnly field', function() {
-         before(function (done) {
+    describe('successfully with readOnly and default fields', function() {
+        before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
                 modelName: 'person-readonly',
@@ -74,35 +74,72 @@ describe('PUT /:collection/:id', function() {
                 collectionTitle: 'People-readonly',
                 type: 'object',
                 properties: {
-                    status: {
-                        type: 'string',
-                        readOnly: true
+                    personal: {
+                        type: 'object',
+                        properties: {
+                            firstName: {type: 'string'},
+                            lastName: {type: 'string', default: 'Junior'},
+                            active: {type: 'boolean', default: true, readOnly: true},
+                            status: {type: 'string', default: 'single', readOnly: false}
+                        }
+                    },
+                    professional: {
+                        type: 'object',
+                        properties: {
+                            awards: {
+                                type: 'array',
+                                items: [
+                                    {type: 'string'}
+                                ],
+                                additionalItems: {type: 'boolean', default: true}
+                            },
+                            jobs: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        company: {type: 'string'}
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
-                done();
-            });
-        });
 
-        before(function(done) {
-            request(app)
-                .post('/api/people-readonly')
-                .set('Content-Type', 'application/json')
-                .send('{"name": "Alice"}')
-                .end(function (err, item) {
-                    if (err) { return done(err); };
-                    itemId = item.body.id;
-                    done();
-                });
+                var person = {
+                    personal: {
+                        firstName: 'Bob',
+                        active: false,
+                        status: 'maried'
+                    },
+                    professional: {
+                        awards: ['inovation', false, true],
+                        jobs: [{company: 'Globo.com'}, {company: 'TV Globo'}]
+                    }
+                };
+
+                request(app)
+                    .post('/api/people-readonly')
+                    .set('Content-Type', 'application/json')
+                    .send(JSON.stringify(person))
+                    .end(function (err, item) {
+                        if (err) { return done(err); };
+                        itemId = item.body.id;
+
+                        done();
+                    });
+            });
         });
 
         before(function(done) {
             request(app)
                 .put('/api/people-readonly/' + itemId)
                 .set('Content-Type', 'application/json')
-                .send('{"name": "Alice", "status": "top"}')
+                .send('{"personal": {"active": false}}')
                 .end(function (err, res) {
                     if (err) { return done(err); };
                     itemResponse = res;
@@ -111,7 +148,7 @@ describe('PUT /:collection/:id', function() {
         });
 
         it('should ignore posted property', function() {
-            expect(itemResponse.body).to.not.include.keys('status');
+            expect(itemResponse.body.personal.active).to.be.true;
         });
     });
 

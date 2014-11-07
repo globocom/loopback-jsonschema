@@ -50,7 +50,7 @@ describe('POST /:collection', function() {
         });
     });
 
-    describe('successfully with a readOnly field', function(){
+    describe('successfully with readOnly and default fields', function(){
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
