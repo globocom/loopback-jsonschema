@@ -60,32 +60,76 @@ describe('POST /:collection', function() {
                 collectionTitle: 'People-readonly',
                 type: 'object',
                 properties: {
-                    status: {
-                        type: 'string',
-                        readOnly: true
+                    personal: {
+                        type: 'object',
+                        properties: {
+                            firstName: {type: 'string'},
+                            lastName: {type: 'string', default: 'Junior'},
+                            active: {type: 'boolean', default: true, readOnly: true},
+                            status: {type: 'string', default: 'single', readOnly: false}
+                        }
+                    },
+                    professional: {
+                        type: 'object',
+                        properties: {
+                            awards: {
+                                type: 'array',
+                                items: [
+                                    {type: 'string'}
+                                ],
+                                additionalItems: {type: 'boolean', default: true}
+                            },
+                            jobs: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        company: {type: 'string'}
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
                 jsonSchemaResourceId = jsonSchema.resourceId;
-                done();
+
+                var person = {
+                    personal: {
+                        firstName: 'Bob',
+                        active: false,
+                        status: 'maried'
+                    },
+                    professional: {
+                        awards: ['inovation', false, true],
+                        jobs: [{company: 'Globo.com'}, {company: 'TV Globo'}]
+                    }
+                };
+
+                request(app)
+                    .post('/api/people-readonly')
+                    .set('Content-Type', 'application/json')
+                    .send(JSON.stringify(person))
+                    .end(function (err, res) {
+                        if (err) { return done(err); };
+                        itemResponse = res;
+                        done();
+                    });
             });
         });
 
-        before(function(done) {
-            request(app)
-                .post('/api/people-readonly')
-                .set('Content-Type', 'application/json')
-                .send('{"name": "Alice", "status": "top"}')
-                .end(function (err, res) {
-                    if (err) { return done(err); };
-                    itemResponse = res;
-                    done();
-                });
+        it('should apply default value for lastName', function() {
+            expect(itemResponse.body.personal.lastName).to.be.eql('Junior');
         });
 
-        it('should ignore posted property', function() {
-            expect(itemResponse.body).to.not.include.keys('status');
+        it('should remove readOnly properties', function() {
+            expect(itemResponse.body.personal.active).to.be.true;
+        });
+
+        it('should ignore when readOnly is falsy', function() {
+            expect(itemResponse.body.personal.status).to.eql('maried');
         });
     });
 
