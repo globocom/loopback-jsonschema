@@ -67,7 +67,7 @@ Have a look at https://github.com/globocom/loopback-jsonschema/blob/master/lib/d
 
 To dynamically define a new Loopback model just create a new instance of the ItemSchema model provided by loopback-jsonschema. Doing this via the REST interface is as simples as POSTing a valid JSON Schema, as follows:
 
-```
+```json
 # person.json
 {
   "type": "object",
@@ -81,7 +81,7 @@ To dynamically define a new Loopback model just create a new instance of the Ite
 }
 ```
 
-```
+```bash
 # Create a Person model from a JSON Schema
 curl -i -XPOST -H "Content-Type: application/json" http://example.org/api/item-schemas -T person.json
 ```
@@ -94,7 +94,7 @@ Once a Loopback model has been defined, Item and Collection schemas describing a
 
 #### Item Schema example
 
-```
+```bash
 $ curl -i http://example.org/api/item-schemas/537530ea27f8870b63f2d886
 HTTP/1.1 200 OK
 X-Powered-By: Express
@@ -137,7 +137,7 @@ Connection: keep-alive
 
 #### Collection Schema example
 
-```
+```bash
 $ curl -i http://example.org/api/collection-schemas/537530ea27f8870b63f2d886
 HTTP/1.1 200 OK
 X-Powered-By: Express
@@ -187,6 +187,66 @@ Connection: keep-alive
 }
 ```
 
+### Default values and read-only properties
+
+It's possible to use `readOnly` property to indicate that the instance property should not be changed (if it has a value of boolean true).
+
+It's possible to use `default` property to indicate that when the instance property is not passed the default value will be used.
+
+If the schema indicates that the property has both `readOnly: true` and `default` values defined, the default value will be used.
+
+For example:
+
+```json
+{
+    "title": "Bikes Rules",
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "collectionName": "bikes",
+    "modelName": "bike",
+    "name": "My Awesome Bikes!",
+    "properties": {
+        "brand": {
+            "description": "Brand of the bike",
+            "default": "kawasaki",
+            "type": "string"
+        },
+        "cc": {
+            "description": "Cubic Centimeters",
+            "default": "120",
+            "readOnly": true,
+            "type": "integer"
+        },
+        "name": {
+            "description": "Name of the bike",
+            "readOnly": false,
+            "type": "string"
+        }
+    }
+}
+```
+
+```bash
+curl -XPOST -H "Content-Type: application/json" http://example.org/api/bikes -d'
+{
+    "cc": 350,
+    "name": "Ninja"
+}'
+```
+
+The output will be:
+```json
+{
+    id: "5460b29652fe613c00f23f75",
+    created: "2014-11-10T12:41:58.344Z",
+    modified: "2014-11-10T12:41:58.344Z",
+    name: "Ninja",
+    brand: "kawasaki",
+    cc: 120
+}
+```
+
+
 ### Default links
 
 Item and collection schemas have a default set of links which correspond to the basic CRUD operations supported by Loopback.
@@ -195,7 +255,7 @@ Item and collection schemas have a default set of links which correspond to the 
 
 It is possible to include custom links in an item schema. To do so, just include them in the `links` property of the **item schema** used to define a Loopback model:
 
-```
+```json
 {
   "type": "object",
   ...
@@ -215,7 +275,7 @@ It is possible to include custom links in an item schema. To do so, just include
 
 It is possible to include custom links in a collection schema. To do so, just include them in the `collectionLinks` property of the **item schema** used to define a Loopback model:
 
-```
+```json
 {
   "type": "object",
   ...
@@ -243,7 +303,7 @@ This module supports both drafts: Draft-4(default) and Draft-3. The error messag
 
 If you want to use draft-3, you need to override the `$schema` property, for instance:
 
-```
+```json
 {
   "$schema": "http://json-schema.org/draft-03/hyper-schema#",
   "type": "object",
@@ -265,7 +325,7 @@ It's possible to create indexes by adding a key called `indexes`.
 
 See [Indexes](http://docs.strongloop.com/display/LB/Model+definition+JSON+file#ModeldefinitionJSONfile-Indexes) in Loopback documentation for more information.
 
-```
+```json
 {
     "type": "object",
     "title": "Task",
@@ -299,6 +359,7 @@ See [Indexes](http://docs.strongloop.com/display/LB/Model+definition+JSON+file#M
 }
 
 ```
+
 
 
 
