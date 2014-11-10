@@ -30,6 +30,7 @@ describe('loopbackJsonSchema', function() {
             loopbackJsonSchema.init(app, myConfig);
             expect(config).to.eql({
                 CollectionSchemaClass: 'MyCollectionSchemaClass',
+                generatedId: true,
                 jsonSchemaValidatorTranslation: {
                     draft4: {}
                 },
