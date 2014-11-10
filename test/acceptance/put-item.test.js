@@ -7,7 +7,7 @@ var ItemSchema = require('../../lib/domain/item-schema');
 
 
 describe('PUT /:collection/:id', function() {
-    var app, itemResponse, itemId, jsonSchemaResourceId, schemeAndAuthority;
+    var app, itemResponse, itemId, jsonSchemaId, schemeAndAuthority;
     before(function() {
         app = support.newLoopbackJsonSchemaApp();
     });
@@ -23,7 +23,7 @@ describe('PUT /:collection/:id', function() {
                 properties: {}
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
                 done();
             });
         });
@@ -58,7 +58,7 @@ describe('PUT /:collection/:id', function() {
         });
 
         it('should correlate the item with its schema', function() {
-            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaResourceId;
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaId;
             expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
         });
@@ -108,7 +108,7 @@ describe('PUT /:collection/:id', function() {
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
 
                 var person = {
                     personal: {
@@ -169,7 +169,7 @@ describe('PUT /:collection/:id', function() {
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
                 done();
             });
         });
@@ -243,7 +243,7 @@ describe('PUT /:collection/:id', function() {
                 required: ['name']
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
                 done();
             });
         });

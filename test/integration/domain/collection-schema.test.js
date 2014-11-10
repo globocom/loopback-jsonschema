@@ -11,7 +11,7 @@ var app = support.newLoopbackJsonSchemaApp();
 describe('CollectionSchema', function() {
     describe('#data', function() {
         describe('when corresponding item schema exists', function() {
-            var collectionSchema, itemSchemaResourceId;
+            var collectionSchema, itemSchemaId;
 
             beforeEach(function (done) {
                 ItemSchema.create({
@@ -26,7 +26,7 @@ describe('CollectionSchema', function() {
                     ]
                 }, function(err, itemSchema) {
                     if (err) { return done(err); };
-                    itemSchemaResourceId = itemSchema.resourceId;
+                    itemSchemaId = itemSchema.id;
                     collectionSchema = new CollectionSchema(itemSchema);
                     done();
                 });
@@ -39,7 +39,7 @@ describe('CollectionSchema', function() {
 
             it('should include "items" key pointing to itemSchema url', function () {
                 var data = collectionSchema.data();
-                expect(data.items.$ref).to.eq('/item-schemas/' + itemSchemaResourceId);
+                expect(data.items.$ref).to.eq('/item-schemas/' + itemSchemaId);
             });
 
             it('should include $schema from ItemSchema', function () {
@@ -74,7 +74,7 @@ describe('CollectionSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchemaResourceId
+                            $ref: '/item-schemas/' + itemSchemaId
                         }
                     },
                     {
@@ -106,12 +106,12 @@ describe('CollectionSchema', function() {
         var collectionSchema, schema;
 
         beforeEach(function() {
-            schema = { resourceId: 1 };
+            schema = { id: 1 };
             collectionSchema = new CollectionSchema(schema);
         });
 
         it('should return URL this collection schema', function() {
-            expect(collectionSchema.url()).to.eq('/collection-schemas/' + schema.resourceId);
+            expect(collectionSchema.url()).to.eq('/collection-schemas/' + schema.id);
         });
     });
 

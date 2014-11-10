@@ -25,7 +25,7 @@ describe('GET /collection-schemas/:id', function () {
                 ]
             }, function(err, itemSchema) {
                 if (err) { return done(err); };
-                collectionSchemaId = itemSchema.resourceId;
+                collectionSchemaId = itemSchema.id;
                 done();
             });
         });

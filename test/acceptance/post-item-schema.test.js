@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var request = require('supertest');
 
 describe('POST /item-schemas', function() {
-    var app, itemSchema, itemSchemaResourceId, response, schemeAndAuthority;
+    var app, itemSchema, itemSchemaId, response, schemeAndAuthority;
 
     describe('successfully', function() {
         before(function(done) {
@@ -29,10 +29,10 @@ describe('POST /item-schemas', function() {
                 .end(function (err, res) {
                     if (err) { return done(err); };
                     itemSchema = JSON.parse(res.text);
-                    itemSchemaResourceId = itemSchema.resourceId;
+                    itemSchemaId = itemSchema.id;
 
                     request(app)
-                        .get('/api/item-schemas/' + itemSchemaResourceId)
+                        .get('/api/item-schemas/' + itemSchemaId)
                         .expect(200)
                         .end(function(err, res) {
                             if (err) { return done(err); };
@@ -48,8 +48,8 @@ describe('POST /item-schemas', function() {
             expect(response.status).to.eq(200);
         });
 
-        it('should return correct resourceId and id', function() {
-            expect(itemSchema.resourceId).to.be.eq(itemSchemaResourceId);
+        it('should return correct id', function() {
+            expect(itemSchema.id).to.be.eq(itemSchemaId);
         });
 
         it('should include default links', function() {
@@ -61,7 +61,7 @@ describe('POST /item-schemas', function() {
                         method: 'POST',
                         href: schemeAndAuthority + '/api/people',
                         schema: {
-                            $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchema.resourceId
+                            $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchema.id
                         }
                     },
                     { rel: 'update', method: 'PUT', href: schemeAndAuthority + '/api/people/{id}' },

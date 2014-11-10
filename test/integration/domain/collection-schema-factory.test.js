@@ -40,7 +40,7 @@ describe('CollectionSchemaFactory', function() {
                     done();
                 };
 
-                CollectionSchemaFactory.buildFromSchemaId(itemSchema.resourceId, callback);
+                CollectionSchemaFactory.buildFromSchemaId(itemSchema.id, callback);
             });
         });
     });

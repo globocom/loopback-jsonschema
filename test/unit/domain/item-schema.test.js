@@ -19,7 +19,7 @@ describe('ItemSchema', function() {
 
     describe('#allLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
         });
 
         describe('when there are no custom links', function() {
@@ -91,7 +91,7 @@ describe('ItemSchema', function() {
 
     describe('#customLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({ resourceId: 1, collectionName: 'people' });
+            itemSchema = new ItemSchema({ id: 1, collectionName: 'people' });
         });
 
         it('should return custom links', function() {
@@ -109,7 +109,7 @@ describe('ItemSchema', function() {
 
     describe('#defaultLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({resourceId: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
         });
 
         it('should return default links', function() {
@@ -132,7 +132,7 @@ describe('ItemSchema', function() {
 
     describe('#url', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({ resourceId: 1 });
+            itemSchema = new ItemSchema({ id: 1 });
         });
 
         it('should return URL this item schema', function() {
@@ -306,17 +306,17 @@ describe('ItemSchema', function() {
     });
 
     describe('#collectionSchema', function() {
-        var collectionSchema, schemaResourceId;
+        var collectionSchema, schemaId;
 
         beforeEach(function() {
-            schemaResourceId = 1;
-            itemSchema = new ItemSchema({resourceId: schemaResourceId});
+            schemaId = 1;
+            itemSchema = new ItemSchema({id: schemaId});
             collectionSchema = itemSchema.collectionSchema();
         });
 
         it('should return a collection schema that corresponds to this item schema', function() {
             expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
-            expect(collectionSchema.itemSchema.resourceId).to.eq(schemaResourceId);
+            expect(collectionSchema.itemSchema.id).to.eq(schemaId);
         });
     });
 
@@ -326,7 +326,7 @@ describe('ItemSchema', function() {
 
         describe('datasource with autoupdate method', function(){
             beforeEach(function(){
-                itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
+                itemSchema = new ItemSchema({id: 1, modelName: 'person', collectionName: 'people'});
                 var Connector = function (){
                     this.name = 'GLOBODB';
                 };
@@ -350,7 +350,7 @@ describe('ItemSchema', function() {
 
         describe('datasource without autoupdate method', function(){
             beforeEach(function(){
-                itemSchema = new ItemSchema({resourceId: 1, modelName: 'person', collectionName: 'people'});
+                itemSchema = new ItemSchema({id: 1, modelName: 'person', collectionName: 'people'});
                 var Connector = function (){
                     this.name = 'MEMORY';
                 };

@@ -7,7 +7,7 @@ var ItemSchema = require('../../lib/domain/item-schema');
 
 
 describe('POST /:collection', function() {
-    var app, itemResponse, jsonSchemaResourceId, schemeAndAuthority;
+    var app, itemResponse, jsonSchemaId, schemeAndAuthority;
 
     describe('successfully', function() {
         before(function (done) {
@@ -21,7 +21,7 @@ describe('POST /:collection', function() {
                 properties: {}
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
                 done();
             });
         });
@@ -44,7 +44,7 @@ describe('POST /:collection', function() {
         });
 
         it('should correlate the item with its schema', function() {
-            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaResourceId;
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaId;
             expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
         });
@@ -94,7 +94,7 @@ describe('POST /:collection', function() {
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
 
                 var person = {
                     personal: {
@@ -150,7 +150,7 @@ describe('POST /:collection', function() {
                 }
             }, function(err, jsonSchema) {
                 if (err) { return done(err); };
-                jsonSchemaResourceId = jsonSchema.resourceId;
+                jsonSchemaId = jsonSchema.id;
                 done();
             });
         });
