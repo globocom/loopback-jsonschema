@@ -4,8 +4,8 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var CollectionSchema = require('../../../lib/domain/collection-schema');
+var config = require('../../../lib/support/config');
 var ItemSchema = require('../../../lib/domain/item-schema');
-var LJSRequest = require('../../../lib/http/ljs-request');
 
 var app = loopback();
 app.set('restApiRoot', '/api');
@@ -174,7 +174,7 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe('#registerLoopbackModel', function() {
+    describe('#registerModel', function() {
         var Test;
 
         beforeEach(function(done) {
@@ -210,7 +210,6 @@ describe('ItemSchema', function() {
             });
 
             Test = itemSchema.constructModel();
-
             itemSchema.registerModel(Test, function(err) {
                 done(err);
             });
@@ -220,14 +219,17 @@ describe('ItemSchema', function() {
             expect(Test).to.exist;
         });
 
-        it("should use collectionName as model's plural", function() {
+        it('should use collectionName as model\'s plural', function() {
             expect(Test.pluralModelName).to.equal('testplural');
         });
 
         it('should have properties defined by this json schema', function() {
-            var rawProperties = Test.definition.rawProperties;
-            delete rawProperties.id;
             expect(Test.definition.rawProperties).to.eql({
+                id: {
+                    generated: true,
+                    id: 1,
+                    type: Number
+                },
                 myBoolean: {
                     type: 'boolean'
                 },
@@ -264,6 +266,28 @@ describe('ItemSchema', function() {
             it('should call hook immediately before registering model', function(done) {
                 expect(customItemSchema.beforeRegisterLoopbackModelCalled).to.be.true;
                 done();
+            });
+        });
+
+        describe('with config.generatedId = false', function() {
+            beforeEach(function(done) {
+                config.generatedId = false;
+                Test = itemSchema.constructModel();
+                itemSchema.registerModel(Test, function(err) {
+                    done(err);
+                });
+            });
+
+            afterEach(function() {
+                config.generatedId = true;
+            });
+
+            it('should have id property as type string and generated false', function() {
+                expect(Test.definition.rawProperties.id).to.eql({
+                    generated: false,
+                    id: true,
+                    type: 'string'
+                });
             });
         });
     });
@@ -321,7 +345,6 @@ describe('ItemSchema', function() {
     });
 
     describe('#createIndexes', function(){
-        var dataSource;
         var database;
 
         describe('datasource with autoupdate method', function(){
@@ -341,8 +364,7 @@ describe('ItemSchema', function() {
             });
 
             it('should create indexes', function(done){
-                itemSchema.createIndexes(function(err, created) {
-                });
+                itemSchema.createIndexes(function() {});
                 expect(database.connector.autoupdate).to.have.been.calledWith(['person']);
                 done();
             });
