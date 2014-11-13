@@ -437,6 +437,10 @@ describe('ItemSchema', function() {
             expect(itemSchemaFindStub).to.have.been.calledWith({});
         });
 
+        it('sets ItemSchema.preLoadModels to true', function(){
+            expect(ItemSchema.preLoadedModels).to.be.true;
+        });
+
         it('calls itemSchema.constructModel', function(){
             expect(itemSchemaConstructModelStub1).to.have.been.called;
             expect(itemSchemaConstructModelStub2).to.have.been.called;
