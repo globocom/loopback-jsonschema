@@ -12,36 +12,39 @@ var app = support.newLoopbackJsonSchemaApp();
 describe('ItemSchema', function() {
     describe('.findOne', function() {
         beforeEach(function(done) {
-            ItemSchema.create({modelName: 'test'}, function(err, instance) {
+            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err, instance) {
                 if (err) { return done(err); };
                 done();
             });
         });
 
-        it('should have $schema', function() {
-            ItemSchema.findOne({where: {modelName: 'test'}}, function(err, itemSchema) {
+        it('should have $schema', function(done) {
+            ItemSchema.findOne({where: {modelName: 'test', collectionName: 'test'}}, function(err, itemSchema) {
                 if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
+                done();
             });
         });
     });
 
     describe('.create', function() {
-        it('should set $schema', function() {
-            ItemSchema.create({modelName: 'test'}, function(err, itemSchema) {
+        it('should set $schema', function(done) {
+            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err, itemSchema) {
                 if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
+                done();
             });
         });
 
-        it('should create model defined by the json schema provided', function() {
-            ItemSchema.create({modelName: 'test'}, function(err) {
+        it('should create model defined by the json schema provided', function(done) {
+            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err) {
                 if (err) { return done(err); };
                 expect(loopback.getModel('test')).to.exist;
+                done();
             });
         });
 
-        it('should save custom links', function() {
+        it('should save custom links', function(done) {
             var customLinks = [{ rel: 'custom', href: '/custom' }];
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
@@ -60,6 +63,8 @@ describe('ItemSchema', function() {
                     { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
                     { rel: 'custom', href: '/custom' }
                 ]);
+
+                done();
             });
         });
 

@@ -99,4 +99,44 @@ describe('POST /item-schemas', function() {
             expect(response.body.error.message).to.eq('Unsupported Content-Type: <text/plain>.')
         });
     });
+
+    describe('without required fields', function(){
+        var bodyError;
+
+        before(function(done) {
+            var schemaJson = {
+                type: 'object'
+            };
+
+            app = support.newLoopbackJsonSchemaApp();
+            request(app)
+                .post('/api/item-schemas')
+                .set('Accept', 'application/json')
+                .set('Content-Type', 'application/json')
+                .send(JSON.stringify(schemaJson))
+                .end(function (err, res) {
+                    if (err) { return done(err); };
+                    response = res;
+                    bodyError = JSON.parse(response.error.text);
+                    done();
+                });
+        });
+
+        it('should return a 422 error', function(){
+            expect(response.status).to.eql(422);
+        });
+
+        it('should error be a ValidationError', function(){
+            console.info(bodyError.error);
+            expect(bodyError.error.name).to.eql('ValidationError');
+        });
+
+        it('should error have the message: "`collectionName` can\'t be blank"', function(){
+            expect(bodyError.error.message).to.contain('`collectionName` can\'t be blank');
+        });
+
+        it('should error have the message: "`modelName` can\'t be blank"', function(){
+            expect(bodyError.error.message).to.contain('`modelName` can\'t be blank');
+        });
+    });
 });
