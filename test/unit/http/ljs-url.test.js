@@ -226,7 +226,7 @@ describe('LJSUrl', function() {
     });
 
     describe('#isRelative', function() {
-        describe('when url is relative', function() {
+        describe('when host is null', function() {
             beforeEach(function() {
                 ljsUrl = new LJSUrl('/api/people');
             });
@@ -236,12 +236,52 @@ describe('LJSUrl', function() {
             });
         });
 
-        describe('when url is absolute', function() {
+        describe('when url has protocol http://', function() {
             beforeEach(function() {
-                ljsUrl = new LJSUrl('http://example.org/api/people');
+                ljsUrl = new LJSUrl('http://example.com/api/people');
             });
 
-            it('should be true', function() {
+            it('should be false', function() {
+                expect(ljsUrl.isRelative()).to.be.false;
+            });
+        });
+
+        describe('when url has protocol https://', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('https://example.com/api/people');
+            });
+
+            it('should be false', function() {
+                expect(ljsUrl.isRelative()).to.be.false;
+            });
+        });
+
+        describe('when url has protocol http and template', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('http://{template}/api/people');
+            });
+
+            it('should be false', function() {
+                expect(ljsUrl.isRelative()).to.be.false;
+            });
+        });
+
+        describe('when url has protocol https and template', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('https://{template}/api/people');
+            });
+
+            it('should be false', function() {
+                expect(ljsUrl.isRelative()).to.be.false;
+            });
+        });
+
+        describe('when url start with template', function() {
+            beforeEach(function() {
+                ljsUrl = new LJSUrl('{template}/api/people');
+            });
+
+            it('should be false', function() {
                 expect(ljsUrl.isRelative()).to.be.false;
             });
         });
