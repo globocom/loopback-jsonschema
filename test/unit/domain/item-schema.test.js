@@ -400,62 +400,93 @@ describe('ItemSchema', function() {
         var itemSchemaRegisterModel1Called, itemSchemaRegisterModel2Called;
         var itemSchemaConstructModelStub1, itemSchemaConstructModelStub2;
 
-        beforeEach(function(done) {
-            ItemSchema.app = loopback();
-            var schema1 = new ItemSchema({modelName: 'PreLoadedModel1'});
-            var schema2 = new ItemSchema({modelName: 'PreLoadedModel2'});
+        describe('when database was a successfully reply', function(){
+            beforeEach(function(done) {
+                ItemSchema.app = loopback();
+                var schema1 = new ItemSchema({modelName: 'PreLoadedModel1'});
+                var schema2 = new ItemSchema({modelName: 'PreLoadedModel2'});
 
-            var Model = function () {};
-            model1 = new Model();
-            model2 = new Model();
+                var Model = function () {};
+                model1 = new Model();
+                model2 = new Model();
 
-            itemSchemaFindStub = this.sinon.stub(ItemSchema, 'find').yields(null, [schema1, schema2]);
+                itemSchemaFindStub = this.sinon.stub(ItemSchema, 'find').yields(null, [schema1, schema2]);
 
-            itemSchemaConstructModelStub1 = this.sinon.stub(schema1, 'constructModel').returns(model1);
-            itemSchemaConstructModelStub2 = this.sinon.stub(schema2, 'constructModel').returns(model2);
+                itemSchemaConstructModelStub1 = this.sinon.stub(schema1, 'constructModel').returns(model1);
+                itemSchemaConstructModelStub2 = this.sinon.stub(schema2, 'constructModel').returns(model2);
 
-            attachModelStub = this.sinon.stub(ItemSchema, 'attachModel').returns(null);
+                attachModelStub = this.sinon.stub(ItemSchema, 'attachModel').returns(null);
 
-            itemSchemaRegisterModel1Called = false;
-            this.sinon.stub(schema1, 'registerModel', function(model, callback) {
-                itemSchemaRegisterModel1Called = true;
+                itemSchemaRegisterModel1Called = false;
+                this.sinon.stub(schema1, 'registerModel', function(model, callback) {
+                    itemSchemaRegisterModel1Called = true;
+                });
+
+                itemSchemaRegisterModel2Called = false;
+                this.sinon.stub(schema2, 'registerModel', function(model, callback) {
+                    itemSchemaRegisterModel2Called = true;
+                });
+
+                ItemSchema.preLoadModels();
+
+                ItemSchema.app.once('loadModels', function() {
+                    done();
+                });
             });
 
-            itemSchemaRegisterModel2Called = false;
-            this.sinon.stub(schema2, 'registerModel', function(model, callback) {
-                itemSchemaRegisterModel2Called = true;
+            it('calls ItemSchema.find', function(){
+                expect(itemSchemaFindStub).to.have.been.calledWith({});
             });
 
-            ItemSchema.preLoadModels();
+            it('sets ItemSchema.preLoadModels to true', function(){
+                expect(ItemSchema.preLoadedModels).to.be.true;
+            });
 
-            ItemSchema.app.once('loadModels', function() {
-                done();
+            it('calls itemSchema.constructModel', function(){
+                expect(itemSchemaConstructModelStub1).to.have.been.called;
+                expect(itemSchemaConstructModelStub2).to.have.been.called;
+            });
+
+
+            it('calls ItemSchema.attachModel', function(){
+                expect(attachModelStub).to.have.been.calledWith(model1);
+                expect(attachModelStub).to.have.been.calledWith(model2);
+            });
+
+            it('calls itemSchema.registerModel', function(){
+                expect(itemSchemaRegisterModel1Called).to.be.true;
+                expect(itemSchemaRegisterModel2Called).to.be.true;
             });
         });
 
-        it('calls ItemSchema.find', function(){
-            expect(itemSchemaFindStub).to.have.been.calledWith({});
+
+        describe('when database failed', function(){
+            var receivedErr;
+            before(function(done) {
+                itemSchemaFindStub = this.sinon.stub(ItemSchema, 'find').yields(new Error('foo error'));
+
+                ItemSchema.preLoadModels();
+
+                ItemSchema.app.once('loadModels', function(err) {
+                    receivedErr = err;
+                    done();
+                });
+            });
+
+            after(function() {
+                itemSchemaFindStub.restore();
+            });
+
+            it('call ItemSchema.find 6 times', function(){
+                expect(itemSchemaFindStub.callCount).to.eql(6);
+            });
+
+            it('receive a error in the last attempt', function(){
+                expect(receivedErr).not.be.null;
+                expect(receivedErr).not.be.undefined;
+            });
         });
 
-        it('sets ItemSchema.preLoadModels to true', function(){
-            expect(ItemSchema.preLoadedModels).to.be.true;
-        });
-
-        it('calls itemSchema.constructModel', function(){
-            expect(itemSchemaConstructModelStub1).to.have.been.called;
-            expect(itemSchemaConstructModelStub2).to.have.been.called;
-        });
-
-
-        it('calls ItemSchema.attachModel', function(){
-            expect(attachModelStub).to.have.been.calledWith(model1);
-            expect(attachModelStub).to.have.been.calledWith(model2);
-        });
-
-        it('calls itemSchema.registerModel', function(){
-            expect(itemSchemaRegisterModel1Called).to.be.true;
-            expect(itemSchemaRegisterModel2Called).to.be.true;
-        });
     });
 });
 

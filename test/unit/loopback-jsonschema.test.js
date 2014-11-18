@@ -37,7 +37,9 @@ describe('loopbackJsonSchema', function() {
                 logLevel: 'info',
                 Model: 'MyModel',
                 myConfigOption: 'myValue',
-                registerItemSchemaAtRequest: true
+                registerItemSchemaAtRequest: true,
+                registerItemSchemaAttemptDelay: 200,
+                registerItemSchemaMaxAttempts: 5
             });
         });
 
