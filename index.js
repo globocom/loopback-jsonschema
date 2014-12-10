@@ -11,6 +11,7 @@ var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-mode
 var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
 var jsonSchemaMiddleware = require('./lib/http/json-schema.middleware');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
+var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
 var logger = require('./lib/support/logger');
 
 var loopbackJsonSchema = module.exports = {};
@@ -27,6 +28,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
     var db = dataSource(app);
     ItemSchema.attachTo(db);
     app.model(ItemSchema);
+    ItemSchemaHooks.initialize();
 
     var restApiRoot = app.get('restApiRoot') || '/api';
     var middlewares = [
@@ -57,6 +59,7 @@ loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
 loopbackJsonSchema.ItemSchema = require('./lib/domain/item-schema');
 loopbackJsonSchema.LJSRequest = require('./lib/http/ljs-request');
 loopbackJsonSchema.LJSUrl = require('./lib/http/ljs-url');
+loopbackJsonSchema.schemaLinkRewriter = require('./lib/http/schema-link-rewriter');
 
 function dataSource(app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();

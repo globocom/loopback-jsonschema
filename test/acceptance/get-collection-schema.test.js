@@ -6,10 +6,15 @@ var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
 
-var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /collection-schemas/:id', function () {
-   describe('when corresponding item schema exists', function () {
+    var app;
+
+    before(function() {
+        app = support.newLoopbackJsonSchemaApp();
+    });
+
+    describe('when corresponding item schema exists', function () {
         var collectionSchema, collectionSchemaResponse, collectionSchemaId;
 
         before(function (done) {
@@ -43,7 +48,7 @@ describe('GET /collection-schemas/:id', function () {
             });
         });
 
-        it('should have application/schema+json content type', function() {
+       it('should have application/schema+json content type', function() {
             expect(collectionSchemaResponse.headers['content-type']).to.eq('application/schema+json; charset=utf-8');
         });
 
@@ -118,7 +123,6 @@ describe('GET /collection-schemas/:id', function () {
                 .expect(404)
                 .end(function (err, res) {
                     if (err) { return done(err); };
-                    expect(res.body).to.be.eql({});
                     done();
             });
         });
