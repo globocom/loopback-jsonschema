@@ -9,9 +9,9 @@ var config = require('./lib/support/config');
 var ItemSchema = require('./lib/domain/item-schema');
 var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-model.middleware');
 var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
-var jsonSchemaMiddleware = require('./lib/http/json-schema.middleware');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
+var schemaCorrelatorHooks = require('./lib/http/schema-correlator-hooks');
 var logger = require('./lib/support/logger');
 
 var loopbackJsonSchema = module.exports = {};
@@ -29,6 +29,9 @@ loopbackJsonSchema.init = function(app, customConfig) {
     ItemSchema.attachTo(db);
     app.model(ItemSchema);
     ItemSchemaHooks.initialize();
+    ItemSchema.registerModelHooksInitializer(
+        schemaCorrelatorHooks
+    );
 
     var restApiRoot = app.get('restApiRoot') || '/api';
     var middlewares = [
@@ -50,7 +53,6 @@ loopbackJsonSchema.enableJsonSchemaMiddleware = function(app) {
     var restApiRoot = app.get('restApiRoot') || '/api';
 
     app.use(restApiRoot, [
-        jsonSchemaMiddleware(),
         jsonSchemaRoutes.drawRouter(corsOptions)
     ]);
 };

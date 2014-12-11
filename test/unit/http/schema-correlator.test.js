@@ -2,11 +2,11 @@ require('../../support');
 
 var expect = require('chai').expect;
 
-var instanceSchemaCorrelator = require('../../../lib/http/instance-schema-correlator');
+var schemaCorrelator = require('../../../lib/http/schema-correlator');
 var ItemSchema = require('../../../lib/domain/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
-describe('instanceSchemaCorrelator', function() {
+describe('schemaCorrelator', function() {
     describe('.correlate', function() {
         var itemSchema, ljsReq, res;
 
