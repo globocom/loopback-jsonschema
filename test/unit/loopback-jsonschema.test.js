@@ -2,9 +2,11 @@ require('../support');
 
 var expect = require('chai').expect;
 var loopback = require('loopback');
+var _ = require('underscore');
 
 var CollectionSchema = require('../../lib/domain/collection-schema');
 var ItemSchema = require('../../lib/domain/item-schema');
+var schemaCorrelatorHooks = require('../../lib/http/schema-correlator-hooks');
 
 var config = require('../../lib/support/config');
 var loopbackJsonSchema = require('../../index');
@@ -39,7 +41,13 @@ describe('loopbackJsonSchema', function() {
                 myConfigOption: 'myValue',
                 registerItemSchemaAtRequest: true,
                 registerItemSchemaAttemptDelay: 200,
-                registerItemSchemaMaxAttempts: 5
+                registerItemSchemaMaxAttempts: 5,
+                collectionRemoteName: 'find',
+                instanceRemoteNames: [
+                    'findById', 'upsert', 'create',
+                    'prototype.updateAttributes', 'prototype.delete',
+                    'deleteById'
+                ]
             });
         });
 
@@ -52,6 +60,16 @@ describe('loopbackJsonSchema', function() {
                         '+json'
                     ]
                 }});
+        });
+
+
+        it('should register schema correlator hook', function(){
+            loopbackJsonSchema.init(app);
+            var hooksFound = _.filter(ItemSchema.modelHooksInitializers, function(hook){
+                return hook === schemaCorrelatorHooks;
+            });
+
+            expect(hooksFound.length).to.be.eql(1);
         });
 
 

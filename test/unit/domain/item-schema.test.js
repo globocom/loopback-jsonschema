@@ -174,6 +174,47 @@ describe('ItemSchema', function() {
         });
     });
 
+    describe('#registerModelHooksInitializer', function(){
+        var noopHook;
+
+        beforeEach(function() {
+            noopHook = function noopHook() {};
+            this.sinon.stub(ItemSchema, 'modelHooksInitializers', [noopHook]);
+        });
+
+        describe('when hooks is an Array of functions', function(){
+            var hook1 = function() {};
+            var hook2 = function() {};
+
+            beforeEach(function() {
+                ItemSchema.registerModelHooksInitializer([hook1, hook2]);
+            });
+
+            it('should to insert each hook', function(){
+                expect(ItemSchema.modelHooksInitializers).to.be.eql([
+                    noopHook,
+                    hook1,
+                    hook2
+                ]);
+            });
+        });
+
+        describe('when hooks is a function', function(){
+            var hook = function() {};
+
+            beforeEach(function() {
+                ItemSchema.registerModelHooksInitializer(hook);
+            });
+
+            it('should to insert the hook', function(){
+                expect(ItemSchema.modelHooksInitializers).to.be.eql([
+                    noopHook,
+                    hook,
+                ]);
+            });
+        });
+    });
+
     describe('#registerModel', function() {
         var Test;
 
