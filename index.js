@@ -59,6 +59,7 @@ loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
 loopbackJsonSchema.ItemSchema = require('./lib/domain/item-schema');
 loopbackJsonSchema.LJSRequest = require('./lib/http/ljs-request');
 loopbackJsonSchema.LJSUrl = require('./lib/http/ljs-url');
+loopbackJsonSchema.indexes = require('./lib/domain/indexes');
 loopbackJsonSchema.schemaLinkRewriter = require('./lib/http/schema-link-rewriter');
 
 function dataSource(app) {
