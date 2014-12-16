@@ -78,7 +78,7 @@ describe('loopbackJsonSchema', function() {
             ItemSchema.modelHooksInitializers = [wrongHook];
 
             ItemSchema.once('attached', function() {
-                expect(ItemSchema.modelHooksInitializers).to.not.be.include(wrongHook);
+                expect(ItemSchema.modelHooksInitializers).to.not.include(wrongHook);
                 done();
             });
 
@@ -86,8 +86,8 @@ describe('loopbackJsonSchema', function() {
         });
 
 
-        describe('when registerItemSchemaAtRequest is false', function(){
-            var app, findStub, itemSchemas;
+        describe('when registerItemSchemaAtRequest is false', function() {
+            var app, findStub;
 
             before(function(done) {
                 app = loopback();
