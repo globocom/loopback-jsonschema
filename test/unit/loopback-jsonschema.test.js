@@ -73,6 +73,19 @@ describe('loopbackJsonSchema', function() {
         });
 
 
+        it('should redefine `ItemSchema.modelHooksInitializers` before attach the ItemSchema', function(done){
+            var wrongHook = function() {};
+            ItemSchema.modelHooksInitializers = [wrongHook];
+
+            ItemSchema.once('attached', function() {
+                expect(ItemSchema.modelHooksInitializers).to.not.be.include(wrongHook);
+                done();
+            });
+
+            loopbackJsonSchema.init(app);
+        });
+
+
         describe('when registerItemSchemaAtRequest is false', function(){
             var app, findStub, itemSchemas;
 
