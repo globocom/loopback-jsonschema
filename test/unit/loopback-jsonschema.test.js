@@ -85,6 +85,16 @@ describe('loopbackJsonSchema', function() {
             loopbackJsonSchema.init(app);
         });
 
+        it('should populate `ItemSchema.modelHooksInitializers` with two default hooks', function(done){
+
+            ItemSchema.once('attached', function() {
+                expect(ItemSchema.modelHooksInitializers.length).to.be.eql(2);
+                done();
+            });
+
+            loopbackJsonSchema.init(app);
+        });
+
 
         describe('when registerItemSchemaAtRequest is false', function() {
             var app, findStub;
