@@ -27,17 +27,15 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     // start with default hooks
     ItemSchema.modelHooksInitializers = ItemSchema.defaultModelHooksInitializers.slice(0);
+    ItemSchema.registerModelHooksInitializer(
+        schemaCorrelatorHooks
+    );
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
 
     app.model(ItemSchema);
     ItemSchemaHooks.initialize();
-
-
-    ItemSchema.registerModelHooksInitializer(
-        schemaCorrelatorHooks
-    );
 
     var restApiRoot = app.get('restApiRoot') || '/api';
     var middlewares = [
