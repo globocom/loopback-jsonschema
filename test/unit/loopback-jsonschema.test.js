@@ -44,7 +44,7 @@ describe('loopbackJsonSchema', function() {
                 registerItemSchemaMaxAttempts: 5,
                 collectionRemoteName: 'find',
                 instanceRemoteNames: [
-                    'findById', 'upsert', 'create',
+                    'findById', 'findOne', 'upsert', 'create',
                     'prototype.updateAttributes', 'prototype.delete',
                     'deleteById'
                 ]
