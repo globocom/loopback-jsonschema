@@ -23,7 +23,7 @@ describe('ItemSchema', function() {
         });
 
         describe('when there are no custom links', function() {
-            it('should default links with empty custom links', function() {
+            it('should return only default links', function() {
                 expect(itemSchema.allLinks()).to.eql([
                     { rel: 'self', href: '/people/{id}' },
                     { rel: 'item', href: '/people/{id}' },
@@ -36,7 +36,8 @@ describe('ItemSchema', function() {
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
-                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'parent', href: '/people' }
                 ]);
             });
         });
@@ -60,6 +61,7 @@ describe('ItemSchema', function() {
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
                     { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'parent', href: '/people' },
                     { rel: 'custom', href: '/custom' }
                 ]);
             });
@@ -83,7 +85,8 @@ describe('ItemSchema', function() {
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
-                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'parent', href: '/people' }
                 ]);
             });
         });
@@ -125,7 +128,8 @@ describe('ItemSchema', function() {
                     }
                 },
                 { rel: 'update', method: 'PUT', href: '/people/{id}' },
-                { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                { rel: 'parent', href: '/people' }
             ]);
         });
     });

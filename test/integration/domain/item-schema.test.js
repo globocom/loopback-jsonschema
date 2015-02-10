@@ -61,14 +61,14 @@ describe('ItemSchema', function() {
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
                     { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'parent', href: '/people' },
                     { rel: 'custom', href: '/custom' }
                 ]);
-
                 done();
             });
         });
 
-        it('should not allow overriding default links', function() {
+        it('should not allow overriding default links', function(done) {
             var customLinks = [{ rel: 'self', href: '/custom' }];
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
@@ -84,8 +84,10 @@ describe('ItemSchema', function() {
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
-                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' }
+                    { rel: 'delete', method: 'DELETE', href: '/people/{id}' },
+                    { rel: 'parent', href: '/people' }
                 ]);
+                done();
             });
         });
 
