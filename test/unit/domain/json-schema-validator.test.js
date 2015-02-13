@@ -1,7 +1,7 @@
 require('../../support');
 
 var expect = require('chai').expect;
-var JSV = require('JSV').JSV;
+var JSV = require('jsvgcom').JSV;
 
 var JsonSchemaValidator = require('../../../lib/domain/json-schema-validator');
 var config = require('../../../lib/support/config');
@@ -39,7 +39,7 @@ describe('JsonSchemaValidator', function() {
                             "required": true
                         },
                         "lastName": {
-                            "type": "string",
+                            "type": "string"
                         },
                         "age": {
                             "type": "integer",
@@ -185,6 +185,124 @@ describe('JsonSchemaValidator', function() {
                     expect(errors.itemCount).to.eq(0);
                 });
             });
+
+
+
+            describe('date format field', function(){
+                it('should return error with invalid value', function(){
+                    schema = {
+                        "title": "Example Schema",
+                        "type": "object",
+                        "properties": {
+                            "birthday": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({birthday: '11.11'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                        code: 500,
+                        property: '/birthday',
+                        message: "Format validation failed (A valid date in YYYY-MM-DD format expected)",
+                        dataPath: '/birthday',
+                        schemaPath: '/properties/birthday'
+                    }]);
+                });
+
+                it('should pass with valid value', function(){
+                    schema = {
+                        "title": "Example Schema",
+                        "type": "object",
+                        "properties": {
+                            "birthday": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({birthday: '1992-10-27'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+            });
+
+            describe('datetime format field', function(){
+                it('should return error with invalid value', function(){
+                    schema = {
+                        "title": "Example Schema",
+                        "type": "object",
+                        "properties": {
+                            "mytime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '11.11'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                        code: 500,
+                        property: '/mytime',
+                        message: "Format validation failed (A valid ISO 8601 date/time string expected)",
+                        dataPath: '/mytime',
+                        schemaPath: '/properties/mytime'
+                    }]);
+                });
+
+                it('should pass with valid value (python format)', function(){
+                    schema = {
+                        "title": "Example Schema",
+                        "type": "object",
+                        "properties": {
+                            "mytime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '2015-02-12T12:25:39.398952Z'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+
+                it('should pass with valid value (javascript format)', function(){
+                    schema = {
+                        "title": "Example Schema",
+                        "type": "object",
+                        "properties": {
+                            "mytime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '2015-02-12T12:25:39.716Z'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+            });
         });
     });
 
@@ -223,6 +341,93 @@ describe('JsonSchemaValidator', function() {
                 var errors = jsonSchemaValidator.validate({}, data);
                 expect(errors).to.have.keys(['items', 'itemCount']);
             });
+
+            describe('date format field', function(){
+                it('should return error with invalid value', function(){
+                    schema.properties.birthday = {
+                        type: "string",
+                        format: "date"
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({birthday: '11.11'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                        code: 500,
+                        property: '/birthday',
+                        message: "Format validation failed (A valid date in YYYY-MM-DD format expected)",
+                        dataPath: '/birthday',
+                        schemaPath: '/properties/birthday/format'
+                    }]);
+                });
+
+                it('should pass with valid value', function(){
+                    schema.properties.birthday = {
+                        type: "string",
+                        format: "date"
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({birthday: '1992-10-27'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+            });
+
+            describe('datetime format field', function(){
+                it('should return error with invalid value', function(){
+                    schema.properties.mytime = {
+                        type: "string",
+                        format: "date-time"
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '11.11'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(1);
+                    expect(errors.items).to.eql([{
+                        code: 500,
+                        property: '/mytime',
+                        message: "Format validation failed (A valid ISO 8601 date/time string expected)",
+                        dataPath: '/mytime',
+                        schemaPath: '/properties/mytime/format'
+                    }]);
+                });
+
+                it('should pass with valid value (python format)', function(){
+                    schema.properties.mytime = {
+                        type: "string",
+                        format: "date-time"
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '2015-02-12T12:25:39.398952Z'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+
+                it('should pass with valid value (javascript format)', function(){
+                    schema.properties.mytime = {
+                        type: "string",
+                        format: "date-time"
+                    };
+
+                    var data = {};
+                    data.toObject = this.sinon.stub().returns({mytime: '2015-02-12T12:25:39.716Z'});
+                    var errors = jsonSchemaValidator.validate(schema, data);
+
+                    expect(errors.itemCount).to.eq(0);
+                    expect(errors.items).to.eql([]);
+                });
+            });
+
 
             describe('required fields', function() {
                 it('should return a list of fields with error', function () {

@@ -9,6 +9,12 @@ help:
 	@echo '    bump_minor_version .......................... bumps minor version'
 	@echo '    bump_major_version .......................... bumps major version'
 
+link:
+	npm link ../JSV
+
+unlink:
+	npm unlink ../JSV
+
 setup:
 	npm install
 
