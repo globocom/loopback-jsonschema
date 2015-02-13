@@ -91,6 +91,10 @@ describe('GET /item-schemas/:id', function() {
                     href: schemeAndAuthority + '/api/people/{id}'
                 },
                 {
+                    rel: 'parent',
+                    href: schemeAndAuthority + '/api/people'
+                },
+                {
                     rel: 'custom',
                     href: schemeAndAuthority + '/api/custom'
                 }
