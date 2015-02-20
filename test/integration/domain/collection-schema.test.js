@@ -111,7 +111,7 @@ describe('CollectionSchema', function() {
         });
 
         it('should return URL this collection schema', function() {
-            expect(collectionSchema.url()).to.eq('/collection-schemas/' + schema.id);
+            expect(collectionSchema.url()).to.eq('/collection-schemas/' + schema.collectionName);
         });
     });
 

@@ -19,7 +19,7 @@ describe('ItemSchema', function() {
 
     describe('#allLinks', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({id: 1, collectionName: 'people'});
+            itemSchema = new ItemSchema({collectionName: 'people'});
         });
 
         describe('when there are no custom links', function() {
@@ -32,7 +32,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/1'
+                            $ref: '/item-schemas/people'
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -56,7 +56,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/1'
+                            $ref: '/item-schemas/people'
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -81,7 +81,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/1'
+                            $ref: '/item-schemas/people'
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -124,7 +124,7 @@ describe('ItemSchema', function() {
                     method: 'POST',
                     href: '/people',
                     schema: {
-                        $ref: '/item-schemas/1'
+                        $ref: '/item-schemas/people'
                     }
                 },
                 { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -136,11 +136,11 @@ describe('ItemSchema', function() {
 
     describe('#url', function() {
         beforeEach(function() {
-            itemSchema = new ItemSchema({ id: 1 });
+            itemSchema = new ItemSchema({ collectionName: 'test' });
         });
 
         it('should return URL this item schema', function() {
-            expect(itemSchema.url()).to.eq('/item-schemas/1');
+            expect(itemSchema.url()).to.eq('/item-schemas/test');
         });
     });
 
@@ -378,14 +378,13 @@ describe('ItemSchema', function() {
         var collectionSchema, schemaId;
 
         beforeEach(function() {
-            schemaId = 1;
-            itemSchema = new ItemSchema({id: schemaId});
+            itemSchema = new ItemSchema({collectionName: 'test'});
             collectionSchema = itemSchema.collectionSchema();
         });
 
         it('should return a collection schema that corresponds to this item schema', function() {
             expect(collectionSchema).to.be.an.instanceof(CollectionSchema);
-            expect(collectionSchema.itemSchema.id).to.eq(schemaId);
+            expect(collectionSchema.itemSchema.collectionName).to.eq('test');
         });
     });
 
