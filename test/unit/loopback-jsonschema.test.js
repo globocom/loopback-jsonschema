@@ -88,7 +88,7 @@ describe('loopbackJsonSchema', function() {
         it('should populate `ItemSchema.modelHooksInitializers` with two default hooks', function(done){
 
             ItemSchema.once('attached', function() {
-                expect(ItemSchema.modelHooksInitializers.length).to.be.eql(2);
+                expect(ItemSchema.modelHooksInitializers.length).to.be.eql(3);
                 done();
             });
 

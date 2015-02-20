@@ -39,8 +39,13 @@ describe('POST /:collection', function() {
                 });
         });
 
-        it('should return 200', function() {
-            expect(itemResponse.status).to.eq(200);
+        it('should return 201', function() {
+            expect(itemResponse.status).to.eq(201);
+        });
+
+        it('should correlate the Location header', function(){
+            var locationUrl = schemeAndAuthority + '/api/people/' + itemResponse.body.id;
+            expect(itemResponse.headers['location']).to.eq(locationUrl);
         });
 
         it('should correlate the item with its schema', function() {

@@ -10,6 +10,7 @@ var ItemSchema = require('./lib/domain/item-schema');
 var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-model.middleware');
 var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
 var schemaCorrelatorHooks = require('./lib/http/schema-correlator-hooks');
+var createLocationHook = require('./lib/http/create-location-hook');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
 var logger = require('./lib/support/logger');
@@ -27,9 +28,10 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     // start with default hooks
     ItemSchema.modelHooksInitializers = ItemSchema.defaultModelHooksInitializers.slice(0);
-    ItemSchema.registerModelHooksInitializer(
+    ItemSchema.registerModelHooksInitializer([
+        createLocationHook,
         schemaCorrelatorHooks
-    );
+    ]);
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
@@ -68,6 +70,7 @@ loopbackJsonSchema.LJSUrl = require('./lib/http/ljs-url');
 loopbackJsonSchema.indexes = require('./lib/domain/indexes');
 loopbackJsonSchema.schemaLinkRewriter = require('./lib/http/schema-link-rewriter');
 loopbackJsonSchema.schemaCorrelator = require('./lib/http/schema-correlator');
+loopbackJsonSchema.locationHeaderCorrelator = require('./lib/http/location-header-correlator');
 
 function dataSource(app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();

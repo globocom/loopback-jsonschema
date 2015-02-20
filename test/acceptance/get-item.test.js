@@ -33,7 +33,7 @@ describe('GET /:collection/:id', function () {
             .post('/api/people')
             .set('Content-Type', 'application/json')
             .send('{"name": "Alice"}')
-            .expect(200)
+            .expect(201)
             .end(function (err, res) {
                 if (err) { return done(err); };
                 itemId = res.body.id;
