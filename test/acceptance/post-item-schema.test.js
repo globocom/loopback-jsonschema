@@ -43,7 +43,7 @@ describe('POST /item-schemas', function() {
         });
 
         it('should correlate the Location header', function(){
-            var locationUrl = schemeAndAuthority + '/api/item-schemas/' + itemSchema.id;
+            var locationUrl = schemeAndAuthority + '/api/item-schemas/' + itemSchema.collectionName;
             expect(response.headers['location']).to.eq(locationUrl);
         });
 
