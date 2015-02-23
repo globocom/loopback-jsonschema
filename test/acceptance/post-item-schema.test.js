@@ -31,21 +31,20 @@ describe('POST /item-schemas', function() {
                     itemSchema = JSON.parse(res.text);
                     itemSchemaCollectionName = itemSchema.collectionName;
 
-                    request(app)
-                        .get('/api/item-schemas/' + itemSchemaCollectionName)
-                        .expect(200)
-                        .end(function(err, res) {
-                            if (err) { return done(err); }
-                            schemeAndAuthority = 'http://' + res.req._headers.host;
-                            response = res;
-                            itemSchema = JSON.parse(res.text);
-                            done();
-                        });
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+                    response = res;
+                    itemSchema = JSON.parse(res.text);
+                    done();
                 });
         });
 
-        it('should return 200', function() {
-            expect(response.status).to.eq(200);
+        it('should return 201', function() {
+            expect(response.status).to.eq(201);
+        });
+
+        it('should correlate the Location header', function(){
+            var locationUrl = schemeAndAuthority + '/api/item-schemas/' + itemSchema.id;
+            expect(response.headers['location']).to.eq(locationUrl);
         });
 
         it('should return correct id', function() {
