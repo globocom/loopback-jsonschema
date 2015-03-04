@@ -7,7 +7,7 @@ var ItemSchema = require('../../lib/domain/item-schema');
 
 
 describe('PUT /:collection/:id', function() {
-    var app, itemResponse, itemId, jsonSchemaId, schemeAndAuthority;
+    var app, itemResponse, itemId, jsonSchemaCollectionName, schemeAndAuthority;
     before(function() {
         app = support.newLoopbackJsonSchemaApp();
     });
@@ -22,8 +22,8 @@ describe('PUT /:collection/:id', function() {
                 type: 'object',
                 properties: {}
             }, function(err, jsonSchema) {
-                if (err) { return done(err); };
-                jsonSchemaId = jsonSchema.id;
+                if (err) { return done(err); }
+                jsonSchemaCollectionName = jsonSchema.collectionName;
                 done();
             });
         });
@@ -34,7 +34,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, item) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemId = item.body.id;
                     done();
                 });
@@ -46,7 +46,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice", "age": 30}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     itemResponse = res;
                     done();
@@ -58,7 +58,7 @@ describe('PUT /:collection/:id', function() {
         });
 
         it('should correlate the item with its schema', function() {
-            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaId;
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/' + jsonSchemaCollectionName;
             expect(itemResponse.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(itemResponse.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
         });
@@ -107,8 +107,8 @@ describe('PUT /:collection/:id', function() {
                     }
                 }
             }, function(err, jsonSchema) {
-                if (err) { return done(err); };
-                jsonSchemaId = jsonSchema.id;
+                if (err) { return done(err); }
+                jsonSchemaCollectionName = jsonSchema.collectionName;
 
                 var person = {
                     personal: {
@@ -127,7 +127,7 @@ describe('PUT /:collection/:id', function() {
                     .set('Content-Type', 'application/json')
                     .send(JSON.stringify(person))
                     .end(function (err, item) {
-                        if (err) { return done(err); };
+                        if (err) { return done(err); }
                         itemId = item.body.id;
 
                         done();
@@ -141,7 +141,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"personal": {"active": false}}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });
@@ -168,8 +168,8 @@ describe('PUT /:collection/:id', function() {
                     }
                 }
             }, function(err, jsonSchema) {
-                if (err) { return done(err); };
-                jsonSchemaId = jsonSchema.id;
+                if (err) { return done(err); }
+                jsonSchemaCollectionName = jsonSchema.collectionName;
                 done();
             });
         });
@@ -180,7 +180,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemId = res.body.id;
                     done();
                 });
@@ -192,7 +192,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });
@@ -211,7 +211,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });
@@ -222,7 +222,7 @@ describe('PUT /:collection/:id', function() {
         });
 
         it('should return error message', function() {
-            expect(itemResponse.body.error.message).to.eq('Unsupported Content-Type: <text/plain>.')
+            expect(itemResponse.body.error.message).to.eq('Unsupported Content-Type: <text/plain>.');
         });
     });
 
@@ -242,8 +242,8 @@ describe('PUT /:collection/:id', function() {
                 },
                 required: ['name']
             }, function(err, jsonSchema) {
-                if (err) { return done(err); };
-                jsonSchemaId = jsonSchema.id;
+                if (err) { return done(err); }
+                jsonSchemaCollectionName = jsonSchema.collectionName;
                 done();
             });
         });
@@ -254,7 +254,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": "Alice"}')
                 .end(function (err, item) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemId = item.body.id;
                     done();
                 });
@@ -266,7 +266,7 @@ describe('PUT /:collection/:id', function() {
                 .set('Content-Type', 'application/json')
                 .send('{"name": ""}')
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });

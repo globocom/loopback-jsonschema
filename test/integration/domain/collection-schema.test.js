@@ -11,7 +11,7 @@ var app = support.newLoopbackJsonSchemaApp();
 describe('CollectionSchema', function() {
     describe('#data', function() {
         describe('when corresponding item schema exists', function() {
-            var collectionSchema, itemSchemaId;
+            var collectionSchema, itemSchemaCollectionName;
 
             beforeEach(function (done) {
                 ItemSchema.create({
@@ -25,8 +25,8 @@ describe('CollectionSchema', function() {
                         { rel: 'custom', href: '/custom' }
                     ]
                 }, function(err, itemSchema) {
-                    if (err) { return done(err); };
-                    itemSchemaId = itemSchema.id;
+                    if (err) { return done(err); }
+                    itemSchemaCollectionName = itemSchema.collectionName;
                     collectionSchema = new CollectionSchema(itemSchema);
                     done();
                 });
@@ -39,7 +39,7 @@ describe('CollectionSchema', function() {
 
             it('should include "items" key pointing to itemSchema url', function () {
                 var data = collectionSchema.data();
-                expect(data.items.$ref).to.eq('/item-schemas/' + itemSchemaId);
+                expect(data.items.$ref).to.eq('/item-schemas/' + itemSchemaCollectionName);
             });
 
             it('should include $schema from ItemSchema', function () {
@@ -74,7 +74,7 @@ describe('CollectionSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchemaId
+                            $ref: '/item-schemas/' + itemSchemaCollectionName
                         }
                     },
                     {

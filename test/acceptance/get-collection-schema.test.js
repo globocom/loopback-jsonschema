@@ -1,7 +1,6 @@
 var support = require('../support');
 
 var expect = require('chai').expect;
-var loopback = require('loopback');
 var request = require('supertest');
 
 var ItemSchema = require('../../lib/domain/item-schema');
@@ -15,7 +14,10 @@ describe('GET /collection-schemas/:id', function () {
     });
 
     describe('when corresponding item schema exists', function () {
-        var collectionSchema, collectionSchemaResponse, collectionSchemaId;
+        var collectionSchema,
+            collectionSchemaResponse,
+            collectionSchemaCollectionName,
+            schemeAndAuthority;
 
         before(function (done) {
             ItemSchema.create({
@@ -29,18 +31,18 @@ describe('GET /collection-schemas/:id', function () {
                     { rel: 'custom', href: '/custom' }
                 ]
             }, function(err, itemSchema) {
-                if (err) { return done(err); };
-                collectionSchemaId = itemSchema.id;
+                if (err) { return done(err); }
+                collectionSchemaCollectionName = itemSchema.collectionName;
                 done();
             });
         });
 
         before(function(done) {
             request(app)
-                .get('/api/collection-schemas/' + collectionSchemaId)
+                .get('/api/collection-schemas/' + collectionSchemaCollectionName)
                 .expect(200)
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     collectionSchemaResponse = res;
                     collectionSchema = JSON.parse(res.text);
@@ -70,7 +72,7 @@ describe('GET /collection-schemas/:id', function () {
 
         it('should include items', function() {
             expect(collectionSchema['items']).to.eql({
-                $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaId
+                $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaCollectionName
             });
         });
 
@@ -89,7 +91,7 @@ describe('GET /collection-schemas/:id', function () {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaId
+                        $ref: schemeAndAuthority + '/api/item-schemas/' + collectionSchemaCollectionName
                     }
                 },
                 {
@@ -121,8 +123,8 @@ describe('GET /collection-schemas/:id', function () {
             request(app)
                 .get('/api/collection-schemas/invalid-schema-id')
                 .expect(404)
-                .end(function (err, res) {
-                    if (err) { return done(err); };
+                .end(function (err) {
+                    if (err) { return done(err); }
                     done();
             });
         });

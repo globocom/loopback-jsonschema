@@ -22,13 +22,12 @@ describe('CollectionSchemaFactory', function() {
             });
         });
 
-        describe('existing item schema', function(){
+        describe('existing item schema', function() {
             var itemSchema;
 
             beforeEach(function(done) {
                 ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err, data) {
-                    if (err) { return done(err); };
-
+                    if (err) { return done(err); }
                     itemSchema = data;
                     done();
                 });
@@ -40,7 +39,7 @@ describe('CollectionSchemaFactory', function() {
                     done();
                 };
 
-                CollectionSchemaFactory.buildFromSchemaId(itemSchema.id, callback);
+                CollectionSchemaFactory.buildFromSchemaId(itemSchema.collectionName, callback);
             });
         });
     });

@@ -38,7 +38,7 @@ describe('ItemSchema', function() {
 
         it('should create model defined by the json schema provided', function(done) {
             ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err) {
-                if (err) { return done(err); };
+                if (err) { return done(err); }
                 expect(loopback.getModel('test')).to.exist;
                 done();
             });
@@ -56,7 +56,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchema.id
+                            $ref: '/item-schemas/' + itemSchema.collectionName
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },
@@ -80,7 +80,7 @@ describe('ItemSchema', function() {
                         method: 'POST',
                         href: '/people',
                         schema: {
-                            $ref: '/item-schemas/' + itemSchema.id
+                            $ref: '/item-schemas/' + itemSchema.collectionName
                         }
                     },
                     { rel: 'update', method: 'PUT', href: '/people/{id}' },

@@ -9,7 +9,7 @@ var app = support.newLoopbackJsonSchemaApp();
 
 describe('GET /item-schemas/:id', function() {
     describe('when schema exists', function() {
-        var itemSchema, itemSchemaId, response, schemeAndAuthority;
+        var itemSchema, itemSchemaCollectionName, response, schemeAndAuthority;
 
         before(function(done) {
             ItemSchema.create({
@@ -23,18 +23,18 @@ describe('GET /item-schemas/:id', function() {
                     { rel: 'custom', href: '/custom' }
                 ]
             }, function(err, itemSchema) {
-                if (err) { return done(err); };
-                itemSchemaId = itemSchema.id;
+                if (err) { return done(err); }
+                itemSchemaCollectionName = itemSchema.collectionName;
                 done();
             });
         });
 
         before(function(done) {
             request(app)
-                .get('/api/item-schemas/' + itemSchemaId)
+                .get('/api/item-schemas/' + itemSchemaCollectionName)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     schemeAndAuthority = 'http://' + res.req._headers.host;
                     response = res;
                     itemSchema = JSON.parse(res.text);
@@ -77,7 +77,7 @@ describe('GET /item-schemas/:id', function() {
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
                     schema: {
-                        $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchemaId
+                        $ref: schemeAndAuthority + '/api/item-schemas/' + itemSchemaCollectionName
                     }
                 },
                 {
@@ -108,7 +108,7 @@ describe('GET /item-schemas/:id', function() {
                 .get('/api/item-schemas/invalid-schema-id')
                 .expect(404)
                 .end(function (err, res) {
-                    if (err) { return done(err); };
+                    if (err) { return done(err); }
                     expect(res.body).to.be.eql({});
                     done();
             });
