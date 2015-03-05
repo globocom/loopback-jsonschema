@@ -1,6 +1,6 @@
 require('fast-url-parser').replace();
 
-var _ = require('underscore');
+var _ = require('lodash');
 
 
 var loopback = require('loopback');

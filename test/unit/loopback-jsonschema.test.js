@@ -2,7 +2,7 @@ require('../support');
 
 var expect = require('chai').expect;
 var loopback = require('loopback');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var CollectionSchema = require('../../lib/domain/collection-schema');
 var ItemSchema = require('../../lib/domain/item-schema');
