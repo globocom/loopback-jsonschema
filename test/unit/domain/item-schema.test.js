@@ -532,6 +532,63 @@ describe('ItemSchema', function() {
         });
 
     });
+
+    describe('.validate(\'relations\')', function(){
+
+        var itemSchemaIsValid;
+
+        describe('when the property relations is valid', function(){
+            beforeEach(function(done) {
+                var schema = {
+                    collectionName: 'people',
+                    modelName: 'person',
+                    relations: {
+                        things: {
+                            collectionName: "things",
+                            type: "belongsTo",
+                            foreignKey: "peopleId"
+                        }
+                    }
+                };
+                var itemSchema = ItemSchema(schema);
+                itemSchema.isValid(function(isValid) {
+                    itemSchemaIsValid = isValid;
+                    done();
+                });
+            });
+
+            it('should pass without an error', function(){
+                expect(itemSchemaIsValid).to.be.true;
+            });
+        });
+
+        describe('when the property relations is invalid', function(){
+            beforeEach(function(done) {
+                var wrongSchema = {
+                    collectionName: 'people',
+                    modelName: 'person',
+                    relations: {
+                        things: {
+                            modelName: "things",
+                            type: "belongsToMe",
+                            foreignWrong: "peopleId",
+                            blah: "haha"
+                        }
+                    }
+                };
+                var itemSchema = new ItemSchema(wrongSchema);
+
+                itemSchema.isValid(function(isValid) {
+                    var itemSchemaIsValid = isValid;
+                    done();
+                });
+            });
+
+            it('should ignore with an error', function(){
+                expect(itemSchemaIsValid).to.be.falsy;
+            });
+        });
+    });
 });
 
 var CustomItemSchema = ItemSchema.extend('custom-item-schema');

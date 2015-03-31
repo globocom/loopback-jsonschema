@@ -17,10 +17,10 @@ afterEach(function(done) {
 });
 
 var support = {
-    newLoopbackJsonSchemaApp: function() {
+    newLoopbackJsonSchemaApp: function(config) {
         var app = loopback();
         app.set('restApiRoot', '/api');
-        loopbackJsonSchema.init(app);
+        loopbackJsonSchema.init(app, config || {});
         loopbackJsonSchema.enableJsonSchemaMiddleware(app);
         app.use(app.get('restApiRoot'), loopback.rest());
         app.use(loopback.errorHandler());

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/globocom/loopback-jsonschema",
   "dependencies": {
+    "async": "^0.9.0",
     "cors": "2.x",
     "debug": "",
     "errorhandler": "1.x",
@@ -24,13 +25,13 @@
     "json-path": "",
     "jsvgcom": "4.2.6",
     "lodash": "3.x",
+    "q": "1.x",
     "stack-trace": "",
     "traverse": "",
     "tv4": "",
     "tv4-formats": "",
     "type-is": "1.x.x",
-    "winston": "0.x",
-    "q": "1.x"
+    "winston": "0.x"
   },
   "peerDependencies": {
     "loopback": "2.x"
