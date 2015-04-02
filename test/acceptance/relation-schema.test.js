@@ -288,9 +288,7 @@ describe('hasMany relation', function(){
     });
 });
 
-
-
-describe.only('belongsTo reverse relation', function(){
+describe('belongsTo reverse relation', function(){
     var personId;
     var petId;
     var app;
@@ -383,6 +381,117 @@ describe.only('belongsTo reverse relation', function(){
                     .end(function (err, res) {
                         if (err) { return done(err); }
                         expect(res.body).to.be.eql({id: personId, name: "I am a person"});
+                        expect(res.statusCode).to.be.eql(200);
+                        callback(null);
+                    });
+            }
+
+        ], function() {
+            done();
+        });
+    });
+
+    describe('GET /api/{collectionName}/{resourceId}/{belongToOwner}', function(){
+        it('should to get related owner in path', function(done){
+            done();
+        });
+    });
+});
+
+
+describe('hasMany reverse relation', function(){
+    var personId;
+    var petId;
+    var app;
+
+    before(function(done) {
+        app = support.newLoopbackJsonSchemaApp({ registerItemSchemaAtRequest: false });
+
+        async.series([
+            function(callback) {
+                var petSchema = {
+                    type: 'object',
+                    modelName: 'pet4',
+                    collectionName: 'pets4',
+                    properties: {
+                        name: {type: 'string'},
+                        personId: {type: 'number'}
+                    },
+                    relations: {
+                        owners: {
+                            collectionName: 'people4',
+                            type: 'hasMany',
+                            foreignKey: 'petId'
+                        }
+                    }
+                };
+                request(app)
+                    .post('/api/item-schemas')
+                    .set('Content-Type', 'application/schema+json')
+                    .send(JSON.stringify(petSchema))
+                    .end(function (err, res) {
+                        if (err) { return done(err); }
+                        expect(res.statusCode).to.be.eql(201);
+                        callback(null);
+                    });
+            },
+            function(callback) {
+                var personSchema = {
+                    'type': 'object',
+                    'modelName': 'person4',
+                    'collectionName': 'people4',
+                    properties: {
+                        name: {type: 'string'}
+                    }
+                };
+
+                request(app)
+                    .post('/api/item-schemas')
+                    .set('Content-Type', 'application/schema+json')
+                    .send(JSON.stringify(personSchema))
+                    .end(function (err, res) {
+                        if (err) { return done(err); }
+                        expect(res.statusCode).to.be.eql(201);
+                        callback(null);
+                    });
+            },
+            function(callback) {
+                var pet = {
+                    name: "my pet"
+                };
+                request(app)
+                    .post('/api/pets4/')
+                    .set('Content-Type', 'application/schema+json')
+                    .send(JSON.stringify(pet))
+                    .end(function (err, res) {
+                        if (err) { return done(err); }
+                        petId = res.body.id;
+                        expect(res.statusCode).to.be.eql(201);
+                        callback(null);
+                    });
+            },
+            function(callback) {
+                var person = {
+                    name: "I am a person"
+                };
+                request(app)
+                    .post('/api/pets4/'+ petId + '/owners/')
+                    .set('Content-Type', 'application/json')
+                    .send(JSON.stringify(person))
+                    .end(function (err, res) {
+                        if (err) { return done(err); }
+                        personId = res.body.id;
+                        expect(res.statusCode).to.be.eql(200);
+                        callback(null);
+                    });
+            },
+
+            function(callback) {
+                request(app)
+                    .get('/api/pets4/'+ petId + '/owners')
+                    .end(function (err, res) {
+                        if (err) { return done(err); }
+                        expect(res.body).to.be.eql([{id: personId, name: "I am a person", petId: petId}]);
                         expect(res.statusCode).to.be.eql(200);
                         callback(null);
                     });

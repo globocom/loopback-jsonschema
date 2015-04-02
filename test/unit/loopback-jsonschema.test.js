@@ -8,8 +8,9 @@ var CollectionSchema = require('../../lib/domain/collection-schema');
 var ItemSchema = require('../../lib/domain/item-schema');
 var schemaCorrelatorHooks = require('../../lib/http/schema-correlator-hooks');
 
-var config = require('../../lib/support/config');
 var loopbackJsonSchema = require('../../index');
+var config = require('../../lib/support/config');
+var configPath = require.resolve('../../lib/support/config');
 
 
 describe('loopbackJsonSchema', function() {
@@ -22,33 +23,12 @@ describe('loopbackJsonSchema', function() {
 
         it('should allow overriding default config', function() {
             var myConfig = {
-                CollectionSchemaClass: 'MyCollectionSchemaClass',
-                jsonSchemaValidatorTranslation: {
-                    draft4: {}
-                },
                 Model: 'MyModel',
                 myConfigOption: 'myValue'
             };
             loopbackJsonSchema.init(app, myConfig);
-            expect(config).to.eql({
-                CollectionSchemaClass: 'MyCollectionSchemaClass',
-                generatedId: true,
-                jsonSchemaValidatorTranslation: {
-                    draft4: {}
-                },
-                logLevel: 'info',
-                Model: 'MyModel',
-                myConfigOption: 'myValue',
-                registerItemSchemaAtRequest: true,
-                registerItemSchemaAttemptDelay: 200,
-                registerItemSchemaMaxAttempts: 5,
-                collectionRemoteName: 'find',
-                instanceRemoteNames: [
-                    'findById', 'findOne', 'upsert', 'create',
-                    'prototype.updateAttributes', 'prototype.delete',
-                    'deleteById'
-                ]
-            });
+            expect(config.Model).to.eql('MyModel');
+            expect(config.myConfigOption).to.eql('myValue');
         });
 
         it('should set strong-remoting params', function(){
@@ -61,7 +41,6 @@ describe('loopbackJsonSchema', function() {
                     ]
                 }});
         });
-
 
         it('should register schema correlator hook', function(){
             loopbackJsonSchema.init(app);

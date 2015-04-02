@@ -7,6 +7,7 @@ var loopback = require('loopback');
 
 var config = require('./lib/support/config');
 var ItemSchema = require('./lib/domain/item-schema');
+var Relations = require('./lib/domain/relations');
 var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-model.middleware');
 var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
 var schemaCorrelatorHooks = require('./lib/http/schema-correlator-hooks');
@@ -24,6 +25,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     // save app pointer
     ItemSchema.app = app;
+    ItemSchema.relations = new Relations(app);
     ItemSchema.app._registeredLoopbackHooks = {};
 
     // start with default hooks
