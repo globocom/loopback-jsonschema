@@ -12,6 +12,7 @@ var registerLoopbackModelMiddleware = require('./lib/http/register-loopback-mode
 var validateRequestMiddleware = require('./lib/http/validate-request.middleware');
 var schemaCorrelatorHooks = require('./lib/http/schema-correlator-hooks');
 var createLocationHook = require('./lib/http/create-location-hook');
+var locationHeaderCorrelator = require('./lib/http/location-header-correlator');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
 var logger = require('./lib/support/logger');
@@ -25,7 +26,10 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     // save app pointer
     ItemSchema.app = app;
+
     ItemSchema.relations = new Relations(app);
+    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'create', locationHeaderCorrelator);
+
     ItemSchema.app._registeredLoopbackHooks = {};
 
     // start with default hooks

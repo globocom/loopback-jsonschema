@@ -174,6 +174,7 @@ describe('hasMany relation', function(){
             .end(function (err, res) {
                 if (err) { return done(err); }
                 personId = res.body.id;
+
                 expect(res.statusCode).to.be.eql(201);
                 done();
             });
@@ -190,7 +191,7 @@ describe('hasMany relation', function(){
             .end(function (err, res) {
                 if (err) { return done(err); }
                 pet1Id = res.body.id;
-                expect(res.statusCode).to.be.eql(200);
+                expect(res.statusCode).to.be.eql(201);
                 done();
             });
     });
@@ -206,7 +207,7 @@ describe('hasMany relation', function(){
             .end(function (err, res) {
                 if (err) { return done(err); }
                 pet2Id = res.body.id;
-                expect(res.statusCode).to.be.eql(200);
+                expect(res.statusCode).to.be.eql(201);
                 done();
             });
     });
@@ -481,7 +482,7 @@ describe('hasMany reverse relation', function(){
                     .end(function (err, res) {
                         if (err) { return done(err); }
                         personId = res.body.id;
-                        expect(res.statusCode).to.be.eql(200);
+                        expect(res.statusCode).to.be.eql(201);
                         callback(null);
                     });
             },
