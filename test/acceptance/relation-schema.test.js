@@ -95,15 +95,34 @@ describe('belongsTo relation', function(){
     });
 
     describe('GET /api/{collectionName}/{resourceId}/{belongToOwner}', function(){
-        it('should to get related owner in path', function(done){
+        var response, schemeAndAuthority;
+
+        before(function(done) {
             request(app)
                 .get('/api/pets/'+ petId + '/owner')
                 .end(function (err, res) {
                     if (err) { return done(err); }
+                    response = res;
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+
                     expect(res.body).to.be.eql({id: personId, name: "I am a person"});
                     expect(res.statusCode).to.be.eql(200);
                     done();
                 });
+        });
+
+        it('should correlate the item with its schema', function() {
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/people';
+            expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
+            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
+        });
+
+        it('should return the related owner', function(){
+            expect(response.body).to.be.eql({id: personId, name: "I am a person"});
+        });
+
+        it('should return a success status code', function(){
+            expect(response.statusCode).to.be.eql(200);
         });
     });
 });
@@ -213,19 +232,93 @@ describe('hasMany relation', function(){
     });
 
     describe('GET /api/people2/{personId}/pets/{petId}', function(){
-        it('should to get related owner in path', function(done){
+        var response, schemeAndAuthority;
+
+        before(function(done) {
             request(app)
                 .get('/api/people2/'+ personId + '/pets/' + pet1Id)
                 .end(function (err, res) {
                     if (err) { return done(err); }
-                    expect(res.body).to.be.eql({
-                        id: pet1Id,
-                        name: "my pet 1",
-                        personId: personId
-                    });
-                    expect(res.statusCode).to.be.eql(200);
+                    response = res;
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+
                     done();
                 });
+        });
+
+        it('should correlate the item with its schema t', function(){
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/pets';
+            expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
+            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
+        });
+
+
+        it('should to get related owner in path', function(){
+            expect(response.body).to.be.eql({
+                id: pet1Id,
+                name: "my pet 1",
+                personId: personId
+            });
+
+            expect(response.statusCode).to.be.eql(200);
+        });
+    });
+
+
+    describe('PUT /api/people2/{personId}/pets/{petId}', function(){
+        var response, schemeAndAuthority;
+
+        before(function(done) {
+            request(app)
+                .put('/api/people2/'+ personId + '/pets/' + pet1Id)
+                .set('Content-Type', 'application/json')
+                .send('{"name": "my pet 1"}')
+                .end(function (err, res) {
+                    if (err) { return done(err); }
+                    response = res;
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+
+                    done();
+                });
+        });
+
+        it('should correlate the item with its schema t', function(){
+            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/pets';
+            expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
+            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
+        });
+    });
+
+    describe('DELETE /api/people2/{personId}/pets/{petId}', function(){
+        var response, schemeAndAuthority, deletePetId;
+        before(function(done) {
+            var pet = {
+                name: "my pet to be deleted"
+            };
+            request(app)
+                .post('/api/people2/' + personId + '/pets')
+                .set('Content-Type', 'application/json')
+                .send(JSON.stringify(pet))
+                .end(function (err, res) {
+                    if (err) { return done(err); }
+                    deletePetId = res.body.id;
+                    done();
+                });
+        });
+        before(function(done) {
+            request(app)
+                .delete('/api/people2/'+ personId + '/pets/' + deletePetId)
+                .end(function (err, res) {
+                    if (err) { return done(err); }
+                    response = res;
+                    schemeAndAuthority = 'http://' + res.req._headers.host;
+
+                    done();
+                });
+        });
+
+        it('should return 204 status code', function(){
+            expect(response.statusCode).to.eq(204);
         });
     });
 

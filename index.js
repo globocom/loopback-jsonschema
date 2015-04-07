@@ -15,6 +15,8 @@ var createLocationHook = require('./lib/http/create-location-hook');
 var locationHeaderCorrelator = require('./lib/http/location-header-correlator');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
+var schemaCorrelator = require('./lib/http/schema-correlator');
+
 var logger = require('./lib/support/logger');
 
 var loopbackJsonSchema = module.exports = {};
@@ -28,7 +30,18 @@ loopbackJsonSchema.init = function(app, customConfig) {
     ItemSchema.app = app;
 
     ItemSchema.relations = new Relations(app);
-    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'create', locationHeaderCorrelator);
+    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'create', function(relationCtx, ctx, result, next) {
+        locationHeaderCorrelator(ctx, result, next);
+    });
+
+    var schemaHook = function(relationCtx, ctx, result, next) {
+        schemaCorrelator.instance(relationCtx.toPluralModelName, ctx, result, next);
+    };
+
+    ItemSchema.relations.bindAfterRemoteHook('belongsTo', 'get', schemaHook);
+    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'findById', schemaHook);
+    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'updateById', schemaHook);
+
 
     ItemSchema.app._registeredLoopbackHooks = {};
 

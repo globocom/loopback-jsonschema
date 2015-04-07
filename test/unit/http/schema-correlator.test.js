@@ -9,6 +9,7 @@ var LJSRequest = require('../../../lib/http/ljs-request');
 describe ('schemaCorrelator', function() {
     var ctx;
     var baseUrl = 'http://api.example.org';
+    var result;
     var itemSchema = new ItemSchema({
         modelName: 'person',
         collectionName: 'people',
@@ -18,7 +19,7 @@ describe ('schemaCorrelator', function() {
         properties: {}
     });
 
-    describe('.correlateCollection', function() {
+    describe('.collection', function() {
         before(function(done) {
             this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
 
@@ -31,7 +32,13 @@ describe ('schemaCorrelator', function() {
                 }
             };
 
-            schemaCorrelator.correlateCollection('people', ctx, function() {
+            result = {
+                constructor: {
+                    pluralModelName: 'people'
+                }
+            };
+
+            schemaCorrelator.collection('people', ctx, result, function() {
                 done();
             });
         });
@@ -49,7 +56,7 @@ describe ('schemaCorrelator', function() {
 
     });
 
-    describe('.correlateInstance', function() {
+    describe('.instance', function() {
         before(function(done) {
             this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
 
@@ -62,7 +69,13 @@ describe ('schemaCorrelator', function() {
                 }
             };
 
-            schemaCorrelator.correlateInstance('people', ctx, function() {
+            result = {
+                constructor: {
+                    pluralModelName: 'people'
+                }
+            };
+
+            schemaCorrelator.instance('people', ctx, result, function() {
                 done();
             });
         });
