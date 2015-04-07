@@ -260,6 +260,10 @@ describe('ItemSchema', function() {
             });
         });
 
+        it('should define the cachedItemSchema property', function(){
+            expect(Test.cachedItemSchema).to.be.instanceOf(ItemSchema);
+        });
+
         it('should create model defined by this json schema', function() {
             expect(Test).to.exist;
         });
