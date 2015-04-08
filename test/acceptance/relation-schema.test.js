@@ -9,6 +9,8 @@ describe('belongsTo relation', function(){
     var personId;
     var petId;
     var app;
+    var petItemSchema;
+    var schemeAndAuthority;
 
     before(function(done) {
         app = support.newLoopbackJsonSchemaApp();
@@ -28,6 +30,7 @@ describe('belongsTo relation', function(){
             .send(JSON.stringify(personSchema))
             .end(function (err, res) {
                 if (err) { return done(err); }
+
                 expect(res.statusCode).to.be.eql(201);
                 done();
             });
@@ -57,6 +60,8 @@ describe('belongsTo relation', function(){
             .end(function (err, res) {
                 if (err) { return done(err); }
                 expect(res.statusCode).to.be.eql(201);
+                petItemSchema = JSON.parse(res.text);
+                schemeAndAuthority = 'http://' + res.req._headers.host;
                 done();
             });
     });
@@ -124,6 +129,19 @@ describe('belongsTo relation', function(){
         it('should return a success status code', function(){
             expect(response.statusCode).to.be.eql(200);
         });
+    });
+
+
+    it('should create a related links in item schema', function(){
+        var foundLinks = petItemSchema.links.filter(function(link) {
+            return link.rel === 'owner';
+        });
+        expect(foundLinks[0]).to.be.eql({
+            rel: 'owner',
+            href: schemeAndAuthority + '/api/pets/{id}/owner'
+        });
+
+        expect(foundLinks.length).to.be.eq(1);
     });
 });
 

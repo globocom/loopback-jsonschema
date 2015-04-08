@@ -134,6 +134,33 @@ describe('ItemSchema', function() {
         });
     });
 
+    describe('#relationLinks', function(){
+        var relationLinks;
+
+        beforeEach(function() {
+            itemSchema = new ItemSchema({
+                id: 1,
+                collectionName: 'people',
+                relations: {
+                    work: {},
+                    friends: {}
+                }
+            });
+
+            relationLinks = itemSchema.relationLinks();
+        });
+
+        it('should to return a related relation links', function(){
+            expect(relationLinks).to.be.eql([
+                { rel: 'work', href: '/people/{id}/work' },
+                { rel: 'friends', href: '/people/{id}/friends' },
+            ]);
+        });
+
+
+    });
+
+
     describe('#url', function() {
         beforeEach(function() {
             itemSchema = new ItemSchema({ collectionName: 'test' });
