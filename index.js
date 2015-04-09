@@ -29,8 +29,8 @@ loopbackJsonSchema.init = function(app, customConfig) {
     // save app pointer
     ItemSchema.app = app;
 
-    ItemSchema.relations = new Relations(app);
-    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'create', function(relationCtx, ctx, result, next) {
+    var relations = Relations.init(app);
+    relations.bindAfterRemoteHook('hasMany', 'create', function(relationCtx, ctx, result, next) {
         locationHeaderCorrelator(ctx, result, next);
     });
 
@@ -38,9 +38,9 @@ loopbackJsonSchema.init = function(app, customConfig) {
         schemaCorrelator.instance(relationCtx.toPluralModelName, ctx, result, next);
     };
 
-    ItemSchema.relations.bindAfterRemoteHook('belongsTo', 'get', schemaHook);
-    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'findById', schemaHook);
-    ItemSchema.relations.bindAfterRemoteHook('hasMany', 'updateById', schemaHook);
+    relations.bindAfterRemoteHook('belongsTo', 'get', schemaHook);
+    relations.bindAfterRemoteHook('hasMany', 'findById', schemaHook);
+    relations.bindAfterRemoteHook('hasMany', 'updateById', schemaHook);
 
 
     ItemSchema.app._registeredLoopbackHooks = {};
@@ -83,13 +83,14 @@ loopbackJsonSchema.enableJsonSchemaMiddleware = function(app) {
 };
 
 loopbackJsonSchema.CollectionSchema = require('./lib/domain/collection-schema');
-loopbackJsonSchema.ItemSchema = require('./lib/domain/item-schema');
 loopbackJsonSchema.LJSRequest = require('./lib/http/ljs-request');
 loopbackJsonSchema.LJSUrl = require('./lib/http/ljs-url');
 loopbackJsonSchema.indexes = require('./lib/domain/indexes');
 loopbackJsonSchema.schemaLinkRewriter = require('./lib/http/schema-link-rewriter');
 loopbackJsonSchema.schemaCorrelator = require('./lib/http/schema-correlator');
 loopbackJsonSchema.locationHeaderCorrelator = require('./lib/http/location-header-correlator');
+loopbackJsonSchema.Relations = Relations;
+loopbackJsonSchema.ItemSchema = ItemSchema;
 
 function dataSource(app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
