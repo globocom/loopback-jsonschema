@@ -83,12 +83,21 @@ describe('Relations', function(){
                 });
             });
             describe('when it\'s a hasMany relation', function(){
+                var eventListener, definitionStub;
+
                 beforeEach(function() {
                     relations = new Relations();
+
+                    eventListener = this.sinon.spy();
+                    relations.on('association', eventListener);
+
                     modelClass = {
                         modelName: 'originModel',
-                        hasMany: this.sinon.spy()
+                        hasMany: this.sinon.stub()
                     };
+                    definitionStub = this.sinon.stub();
+                    modelClass.hasMany.returns(definitionStub);
+
                     schema = {
                         collectionName: 'model',
                         relations: {
@@ -116,6 +125,10 @@ describe('Relations', function(){
                 it('successfully bind a relation', function(){
                     expect(modelClass.hasMany).to.have.been.calledWith(targetModelClass, {
                         as: 'target', foreignKey: 'myId'});
+                });
+
+                it('successfully emit a event', function(){
+                    expect(eventListener).to.have.been.calledWith('hasMany', definitionStub);
                 });
             });
         });
