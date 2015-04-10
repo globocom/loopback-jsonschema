@@ -17,14 +17,10 @@ var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
 var schemaCorrelator = require('./lib/http/schema-correlator');
 
-var logger = require('./lib/support/logger');
-
 var loopbackJsonSchema = module.exports = {};
 loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
     app.set('remoting', {json: {type: ['json', '+json']}});
-
-    logger.transports.console.level = config.logLevel;
 
     // save app pointer
     ItemSchema.app = app;
