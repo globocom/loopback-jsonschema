@@ -133,11 +133,76 @@ describe('Relations', function(){
             });
         });
 
+        describe('when two hooks are binded for a method', function(){
+            var fakeHook1, fakeHook2, fakeHook1Called, fakeHook2Called;
+
+            beforeEach(function() {
+                fakeHook1Called = false;
+                fakeHook2Called = false;
+
+                fakeHook1 = function fakeHook1() {
+                    fakeHook1Called = true;
+                };
+
+                fakeHook2 = function fakeHook2() {
+                    fakeHook2Called = true;
+                };
+
+                relations = new Relations();
+                relations.bindAfterRemoteHook('belongsTo', 'create', fakeHook1);
+                relations.bindAfterRemoteHook('belongsTo', 'create', fakeHook2);
+
+                modelClass = {
+                    modelName: 'originModel',
+                    belongsTo: this.sinon.spy(),
+                    afterRemote: this.sinon.spy()
+                };
+                schema = {
+                    collectionName: 'model',
+                    relations: {
+                        target: {
+                            collectionName: 'targetModel',
+                            type: 'belongsTo',
+                            foreignKey: 'myId'
+                        }
+                    }
+                };
+
+                targetModelClass = {
+                    modelName: 'targetModel',
+                    belongsTo: this.sinon.spy()
+                };
+
+                this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
+                    if (modelName == 'targetModel') {
+                        return targetModelClass;
+                    }
+                });
+
+                relations.bindRelation(schema, modelClass);
+                relations.bindRelation(schema, modelClass);
+            });
+
+            it('should to store the relation bounds', function(){
+                expect(relations.boundRemoteHooks).to.be.eql({
+                    originModel: {
+                        "prototype.__create__target": ['fakeHook1', 'fakeHook2']
+                    }
+                });
+            });
+
+            it('should to bind hooks', function(){
+                expect(modelClass.afterRemote).to.be.calledTwice;
+                expect(modelClass.afterRemote).to.be.calledWith('prototype.__create__target');
+            });
+        });
+
+
         describe('when calling `bindRelation` twice times', function(){
             var fakeHook;
 
             beforeEach(function() {
-                fakeHook = this.sinon.spy();
+                fakeHook = function myHook() {};
 
                 relations = new Relations();
                 relations.bindAfterRemoteHook('belongsTo', 'create', fakeHook);
@@ -176,7 +241,7 @@ describe('Relations', function(){
             it('should to store a bound relation', function(){
                 expect(relations.boundRemoteHooks).to.be.eql({
                     originModel: {
-                        "prototype.__create__target": true
+                        "prototype.__create__target": ['myHook']
                     }
                 });
             });

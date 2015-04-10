@@ -116,7 +116,7 @@ describe('belongsTo relation', function(){
                 });
         });
 
-        it('should correlate the item with its schema', function() {
+        it('should correlate the item with item schema', function() {
             var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/people';
             expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
@@ -229,6 +229,13 @@ describe('hasMany relation', function(){
                 if (err) { return done(err); }
                 pet1Id = res.body.id;
                 expect(res.statusCode).to.be.eql(201);
+
+                var schemeAndAuthority = 'http://' + res.req._headers.host;
+                var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/pets';
+
+                expect(res.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
+                expect(res.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
+
                 done();
             });
     });
@@ -264,7 +271,7 @@ describe('hasMany relation', function(){
                 });
         });
 
-        it('should correlate the item with its schema t', function(){
+        it('should correlate the item with item schema', function(){
             var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/pets';
             expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
             expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
@@ -359,6 +366,31 @@ describe('hasMany relation', function(){
                     done();
                 });
         });
+
+        it('should correlate the item with item schema', function(done) {
+            request(app)
+                .get('/api/people2/'+ personId + '/pets')
+                .end(function (err, res) {
+                    if (err) { return done(err); }
+                    expect(res.body).to.be.eql([{
+                        id: pet1Id,
+                        name: "my pet 1",
+                        personId: personId
+                    }, {
+                        id: pet2Id,
+                        name: "my pet 2",
+                        personId: personId
+                    }]);
+                    var schemeAndAuthority = 'http://' + res.req._headers.host;
+                    var itemSchemaUrl = schemeAndAuthority + '/api/collection-schemas/pets';
+
+                    expect(res.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
+                    expect(res.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
+                    done();
+                });
+        });
+
+
     });
 
     describe('GET /api/{collectionName}/?filter[include]=pets', function(){

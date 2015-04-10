@@ -30,15 +30,19 @@ loopbackJsonSchema.init = function(app, customConfig) {
     ItemSchema.app = app;
 
     var relations = Relations.init(app);
-    relations.bindAfterRemoteHook('hasMany', 'create', function(relationCtx, ctx, result, next) {
+    relations.bindAfterRemoteHook('hasMany', 'create', function correlateLocationHeader(relationCtx, ctx, result, next) {
         locationHeaderCorrelator(ctx, result, next);
     });
 
-    var schemaHook = function(relationCtx, ctx, result, next) {
+    var schemaHook = function correlateInstance(relationCtx, ctx, result, next) {
         schemaCorrelator.instance(relationCtx.toPluralModelName, ctx, result, next);
     };
 
     relations.bindAfterRemoteHook('belongsTo', 'get', schemaHook);
+    relations.bindAfterRemoteHook('hasMany', 'get', function correlateCollection (relationCtx, ctx, result, next) {
+        schemaCorrelator.collection(relationCtx.toPluralModelName, ctx, result, next);
+    });
+    relations.bindAfterRemoteHook('hasMany', 'create', schemaHook);
     relations.bindAfterRemoteHook('hasMany', 'findById', schemaHook);
     relations.bindAfterRemoteHook('hasMany', 'updateById', schemaHook);
 
