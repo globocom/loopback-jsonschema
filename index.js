@@ -20,7 +20,10 @@ var schemaCorrelator = require('./lib/http/schema-correlator');
 var loopbackJsonSchema = module.exports = {};
 loopbackJsonSchema.init = function(app, customConfig) {
     _.extend(config, customConfig);
-    app.set('remoting', {json: {type: ['json', '+json']}});
+    var remoting = app.get('remoting') || {};
+    remoting.json = remoting.json || {};
+    remoting.json.type = ['json', '+json'];
+    app.set('remoting', remoting);
 
     // save app pointer
     ItemSchema.app = app;
