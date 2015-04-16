@@ -4,7 +4,11 @@ var traverse = require('traverse');
 var readOnlyDefaultValuesHandler = require('../../../lib/domain/readonly-default-values-handler');
 
 describe('readOnlyDefaultValuesHandler', function() {
-    var ctx = {};
+    var ctx;
+
+    beforeEach(function() {
+        ctx = {};
+    });
 
     describe('readOnly', function() {
         it('should remove property', function(){
@@ -276,6 +280,26 @@ describe('readOnlyDefaultValuesHandler', function() {
                     name: 'wilson',
                     time: 0
                 });
+            });
+        });
+
+        describe('when method name is updateAttributes', function() {
+            beforeEach(function() {
+                traverse(ctx).set(['method', 'name'], 'updateAttributes');
+
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
+                    name: {type: 'string'},
+                    status: {type: 'string', default: 'active'}
+                });
+
+                traverse(ctx).set(['req', 'body'], {
+                    name: 'wilson'
+                });
+            });
+
+            it('should not apply default value', function() {
+                var body = readOnlyDefaultValuesHandler(ctx);
+                expect(body).to.eql({name: 'wilson'});
             });
         });
     });
