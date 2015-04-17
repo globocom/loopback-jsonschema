@@ -7,7 +7,7 @@ describe('readOnlyDefaultValuesHandler', function() {
     var ctx;
 
     beforeEach(function() {
-        ctx = {};
+        ctx = {req: {method: 'POST'}};
     });
 
     describe('readOnly', function() {
@@ -283,9 +283,9 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
         });
 
-        describe('when method name is updateAttributes', function() {
+        describe('when method is PUT', function() {
             beforeEach(function() {
-                traverse(ctx).set(['method', 'name'], 'updateAttributes');
+                traverse(ctx).set(['req', 'method'], 'PUT');
 
                 traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
