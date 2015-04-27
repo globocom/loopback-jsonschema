@@ -205,12 +205,12 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe('#registerModelHooksInitializer', function(){
+    describe('#registerRemoteHookInitializers', function(){
         var noopHook;
 
         beforeEach(function() {
             noopHook = function noopHook() {};
-            this.sinon.stub(ItemSchema, 'modelHooksInitializers', [noopHook]);
+            this.sinon.stub(ItemSchema, 'remoteHookInitializers', [noopHook]);
         });
 
         describe('when hooks is an Array of functions', function(){
@@ -218,11 +218,11 @@ describe('ItemSchema', function() {
             var hook2 = function() {};
 
             beforeEach(function() {
-                ItemSchema.registerModelHooksInitializer([hook1, hook2]);
+                ItemSchema.registerRemoteHookInitializers([hook1, hook2]);
             });
 
             it('should to insert each hook', function(){
-                expect(ItemSchema.modelHooksInitializers).to.be.eql([
+                expect(ItemSchema.remoteHookInitializers).to.be.eql([
                     noopHook,
                     hook1,
                     hook2
@@ -234,11 +234,11 @@ describe('ItemSchema', function() {
             var hook = function() {};
 
             beforeEach(function() {
-                ItemSchema.registerModelHooksInitializer(hook);
+                ItemSchema.registerRemoteHookInitializers(hook);
             });
 
             it('should to insert the hook', function(){
-                expect(ItemSchema.modelHooksInitializers).to.be.eql([
+                expect(ItemSchema.remoteHookInitializers).to.be.eql([
                     noopHook,
                     hook,
                 ]);

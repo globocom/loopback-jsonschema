@@ -44,7 +44,7 @@ describe('loopbackJsonSchema', function() {
 
         it('should register schema correlator hook', function(){
             loopbackJsonSchema.init(app);
-            var hooksFound = _.filter(ItemSchema.modelHooksInitializers, function(hook){
+            var hooksFound = _.filter(ItemSchema.remoteHookInitializers, function(hook){
                 return hook === schemaCorrelatorHooks;
             });
 
@@ -52,22 +52,22 @@ describe('loopbackJsonSchema', function() {
         });
 
 
-        it('should redefine `ItemSchema.modelHooksInitializers` before attach the ItemSchema', function(done){
+        it('should redefine `ItemSchema.remoteHookInitializers` before attach the ItemSchema', function(done){
             var wrongHook = function() {};
-            ItemSchema.modelHooksInitializers = [wrongHook];
+            ItemSchema.remoteHookInitializers = [wrongHook];
 
             ItemSchema.once('attached', function() {
-                expect(ItemSchema.modelHooksInitializers).to.not.include(wrongHook);
+                expect(ItemSchema.remoteHookInitializers).to.not.include(wrongHook);
                 done();
             });
 
             loopbackJsonSchema.init(app);
         });
 
-        it('should populate `ItemSchema.modelHooksInitializers` with two default hooks', function(done){
+        it('should populate `ItemSchema.remoteHookInitializers` with two default hooks', function(done){
 
             ItemSchema.once('attached', function() {
-                expect(ItemSchema.modelHooksInitializers.length).to.be.eql(3);
+                expect(ItemSchema.remoteHookInitializers.length).to.be.eql(3);
                 done();
             });
 

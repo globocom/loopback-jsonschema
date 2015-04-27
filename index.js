@@ -49,8 +49,8 @@ loopbackJsonSchema.init = function(app, customConfig) {
     ItemSchema.app._registeredLoopbackHooks = {};
 
     // start with default hooks
-    ItemSchema.modelHooksInitializers = ItemSchema.defaultModelHooksInitializers.slice(0);
-    ItemSchema.registerModelHooksInitializer([
+    ItemSchema.remoteHookInitializers = ItemSchema.defaultRemoteHookInitializers.slice(0);
+    ItemSchema.registerRemoteHookInitializers([
         createLocationHook,
         schemaCorrelatorHooks
     ]);
