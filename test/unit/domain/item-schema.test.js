@@ -142,8 +142,16 @@ describe('ItemSchema', function() {
                 id: 1,
                 collectionName: 'people',
                 relations: {
-                    work: {},
-                    friends: {}
+                    work: {
+                        collectionName: 'works',
+                        type: 'belongsTo',
+                        foreignKey: 'workId'
+                    },
+                    friends: {
+                        collectionName: 'friends',
+                        type: 'hasMany',
+                        foreignKey: 'friendId'
+                    }
                 }
             });
 
@@ -152,7 +160,7 @@ describe('ItemSchema', function() {
 
         it('should to return a related relation links', function(){
             expect(relationLinks).to.be.eql([
-                { rel: 'work', href: '/people/{id}/work' },
+                { rel: 'work', href: '/works/{workId}' },
                 { rel: 'friends', href: '/people/{id}/friends' },
             ]);
         });

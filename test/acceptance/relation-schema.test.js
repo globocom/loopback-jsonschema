@@ -138,7 +138,7 @@ describe('belongsTo relation', function(){
         });
         expect(foundLinks[0]).to.be.eql({
             rel: 'owner',
-            href: schemeAndAuthority + '/api/pets/{id}/owner'
+            href: schemeAndAuthority + '/api/people/{personId}'
         });
 
         expect(foundLinks.length).to.be.eq(1);
