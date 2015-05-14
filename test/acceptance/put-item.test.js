@@ -210,15 +210,12 @@ describe('PUT /:collection/:id', function() {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
+                .expect(415)
                 .end(function (err, res) {
                     if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });
-        });
-
-        it('should return 415', function() {
-            expect(itemResponse.status).to.eq(415);
         });
 
         it('should return error message', function() {
@@ -265,15 +262,12 @@ describe('PUT /:collection/:id', function() {
                 .put('/api/people/' + itemId)
                 .set('Content-Type', 'application/json')
                 .send('{"name": ""}')
+                .expect(422)
                 .end(function (err, res) {
                     if (err) { return done(err); }
                     itemResponse = res;
                     done();
                 });
-        });
-
-        it('should return 422 status code', function() {
-            expect(itemResponse.status).to.eq(422);
         });
 
         it('should return errors in body', function() {

@@ -185,15 +185,12 @@ describe('POST /:collection', function() {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'text/plain')
                 .send('{"name": "Alice"}')
+                .expect(415)
                 .end(function (err, res) {
                     if (err) { return done(err); };
                     itemResponse = res;
                     done();
                 });
-        });
-
-        it('should return 415', function() {
-            expect(itemResponse.status).to.eq(415);
         });
 
         it('should return error message', function() {
@@ -227,6 +224,7 @@ describe('POST /:collection', function() {
             request(app)
                 .post('/api/people')
                 .set('Content-Type', 'application/json')
+                .expect(422)
                 .send('{}')
                 .end(function (err, res) {
                     if (err) { return done(err); };

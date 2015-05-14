@@ -84,6 +84,7 @@ describe('POST /item-schemas', function() {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'text/plain')
                 .send(JSON.stringify(schemaJson))
+                .expect(415)
                 .end(function (err, res) {
                     if (err) { return done(err); };
                     response = res;
@@ -114,16 +115,13 @@ describe('POST /item-schemas', function() {
                 .set('Accept', 'application/json')
                 .set('Content-Type', 'application/json')
                 .send(JSON.stringify(schemaJson))
+                .expect(422)
                 .end(function (err, res) {
                     if (err) { return done(err); };
                     response = res;
                     bodyError = JSON.parse(response.error.text);
                     done();
                 });
-        });
-
-        it('should return a 422 error', function(){
-            expect(response.status).to.eql(422);
         });
 
         it('should error be a ValidationError', function(){
