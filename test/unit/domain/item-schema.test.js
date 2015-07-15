@@ -307,12 +307,30 @@ describe('ItemSchema', function() {
             expect(Test.pluralModelName).to.equal('testplural');
         });
 
-        it('should id property', function() {
+        it('should have properties defined by this json schema', function() {
             expect(Test.definition.rawProperties).to.eql({
                 id: {
                     generated: true,
                     id: 1,
                     type: Number
+                },
+                myBoolean: {
+                    type: 'boolean'
+                },
+                myInteger: {
+                    type: 'number'
+                },
+                myNumber: {
+                    type: 'number'
+                },
+                myNull: {
+                    type: 'null'
+                },
+                myObject: {
+                    type: 'object'
+                },
+                myString: {
+                    type: 'string'
                 }
             });
         });

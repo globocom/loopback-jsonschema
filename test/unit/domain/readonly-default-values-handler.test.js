@@ -12,7 +12,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
     describe('readOnly', function() {
         it('should remove property', function(){
-            traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+            traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                 name: {type: 'string'},
                 status: {readOnly: true, type: 'string'}
             });
@@ -27,7 +27,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     medias: {
                         type: 'array',
                         items: {
@@ -68,7 +68,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a nested objects', function(){
             beforeEach(function() {
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
                     contact: {
                         type: 'object',
@@ -118,7 +118,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
     describe('default value', function(){
         beforeEach(function() {
-            traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+            traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                 name: {type: 'string'},
                 status: {default: 'default_status', type: 'string'}
             });
@@ -126,7 +126,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     medias: {
                         type: 'array',
                         items: {
@@ -190,7 +190,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has nested objects', function(){
             beforeEach(function() {
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
                     contact: {
                         type: 'object',
@@ -248,7 +248,7 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should ignore the default value even for boolean types', function(){
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
                     active: {default: true, type: 'boolean'}
                 });
@@ -266,7 +266,7 @@ describe('readOnlyDefaultValuesHandler', function() {
             });
 
             it('should ignore the default value even for number types', function(){
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
                     time: {default: 60, type: 'number'}
                 });
@@ -287,7 +287,7 @@ describe('readOnlyDefaultValuesHandler', function() {
             beforeEach(function() {
                 traverse(ctx).set(['req', 'method'], 'PUT');
 
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     name: {type: 'string'},
                     status: {type: 'string', default: 'active'}
                 });
@@ -310,7 +310,7 @@ describe('readOnlyDefaultValuesHandler', function() {
         });
 
         it('should not replace current value when readOnly is false', function(){
-            traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+            traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                 name: {type: 'string'},
                 status: {readOnly: false, type: 'string', default: 'active'}
             });
@@ -324,7 +324,7 @@ describe('readOnlyDefaultValuesHandler', function() {
         });
 
         it('should replace current value with default value', function(){
-            traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+            traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                 name: {type: 'string'},
                 status: {readOnly: true, type: 'string', default: 'active'}
             });
@@ -340,7 +340,7 @@ describe('readOnlyDefaultValuesHandler', function() {
 
         describe('when schema has a array object of a one type', function(){
             beforeEach(function() {
-                traverse(ctx).set(['method', 'ctor', 'cachedItemSchema', 'properties'], {
+                traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
                     telephones: {
                         type: 'array',
                         items: [
