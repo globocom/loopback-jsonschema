@@ -91,23 +91,21 @@ describe('ItemSchema', function() {
             });
         });
 
-        it('should persist only custom links', function() {
+        it('should persist only custom links', function(done) {
             var customLinks = [{ rel: 'self', href: '/people/{id}' }, { rel: 'custom', href: '/custom' }];
-
-            var afterSaveOriginal = ItemSchema.afterSave;
-
-            // prevent links be overridden
-            ItemSchema.afterSave = function(next) {
-                next();
-            };
 
             ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
-                expect(itemSchema.links).to.eql([
-                    { rel: 'custom', href: '/custom' }
-                ]);
 
-                ItemSchema.afterSave = afterSaveOriginal;
+                ItemSchema.findOne({'collectionName': 'people'}, function(err, itemSchema) {
+                    if (err) { return done(err); }
+
+                    expect(itemSchema.__data.links).to.eql([
+                        { rel: 'custom', href: '/custom' }
+                    ]);
+
+                    done(err);
+                });
             });
         });
     });
