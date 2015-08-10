@@ -285,6 +285,10 @@ describe('ItemSchema', function() {
                     },
                     myString: {
                         type: 'string'
+                    },
+                    myRequired: {
+                        type: 'string',
+                        required: true
                     }
                 }
             });
@@ -331,8 +335,15 @@ describe('ItemSchema', function() {
                 },
                 myString: {
                     type: 'string'
+                },
+                myRequired: {
+                    type: 'string'
                 }
             });
+        });
+
+        it('should remove \'required\' attributes from model definition', function() {
+            expect(Test.definition.rawProperties.myRequired.required).to.be.undefined;
         });
 
         describe('with a beforeRegisterLoopbackModel hook', function() {
