@@ -4,4 +4,4 @@ node_js:
   - "0.10"
 notifications:
   email:
-    - backstage@corp.globo.com
+    - backstage1@corp.globo.com
