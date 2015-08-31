@@ -16,9 +16,8 @@ describe('belongsTo relation', function(){
         app = support.newLoopbackJsonSchemaApp();
 
         var personSchema = {
-            'type': 'object',
-            'modelName': 'person',
-            'collectionName': 'people',
+            type: 'object',
+            collectionName: 'people',
             properties: {
                 name: {type: 'string'}
             }
@@ -38,9 +37,8 @@ describe('belongsTo relation', function(){
 
     before(function(done) {
         var petSchema = {
-            'type': 'object',
-            'modelName': 'pet',
-            'collectionName': 'pets',
+            type: 'object',
+            collectionName: 'pets',
             properties: {
                 name: {type: 'string'},
                 personId: {type: 'number'}
@@ -153,9 +151,8 @@ describe('hasMany relation', function(){
     before(function(done) {
         app = support.newLoopbackJsonSchemaApp();
         var petSchema = {
-            'type': 'object',
-            'modelName': 'pet',
-            'collectionName': 'pets',
+            type: 'object',
+            collectionName: 'pets',
             properties: {
                 name: {type: 'string'},
                 personId: {type: 'number'}
@@ -174,9 +171,8 @@ describe('hasMany relation', function(){
 
     before(function(done) {
         var personSchema = {
-            'type': 'object',
-            'modelName': 'person2',
-            'collectionName': 'people2',
+            type: 'object',
+            collectionName: 'people2',
             properties: {
                 name: {type: 'string'}
             },
@@ -444,7 +440,6 @@ describe('belongsTo reverse relation', function(){
             function(callback) {
                 var petSchema = {
                     type: 'object',
-                    modelName: 'pet3',
                     collectionName: 'pets3',
                     properties: {
                         name: {type: 'string'},
@@ -470,9 +465,8 @@ describe('belongsTo reverse relation', function(){
             },
             function(callback) {
                 var personSchema = {
-                    'type': 'object',
-                    'modelName': 'person3',
-                    'collectionName': 'people3',
+                    type: 'object',
+                    collectionName: 'people3',
                     properties: {
                         name: {type: 'string'}
                     }
@@ -555,7 +549,6 @@ describe('hasMany reverse relation', function(){
             function(callback) {
                 var petSchema = {
                     type: 'object',
-                    modelName: 'pet4',
                     collectionName: 'pets4',
                     properties: {
                         name: {type: 'string'},
@@ -581,9 +574,8 @@ describe('hasMany reverse relation', function(){
             },
             function(callback) {
                 var personSchema = {
-                    'type': 'object',
-                    'modelName': 'person4',
-                    'collectionName': 'people4',
+                    type: 'object',
+                    collectionName: 'people4',
                     properties: {
                         name: {type: 'string'}
                     }

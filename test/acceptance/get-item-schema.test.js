@@ -13,7 +13,6 @@ describe('GET /item-schemas/:id', function() {
 
         before(function(done) {
             ItemSchema.create({
-                modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
                 collectionTitle: 'People',

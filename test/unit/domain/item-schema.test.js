@@ -259,7 +259,6 @@ describe('ItemSchema', function() {
 
         beforeEach(function(done) {
             itemSchema = new ItemSchema({
-                modelName: 'test',
                 collectionName: 'testplural',
                 properties: {
                     myArray: {
@@ -350,7 +349,7 @@ describe('ItemSchema', function() {
             var customItemSchema;
 
             beforeEach(function(done) {
-                customItemSchema = new CustomItemSchema({modelName: 'test', collectionName: 'testplural'});
+                customItemSchema = new CustomItemSchema({collectionName: 'testplural'});
                 customItemSchema.beforeRegisterLoopbackModelCalled = false;
                 var model = customItemSchema.constructModel();
                 customItemSchema.registerModel(model, function(err) {
@@ -392,7 +391,7 @@ describe('ItemSchema', function() {
             var unregistredModelSchema;
 
             before(function() {
-                unregistredModelSchema = new ItemSchema({modelName: 'unregistred-model'});
+                unregistredModelSchema = new ItemSchema({collectionName: 'unregistred-model'});
             });
 
             it('should return null', function(){
@@ -405,7 +404,7 @@ describe('ItemSchema', function() {
             var model;
 
             before(function(done) {
-                registredModelSchema = new ItemSchema({modelName: 'registred-model'});
+                registredModelSchema = new ItemSchema({collectionName: 'registred-model'});
                 var contructedModel = registredModelSchema.constructModel();
                 registredModelSchema.registerModel(contructedModel, function(err) {
                     if (err) { return done(err); }
@@ -443,7 +442,7 @@ describe('ItemSchema', function() {
 
         describe('datasource with autoupdate method', function(){
             beforeEach(function(){
-                itemSchema = new ItemSchema({id: 1, modelName: 'person', collectionName: 'people'});
+                itemSchema = new ItemSchema({collectionName: 'people'});
                 var Connector = function (){
                     this.name = 'GLOBODB';
                 };
@@ -459,14 +458,14 @@ describe('ItemSchema', function() {
 
             it('should create indexes', function(done){
                 itemSchema.createIndexes(function() {});
-                expect(database.connector.autoupdate).to.have.been.calledWith(['person']);
+                expect(database.connector.autoupdate).to.have.been.calledWith(['people']);
                 done();
             });
         });
 
         describe('datasource without autoupdate method', function(){
             beforeEach(function(){
-                itemSchema = new ItemSchema({id: 1, modelName: 'person', collectionName: 'people'});
+                itemSchema = new ItemSchema({collectionName: 'people'});
                 var Connector = function (){
                     this.name = 'MEMORY';
                 };
@@ -497,8 +496,8 @@ describe('ItemSchema', function() {
         describe('when database was a successfully reply', function(){
             beforeEach(function(done) {
                 ItemSchema.app = loopback();
-                var schema1 = new ItemSchema({modelName: 'PreLoadedModel1'});
-                var schema2 = new ItemSchema({modelName: 'PreLoadedModel2'});
+                var schema1 = new ItemSchema({collectionName: 'PreLoadedModel1'});
+                var schema2 = new ItemSchema({collectionName: 'PreLoadedModel2'});
 
                 var Model = function () {};
                 model1 = new Model();
@@ -591,7 +590,6 @@ describe('ItemSchema', function() {
             beforeEach(function(done) {
                 var schema = {
                     collectionName: 'people',
-                    modelName: 'person',
                     relations: {
                         things: {
                             collectionName: "things",
@@ -616,10 +614,9 @@ describe('ItemSchema', function() {
             beforeEach(function(done) {
                 var wrongSchema = {
                     collectionName: 'people',
-                    modelName: 'person',
                     relations: {
                         things: {
-                            modelName: "things",
+                            collectionName: "things",
                             type: "belongsToMe",
                             foreignWrong: "peopleId",
                             blah: "haha"

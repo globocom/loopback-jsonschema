@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var loopback = require('loopback');
 
 var Relations = require('../../../lib/domain/relations');
-var models = require('../../../lib/domain/models');
+
 
 describe('Relations', function(){
     var relations, schema, modelClass, targetModelClass;
@@ -68,10 +68,11 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                        if (modelName == 'targetModel') {
+                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                        if (collectionName == 'targetModel') {
                             return targetModelClass;
                         }
+
                     });
 
                     relations.bindRelation(schema, modelClass);
@@ -113,8 +114,8 @@ describe('Relations', function(){
                         modelName: 'targetModel'
                     };
 
-                    this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                        if (modelName == 'targetModel') {
+                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                        if (collectionName == 'targetModel') {
                             return targetModelClass;
                         }
                     });
@@ -173,8 +174,8 @@ describe('Relations', function(){
                     belongsTo: this.sinon.spy()
                 };
 
-                this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                    if (modelName == 'targetModel') {
+                this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    if (collectionName == 'targetModel') {
                         return targetModelClass;
                     }
                 });
@@ -228,8 +229,8 @@ describe('Relations', function(){
                     belongsTo: this.sinon.spy()
                 };
 
-                this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                    if (modelName == 'targetModel') {
+                this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    if (collectionName == 'targetModel') {
                         return targetModelClass;
                     }
                 });
@@ -276,8 +277,8 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                        if (modelName == 'originModel') {
+                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                        if (collectionName == 'originModel') {
                             return modelClass;
                         }
                     });
@@ -343,8 +344,8 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(models, 'fromPluralModelName', function(app, modelName) {
-                        if (modelName == 'originModel') {
+                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                        if (collectionName == 'originModel') {
                             return modelClass;
                         }
                     });

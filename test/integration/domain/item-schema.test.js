@@ -12,14 +12,14 @@ var app = support.newLoopbackJsonSchemaApp();
 describe('ItemSchema', function() {
     describe('.findOne', function() {
         beforeEach(function(done) {
-            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err, instance) {
+            ItemSchema.create({collectionName: 'test'}, function(err, instance) {
                 if (err) { return done(err); };
                 done();
             });
         });
 
         it('should have $schema', function(done) {
-            ItemSchema.findOne({where: {modelName: 'test', collectionName: 'test'}}, function(err, itemSchema) {
+            ItemSchema.findOne({where: {collectionName: 'test'}}, function(err, itemSchema) {
                 if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
                 done();
@@ -29,7 +29,7 @@ describe('ItemSchema', function() {
 
     describe('.create', function() {
         it('should set $schema', function(done) {
-            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err, itemSchema) {
+            ItemSchema.create({collectionName: 'test'}, function(err, itemSchema) {
                 if (err) { return done(err); };
                 expect(itemSchema.$schema).to.exist;
                 done();
@@ -37,7 +37,7 @@ describe('ItemSchema', function() {
         });
 
         it('should create model defined by the json schema provided', function(done) {
-            ItemSchema.create({modelName: 'test', collectionName: 'test'}, function(err) {
+            ItemSchema.create({collectionName: 'test'}, function(err) {
                 if (err) { return done(err); }
                 expect(loopback.getModel('test')).to.exist;
                 done();
@@ -46,7 +46,7 @@ describe('ItemSchema', function() {
 
         it('should save custom links', function(done) {
             var customLinks = [{ rel: 'custom', href: '/custom' }];
-            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
+            ItemSchema.create({collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
                 expect(itemSchema.links).to.eql([
                     { rel: 'self', href: '/people/{id}' },
@@ -70,7 +70,7 @@ describe('ItemSchema', function() {
 
         it('should not allow overriding default links', function(done) {
             var customLinks = [{ rel: 'self', href: '/custom' }];
-            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
+            ItemSchema.create({collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
                 expect(itemSchema.links).to.eql([
                     { rel: 'self', href: '/people/{id}' },
@@ -94,7 +94,7 @@ describe('ItemSchema', function() {
         it('should persist only custom links', function(done) {
             var customLinks = [{ rel: 'self', href: '/people/{id}' }, { rel: 'custom', href: '/custom' }];
 
-            ItemSchema.create({modelName: 'test', collectionName: 'people', links: customLinks}, function(err, itemSchema) {
+            ItemSchema.create({collectionName: 'people', links: customLinks}, function(err, itemSchema) {
                 if (err) { return done(err); }
 
                 ItemSchema.findOne({'collectionName': 'people'}, function(err, itemSchema) {
@@ -118,11 +118,11 @@ describe('ItemSchema', function() {
 
         it('should find ItemSchema by collection name', function(done) {
             var callback = function(err, itemSchema) {
-                expect(itemSchema.modelName).to.eq('person');
+                expect(itemSchema.collectionName).to.eq('people');
                 done();
             };
 
-            ItemSchema.create({ modelName: 'person', collectionName: 'people' }, function(err) {
+            ItemSchema.create({collectionName: 'people' }, function(err) {
                 if (err) { return done(err); }
                 ItemSchema.findByCollectionName('people', callback);
             });
@@ -146,9 +146,7 @@ describe('ItemSchema', function() {
 
                 beforeEach(function(done) {
                     ItemSchema.defineRemoteHooks = this.sinon.spy(ItemSchema.defineRemoteHooks);
-                    citySchema = new ItemSchema({
-                        modelName: 'city', collectionName: 'cities'
-                    });
+                    citySchema = new ItemSchema({collectionName: 'cities'});
 
                     var cityModel = citySchema.constructModel();
 
@@ -170,7 +168,6 @@ describe('ItemSchema', function() {
 
         describe('validation', function() {
             var schemaDefinition = {
-                modelName: 'personInvalid',
                 collectionName: 'people',
                 properties: {
                     firstName: {

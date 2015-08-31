@@ -11,9 +11,9 @@ describe('models', function() {
         var Model;
 
         beforeEach(function() {
-            var TestModel = { modelName: 'person-test-models', pluralModelName : 'people-test-models' };
+            var TestModel = { modelName: 'person-test-models'};
             app.models().push(TestModel);
-            Model = models.fromPluralModelName(app, 'people-test-models');
+            Model = models.fromPluralModelName(app, 'person-test-models');
         });
 
         afterEach(function() {

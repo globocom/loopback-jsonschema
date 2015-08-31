@@ -15,7 +15,6 @@ describe('PUT /:collection/:id', function() {
     describe('successfully', function() {
         before(function(done) {
             ItemSchema.create({
-                modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
                 collectionTitle: 'People',
@@ -68,7 +67,6 @@ describe('PUT /:collection/:id', function() {
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person-readonly',
                 collectionName: 'people-readonly',
                 title: 'Person',
                 collectionTitle: 'People-readonly',
@@ -156,7 +154,6 @@ describe('PUT /:collection/:id', function() {
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person-readonly',
                 collectionName: 'people-readonly',
                 title: 'Person',
                 collectionTitle: 'People-readonly',
@@ -226,7 +223,6 @@ describe('PUT /:collection/:id', function() {
     describe('with validation errors', function() {
         before(function(done) {
             ItemSchema.create({
-                modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
                 collectionTitle: 'People',
@@ -281,7 +277,7 @@ describe('PUT /:collection/:id', function() {
                         'custom'
                     ]
                 },
-                context: 'person',
+                context: 'people',
                 messages: {
                     '/name': [
                         'String is too short (0 chars), minimum 1'
@@ -291,7 +287,7 @@ describe('PUT /:collection/:id', function() {
                     ]
                 }
             });
-            expect(error.message).to.contain('The `person` instance is not valid.');
+            expect(error.message).to.contain('The `people` instance is not valid.');
             expect(error.message).to.contain('`_all` Instance is invalid');
             expect(error.message).to.contain('`/name` String is too short (0 chars), minimum 1');
             expect(error.name).to.eq('ValidationError');

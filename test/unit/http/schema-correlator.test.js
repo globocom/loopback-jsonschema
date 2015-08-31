@@ -11,7 +11,6 @@ describe ('schemaCorrelator', function() {
     var baseUrl = 'http://api.example.org';
     var result;
     var itemSchema = new ItemSchema({
-        modelName: 'person',
         collectionName: 'people',
         title: 'Person',
         collectionTitle: 'People',

@@ -18,7 +18,6 @@ describe('GET /:collection/:id', function () {
             type: 'object',
             title: 'Person',
             collectionTitle: 'People',
-            modelName: 'person',
             collectionName: 'people',
             properties: {}
         }, function(err, jsonSchema) {

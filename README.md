@@ -73,7 +73,6 @@ To dynamically define a new Loopback model just create a new instance of the Ite
   "type": "object",
   "title": "Person",
   "collectionTitle": "People",
-  "modelName": "person",
   "collectionName": "people",
   "properties": {
     ...
@@ -95,7 +94,7 @@ Once a Loopback model has been defined, Item and Collection schemas describing a
 #### Item Schema example
 
 ```bash
-$ curl -i http://example.org/api/item-schemas/537530ea27f8870b63f2d886
+$ curl -i http://example.org/api/item-schemas/people
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -109,7 +108,6 @@ Connection: keep-alive
   "type": "object",
   "title": "Person",
   "collectionTitle": "People",
-  "modelName": "person",
   "collectionName": "people",
   "links": [
     {
@@ -138,7 +136,7 @@ Connection: keep-alive
 #### Collection Schema example
 
 ```bash
-$ curl -i http://example.org/api/collection-schemas/537530ea27f8870b63f2d886
+$ curl -i http://example.org/api/collection-schemas/people
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/schema+json; charset=utf-8
@@ -152,7 +150,7 @@ Connection: keep-alive
   "title": "People",
   "type": "array",
   "items": {
-    "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
+    "$ref": "http://example.org/api/item-schemas/people"
   },
   "links": [
     {
@@ -164,7 +162,7 @@ Connection: keep-alive
       "method": "POST",
       "href": "http://example.org/api/people",
       "schema": {
-        "$ref": "http://example.org/api/item-schemas/537530ea27f8870b63f2d886"
+        "$ref": "http://example.org/api/item-schemas/people"
       }
     },
     {
@@ -203,7 +201,6 @@ For example:
     "type": "object",
     "$schema": "http://json-schema.org/draft-04/hyper-schema#",
     "collectionName": "bikes",
-    "modelName": "bike",
     "name": "My Awesome Bikes!",
     "properties": {
         "brand": {
@@ -330,7 +327,6 @@ See [Indexes](http://docs.strongloop.com/display/LB/Model+definition+JSON+file#M
     "type": "object",
     "title": "Task",
     "collectionTitle": "To-Do List",
-    "modelName": "task",
     "collectionName": "tasks",
     "properties": {
         "title": {

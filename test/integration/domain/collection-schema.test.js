@@ -15,7 +15,6 @@ describe('CollectionSchema', function() {
 
             beforeEach(function (done) {
                 ItemSchema.create({
-                    modelName: 'person',
                     collectionName: 'people',
                     title: 'Person',
                     collectionTitle: 'People',
@@ -45,11 +44,6 @@ describe('CollectionSchema', function() {
             it('should include $schema from ItemSchema', function () {
                 var data = collectionSchema.data();
                 expect(data.$schema).to.eq('http://json-schema.org/draft-04/hyper-schema#');
-            });
-
-            it('should include modelName from ItemSchema', function () {
-                var data = collectionSchema.data();
-                expect(data.modelName).to.eq('person');
             });
 
             it('should include collectionName from ItemSchema', function () {

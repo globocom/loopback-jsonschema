@@ -10,9 +10,8 @@ describe('POST /item-schemas', function() {
         before(function(done) {
             app = support.newLoopbackJsonSchemaApp();
             var schemaJson = {
-                'type': 'object',
-                'modelName': 'person',
-                'collectionName': 'people',
+                type: 'object',
+                collectionName: 'people',
                 links: [
                     {
                         rel: 'blog',
@@ -75,9 +74,8 @@ describe('POST /item-schemas', function() {
         before(function(done) {
             app = support.newLoopbackJsonSchemaApp();
             var schemaJson = {
-                'type': 'object',
-                'modelName': 'person',
-                'collectionName': 'people'
+                type: 'object',
+                collectionName: 'people'
             };
             request(app)
                 .post('/api/item-schemas')
@@ -131,10 +129,6 @@ describe('POST /item-schemas', function() {
 
         it('should error have the message: "`collectionName` can\'t be blank"', function(){
             expect(bodyError.error.message).to.contain('`collectionName` can\'t be blank');
-        });
-
-        it('should error have the message: "`modelName` can\'t be blank"', function(){
-            expect(bodyError.error.message).to.contain('`modelName` can\'t be blank');
         });
     });
 });

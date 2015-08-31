@@ -26,13 +26,13 @@ describe('registerLoopbackModel', function() {
             var callback = function(err) {
                 if (err) { return done(err); }
                 app.models().splice(0, app.models().length);
-                var Car = loopback.getModel('car');
+                var Car = loopback.getModel('cars');
                 expect(Car).to.not.be.null;
                 expect(Car.definition.settings.plural).to.equal('cars');
                 done();
             };
 
-            ItemSchema.create({ modelName: 'car', collectionName: 'cars' }, function(err) {
+            ItemSchema.create({collectionName: 'cars' }, function(err) {
                 if (err) { return done(err); }
                 registerLoopbackModel.handle(ljsReq, callback);
             });

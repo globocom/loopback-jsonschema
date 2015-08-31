@@ -13,7 +13,6 @@ describe('POST /:collection', function() {
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
                 collectionTitle: 'People',
@@ -59,7 +58,6 @@ describe('POST /:collection', function() {
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person-readonly',
                 collectionName: 'people-readonly',
                 title: 'Person',
                 collectionTitle: 'People-readonly',
@@ -142,7 +140,6 @@ describe('POST /:collection', function() {
         before(function (done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person-readonly',
                 collectionName: 'people-readonly',
                 title: 'Person',
                 collectionTitle: 'People-readonly',
@@ -202,7 +199,6 @@ describe('POST /:collection', function() {
         before(function(done) {
             app = support.newLoopbackJsonSchemaApp();
             ItemSchema.create({
-                modelName: 'person',
                 collectionName: 'people',
                 title: 'Person',
                 collectionTitle: 'People',
@@ -248,7 +244,7 @@ describe('POST /:collection', function() {
                         'custom'
                     ]
                 },
-                context: 'person',
+                context: 'people',
                 messages: {
                     '/name': [
                         'Missing required property: name'
@@ -258,7 +254,7 @@ describe('POST /:collection', function() {
                     ]
                 }
             });
-            expect(error.message).to.contain('The `person` instance is not valid.');
+            expect(error.message).to.contain('The `people` instance is not valid.');
             expect(error.message).to.contain('`_all` Instance is invalid');
             expect(error.message).to.contain('`/name` Missing required property: name');
             expect(error.name).to.eq('ValidationError');
