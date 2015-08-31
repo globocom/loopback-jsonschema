@@ -1,6 +1,6 @@
 {
   "name": "loopback-jsonschema",
-  "version": "3.2.6",
+  "version": "4.0.0",
   "description": "JSON Schema support for Loopback",
   "main": "index.js",
   "scripts": {
