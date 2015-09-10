@@ -19,9 +19,7 @@ describe ('schemaCorrelator', function() {
     });
 
     describe('.collection', function() {
-        before(function(done) {
-            this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
-
+        before(function() {
             ctx = {
                 req: {
                     app: null
@@ -36,29 +34,49 @@ describe ('schemaCorrelator', function() {
                     pluralModelName: 'people'
                 }
             };
+        });
 
-            schemaCorrelator.collection('people', ctx, result, function() {
-                done();
+        describe('without queryparams', function(done){
+            beforeEach(function(done) {
+                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+                schemaCorrelator.collection('people', ctx, result, function() {
+                    done();
+                });
+            });
+
+            it('should correlate `Content-Type` header', function(){
+                var schemaUrl = baseUrl + '/collection-schemas/people';
+                expect(ctx.res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
+            });
+
+            it('should correlate `Link` header', function(){
+                var schemaUrl = baseUrl + '/collection-schemas/people';
+                expect(ctx.res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
             });
         });
 
+        describe('with queryparams', function(done){
+            beforeEach(function(done) {
+                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+                schemaCorrelator.collection('people', {_debug: 'true'}, ctx, result, function() {
+                    done();
+                });
+            });
 
-        it('should correlate `Content-Type` header', function(){
-            var schemaUrl = baseUrl + '/collection-schemas/people';
-            expect(ctx.res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
+            it('should correlate `Content-Type` header', function(){
+                var schemaUrl = baseUrl + '/collection-schemas/people?_debug=true';
+                expect(ctx.res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
+            });
+
+            it('should correlate `Link` header', function(){
+                var schemaUrl = baseUrl + '/collection-schemas/people?_debug=true';
+                expect(ctx.res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
+            });
         });
-
-        it('should correlate `Link` header', function(){
-            var schemaUrl = baseUrl + '/collection-schemas/people';
-            expect(ctx.res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
-        });
-
     });
 
     describe('.instance', function() {
-        before(function(done) {
-            this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
-
+        before(function() {
             ctx = {
                 req: {
                     app: null
@@ -73,21 +91,26 @@ describe ('schemaCorrelator', function() {
                     pluralModelName: 'people'
                 }
             };
+        });
 
-            schemaCorrelator.instance('people', ctx, result, function() {
-                done();
+        describe('with querystring', function(){
+            before(function(done) {
+                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+
+                schemaCorrelator.instance('people', {compact: 'false'}, ctx, result, function() {
+                    done();
+                });
             });
-        });
 
+            it('should correlate `Content-Type` header', function(){
+                var schemaUrl = baseUrl + '/item-schemas/people?compact=false';
+                expect(ctx.res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
+            });
 
-        it('should correlate `Content-Type` header', function(){
-            var schemaUrl = baseUrl + '/item-schemas/people';
-            expect(ctx.res.set).to.have.been.calledWith('Content-Type', 'application/json; charset=utf-8; profile="' + schemaUrl + '"');
-        });
-
-        it('should correlate `Link` header', function(){
-            var schemaUrl = baseUrl + '/item-schemas/people';
-            expect(ctx.res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
+            it('should correlate `Link` header', function(){
+                var schemaUrl = baseUrl + '/item-schemas/people?compact=false';
+                expect(ctx.res.set).to.have.been.calledWith('Link', '<' + schemaUrl + '>; rel="describedby"');
+            });
         });
     });
 });

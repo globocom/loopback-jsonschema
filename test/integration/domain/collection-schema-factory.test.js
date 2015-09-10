@@ -18,7 +18,7 @@ describe('CollectionSchemaFactory', function() {
                     done();
                 };
 
-                CollectionSchemaFactory.buildFromSchemaId('invalid-id', callback);
+                CollectionSchemaFactory.buildFromSchemaId('invalid-id', null, callback);
             });
         });
 
@@ -39,7 +39,7 @@ describe('CollectionSchemaFactory', function() {
                     done();
                 };
 
-                CollectionSchemaFactory.buildFromSchemaId(itemSchema.collectionName, callback);
+                CollectionSchemaFactory.buildFromSchemaId(itemSchema.collectionName, null, callback);
             });
         });
     });

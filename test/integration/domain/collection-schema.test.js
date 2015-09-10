@@ -94,6 +94,59 @@ describe('CollectionSchema', function() {
                 ]);
             });
         });
+
+        describe('when navigationRoot exists', function() {
+            var collectionSchema, itemSchemaCollectionName;
+
+            beforeEach(function (done) {
+                ItemSchema.create({
+                    collectionName: 'people',
+                    title: 'Person',
+                    collectionTitle: 'People',
+                    type: 'object',
+                    properties: {}
+                }, function(err, itemSchema) {
+                    if (err) { return done(err); }
+                    itemSchemaCollectionName = itemSchema.collectionName;
+                    collectionSchema = new CollectionSchema(itemSchema, '/search');
+                    done();
+                });
+            });
+
+            it('should include links', function() {
+                var data = collectionSchema.data();
+                expect(data.links).to.eql([
+                    {
+                        rel: 'self',
+                        href: '/people/search'
+                    },
+                    {
+                        rel: 'add',
+                        method: 'POST',
+                        href: '/people',
+                        schema: {
+                            $ref: '/item-schemas/' + itemSchemaCollectionName
+                        }
+                    },
+                    {
+                        rel: 'previous',
+                        href: '/people/search?filter[limit]={limit}&filter[offset]={previousOffset}{&paginateQs*}'
+                    },
+                    {
+                        rel: 'next',
+                        href: '/people/search?filter[limit]={limit}&filter[offset]={nextOffset}{&paginateQs*}'
+                    },
+                    {
+                        rel: 'page',
+                        href: '/people/search?filter[limit]={limit}&filter[offset]={offset}{&paginateQs*}'
+                    },
+                    {
+                        rel: 'order',
+                        href: '/people/search?filter[order]={orderAttribute}%20{orderDirection}{&orderQs*}'
+                    }
+                ]);
+            });
+        });
     });
 
     describe('#url', function() {
