@@ -64,6 +64,10 @@ describe('CollectionSchema', function() {
                         href: '/people'
                     },
                     {
+                        rel: 'list',
+                        href: '/people'
+                    },
+                    {
                         rel: 'add',
                         method: 'POST',
                         href: '/people',
@@ -118,6 +122,10 @@ describe('CollectionSchema', function() {
                 expect(data.links).to.eql([
                     {
                         rel: 'self',
+                        href: '/people/search'
+                    },
+                    {
+                        rel: 'list',
                         href: '/people/search'
                     },
                     {

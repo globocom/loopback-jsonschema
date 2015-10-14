@@ -86,6 +86,10 @@ describe('GET /collection-schemas/:id', function () {
                     href: schemeAndAuthority + '/api/people'
                 },
                 {
+                    rel: 'list',
+                    href: schemeAndAuthority + '/api/people'
+                },
+                {
                     rel: 'add',
                     method: 'POST',
                     href: schemeAndAuthority + '/api/people',
