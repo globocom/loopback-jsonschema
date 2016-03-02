@@ -9,7 +9,13 @@ var modelPropertiesConverter = require('../../../lib/domain/model-properties-con
 describe('modelPropertiesConverter', function() {
     describe('converting $schema', function() {
         beforeEach(function() {
-            this.jsonSchema = new ItemSchema();
+            this.jsonSchema = new ItemSchema({
+                'collectionName': 'test',
+                "indexes": {
+                    "file_width_index": {"file.width": 1}
+                }
+            });
+
             this.jsonSchema.update$schema();
             this.jsonSchema.__data.$schema = this.jsonSchema.$schema; // __data.$schema will be defined when a post is received
         });
@@ -31,6 +37,16 @@ describe('modelPropertiesConverter', function() {
                 expect(this.jsonSchema.$schema).to.not.exist;
                 expect(this.jsonSchema.__data.$schema).to.not.exist;
             });
+
+            it('should convert indexes with dot to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                expect(
+                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
+                to.exist;
+                expect(
+                    this.jsonSchema['indexes']['file_width_index']['file.width']).
+                to.not.exist;
+            });
         });
 
         describe('.restore', function() {
@@ -44,6 +60,15 @@ describe('modelPropertiesConverter', function() {
                 expect(this.jsonSchema.__data.$schema).to.exist;
                 expect(this.jsonSchema['%24schema']).to.not.exist;
                 expect(this.jsonSchema.__data['%24schema']).to.not.exist;
+            });
+
+            it('should restore indexes with %2E to dot', function() {
+                expect(
+                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
+                to.not.exist;
+                expect(
+                    this.jsonSchema['indexes']['file_width_index']['file.width']).
+                to.exist;
             });
         });
     });
