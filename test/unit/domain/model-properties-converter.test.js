@@ -7,13 +7,52 @@ var modelPropertiesConverter = require('../../../lib/domain/model-properties-con
 
 
 describe('modelPropertiesConverter', function() {
+    function findLink(links, rel) {
+        return links.find(function (link) {
+            return link.rel === rel;
+        });
+    }
     describe('converting $schema', function() {
         beforeEach(function() {
             this.jsonSchema = new ItemSchema({
-                'collectionName': 'test',
-                "indexes": {
-                    "file_width_index": {"file.width": 1}
-                }
+                collectionName: 'test',
+                indexes: {
+                    'file_width_index': {'file.width': 1}
+                },
+                collectionLinks: [
+                    {
+                        rel: 'search',
+                        href: '/search',
+                        schema: {
+                            properties: {
+                                'dot.value': {
+                                    type: 'object'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        rel: 'item',
+                        href: '/bar'
+                    }
+                ],
+                links: [
+                    {
+                        rel: 'publish',
+                        href: '/publish',
+                        schema: {
+                            properties: {
+                                'dot.value': {
+                                    type: 'object'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        rel: 'item',
+                        href: '/bar'
+                    }
+                ],
             });
 
             this.jsonSchemaWithKeys = new ItemSchema({
@@ -55,42 +94,46 @@ describe('modelPropertiesConverter', function() {
 
             it('should convert indexes with dot to %2E', function() {
                 modelPropertiesConverter.convert(this.jsonSchema);
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
-                to.exist;
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file.width']).
-                to.not.exist;
+                var parentNode = this.jsonSchema.indexes['file_width_index'];
+                expect(parentNode['file%2Ewidth']).to.exist;
+                expect(parentNode['file.width']).to.not.exist;
             });
 
             it('should convert indexes with dotted keys to %2E', function() {
                 modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['keys']['file%2Ewidth']).
-                to.exist;
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['keys']['file.width']).
-                to.not.exist;
+                var keys = this.jsonSchemaWithKeys.indexes['file_width_index'].keys;
+                expect(keys['file%2Ewidth']).to.exist;
+                expect(keys['file.width']).to.not.exist;
             });
 
             it('should convert indexes with dotted keys to %2E', function() {
                 modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['keys']['file%2Ewidth']).
-                to.exist;
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['keys']['file.width']).
-                to.not.exist;
+                var keys = this.jsonSchemaWithKeys.indexes['file_width_index'].keys;
+                expect(keys['file%2Ewidth']).to.exist;
+                expect(keys['file.width']).to.not.exist;
+            });
+
+            it('should convert collectionLinks schema with dotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                var link = findLink(this.jsonSchema.collectionLinks, 'search');
+                var props = link.schema.properties;
+                expect(props['dot%2Evalue']).to.exist;
+                expect(props['dot.value']).to.not.exist;
+            });
+
+            it('should convert links schema with dotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                var link = findLink(this.jsonSchema.links, 'publish');
+                var props = link.schema.properties;
+                expect(props['dot%2Evalue']).to.exist;
+                expect(props['dot.value']).to.not.exist;
             });
 
             it('should not change options in the indexes definitions while converting dotted keys to %2E', function() {
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['options']['unique']).
-                to.be.true;
+                var options = this.jsonSchemaWithKeys['indexes']['file_width_index']['options'];
+                expect(options.unique).to.be.true;
                 modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
-                expect(
-                    this.jsonSchemaWithKeys['indexes']['file_width_index']['options']['unique']).
-                to.be.true;
+                expect(options.unique).to.be.true;
             });
         });
 
@@ -108,31 +151,35 @@ describe('modelPropertiesConverter', function() {
             });
 
             it('should restore indexes with %2E to dot', function() {
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
-                to.not.exist;
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file.width']).
-                to.exist;
+                var opts =  this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
             });
 
             it('should restore indexes with %2E to dot', function() {
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
-                to.not.exist;
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file.width']).
-                to.exist;
+                var opts = this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
             });
 
             it('should restore indexes with %2E\'d keys  to dot', function() {
+                var opts = this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
+            });
 
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file%2Ewidth']).
-                to.not.exist;
-                expect(
-                    this.jsonSchema['indexes']['file_width_index']['file.width']).
-                to.exist;
+            it('should restore collectionLinks schema', function() {
+                var link = findLink(this.jsonSchema.collectionLinks, 'search');
+                var props = link.schema.properties;
+                expect(props['dot%2Evalue']).to.not.exist;
+                expect(props['dot.value']).to.exist;
+            });
+
+            it('should restore links schema', function() {
+                var link = findLink(this.jsonSchema.links, 'publish');
+                var props = link.schema.properties;
+                expect(props['dot%2Evalue']).to.not.exist;
+                expect(props['dot.value']).to.exist;
             });
         });
     });
