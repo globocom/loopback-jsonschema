@@ -92,6 +92,7 @@ loopbackJsonSchema.schemaCorrelator = require('./lib/http/schema-correlator');
 loopbackJsonSchema.locationHeaderCorrelator = require('./lib/http/location-header-correlator');
 loopbackJsonSchema.Relations = Relations;
 loopbackJsonSchema.ItemSchema = ItemSchema;
+loopbackJsonSchema.Links = require('./lib/domain/links');
 
 function dataSource(app) {
     return app.dataSources.loopbackJsonSchemaDb || loopback.memory();
