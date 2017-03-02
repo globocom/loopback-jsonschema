@@ -5,7 +5,7 @@ var loopback = require('loopback');
 
 var RegistryModels = require('../../../lib/domain/registry-models');
 
-describe.only('RegistryModels', function() {
+describe('RegistryModels', function() {
   var registryModels;
 
   beforeEach(function() {
