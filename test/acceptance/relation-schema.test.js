@@ -285,31 +285,6 @@ describe('hasMany relation', function(){
         });
     });
 
-
-    describe('PUT /api/people2/{personId}/pets/{petId}', function(){
-        var response, schemeAndAuthority;
-
-        before(function(done) {
-            request(app)
-                .put('/api/people2/'+ personId + '/pets/' + pet1Id)
-                .set('Content-Type', 'application/json')
-                .send('{"name": "my pet 1"}')
-                .end(function (err, res) {
-                    if (err) { return done(err); }
-                    response = res;
-                    schemeAndAuthority = 'http://' + res.req._headers.host;
-
-                    done();
-                });
-        });
-
-        it('should correlate the item with its schema', function(){
-            var itemSchemaUrl = schemeAndAuthority + '/api/item-schemas/pets';
-            expect(response.headers['link']).to.eq('<' + itemSchemaUrl + '>; rel="describedby"');
-            expect(response.headers['content-type']).to.eq('application/json; charset=utf-8; profile="' + itemSchemaUrl + '"');
-        });
-    });
-
     describe('DELETE /api/people2/{personId}/pets/{petId}', function(){
         var response, schemeAndAuthority, deletePetId;
         before(function(done) {
