@@ -1,17 +1,19 @@
 require('../../support');
 
 var expect = require('chai').expect;
-var loopback = require('loopback');
 
 var Relations = require('../../../lib/domain/relations');
+var RegistryModels = require('../../../lib/domain/registry-models');
 
 
 describe('Relations', function(){
-    var relations, schema, modelClass, targetModelClass;
+    var relations, schema, modelClass, targetModelClass, registryModels;
 
     describe('.bindBeforeRemoteHook', function(){
         var fakeHook;
         beforeEach(function() {
+            registryModels = new RegistryModels();
+            registryModels.reset();
             relations = new Relations();
             fakeHook = this.sinon.spy();
             relations.bindBeforeRemoteHook('hasMany', 'create', fakeHook);
@@ -49,6 +51,7 @@ describe('Relations', function(){
                 beforeEach(function() {
                     relations = new Relations();
                     modelClass = {
+                        isV2: false,
                         modelName: 'originModel',
                         belongsTo: this.sinon.spy()
                     };
@@ -68,7 +71,7 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                         if (collectionName == 'targetModel') {
                             return targetModelClass;
                         }
@@ -93,6 +96,7 @@ describe('Relations', function(){
                     relations.on('association', eventListener);
 
                     modelClass = {
+                        isV2: false,
                         modelName: 'originModel',
                         hasMany: this.sinon.stub()
                     };
@@ -114,7 +118,7 @@ describe('Relations', function(){
                         modelName: 'targetModel'
                     };
 
-                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                         if (collectionName == 'targetModel') {
                             return targetModelClass;
                         }
@@ -174,7 +178,7 @@ describe('Relations', function(){
                     belongsTo: this.sinon.spy()
                 };
 
-                this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                     if (collectionName == 'targetModel') {
                         return targetModelClass;
                     }
@@ -229,7 +233,7 @@ describe('Relations', function(){
                     belongsTo: this.sinon.spy()
                 };
 
-                this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                     if (collectionName == 'targetModel') {
                         return targetModelClass;
                     }
@@ -277,7 +281,7 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                         if (collectionName == 'originModel') {
                             return modelClass;
                         }
@@ -291,7 +295,7 @@ describe('Relations', function(){
                 });
 
                 it('store a pending relation', function(){
-                    expect(relations.pendingRelations).to.be.eql({
+                    expect(relations.pendingRelationsV1).to.be.eql({
                         targetModel: [
                             {
                                 relation: {
@@ -344,7 +348,7 @@ describe('Relations', function(){
                         belongsTo: this.sinon.spy()
                     };
 
-                    this.sinon.stub(loopback, 'findModel', function(collectionName) {
+                    this.sinon.stub(registryModels, 'findV1', function(collectionName) {
                         if (collectionName == 'originModel') {
                             return modelClass;
                         }
@@ -358,7 +362,7 @@ describe('Relations', function(){
                 });
 
                 it('store a pending relation', function(){
-                    expect(relations.pendingRelations).to.be.eql({
+                    expect(relations.pendingRelationsV1).to.be.eql({
                         targetModel: [
                             {
                                 relation: {
