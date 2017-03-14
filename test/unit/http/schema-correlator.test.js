@@ -6,7 +6,7 @@ var schemaCorrelator = require('../../../lib/http/schema-correlator');
 var ItemSchema = require('../../../lib/domain/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
-describe ('schemaCorrelator', function() {
+describe('schemaCorrelator', function() {
     var ctx;
     var baseUrl = 'http://api.example.org';
     var result;
@@ -22,7 +22,13 @@ describe ('schemaCorrelator', function() {
         before(function() {
             ctx = {
                 req: {
-                    app: null
+                    app: null,
+                    protocol: 'http',
+                    get: (name) => {
+                        if (name === 'Host') {
+                            return 'example.org';
+                        }
+                    },
                 },
                 res: {
                     set: this.sinon.stub()
@@ -79,7 +85,13 @@ describe ('schemaCorrelator', function() {
         before(function() {
             ctx = {
                 req: {
-                    app: null
+                    app: null,
+                    protocol: 'http',
+                    get: (name) => {
+                        if (name === 'Host') {
+                            return 'example.org';
+                        }
+                    },
                 },
                 res: {
                     set: this.sinon.stub()
