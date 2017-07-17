@@ -7,16 +7,17 @@ var ItemSchema = require('../../../lib/domain/item-schema');
 var LJSRequest = require('../../../lib/http/ljs-request');
 
 describe('schemaCorrelator', function() {
-    var ctx;
-    var baseUrl = 'http://api.example.org';
-    var result;
-    var itemSchema = new ItemSchema({
-        collectionName: 'people',
-        title: 'Person',
-        collectionTitle: 'People',
-        type: 'object',
-        properties: {}
-    });
+    var ctx,
+        baseUrl = 'http://api.example.org',
+        baseUrlStub,
+        result,
+        itemSchema = new ItemSchema({
+            collectionName: 'people',
+            title: 'Person',
+            collectionTitle: 'People',
+            type: 'object',
+            properties: {}
+        });
 
     describe('.collection', function() {
         before(function() {
@@ -44,10 +45,14 @@ describe('schemaCorrelator', function() {
 
         describe('without queryparams', function(done){
             beforeEach(function(done) {
-                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+                baseUrlStub = this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
                 schemaCorrelator.collection('people', ctx, result, function() {
                     done();
                 });
+            });
+
+            after(function() {
+                baseUrlStub.restore();
             });
 
             it('should correlate `Content-Type` header', function(){
@@ -63,10 +68,14 @@ describe('schemaCorrelator', function() {
 
         describe('with queryparams', function(done){
             beforeEach(function(done) {
-                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+                baseUrlStub = this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
                 schemaCorrelator.collection('people', {_debug: 'true'}, ctx, result, function() {
                     done();
                 });
+            });
+
+            afterEach(function() {
+                baseUrlStub.restore();
             });
 
             it('should correlate `Content-Type` header', function(){
@@ -107,11 +116,15 @@ describe('schemaCorrelator', function() {
 
         describe('with querystring', function(){
             before(function(done) {
-                this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
+                baseUrlStub = this.sinon.stub(LJSRequest.prototype, 'baseUrl').returns(baseUrl);
 
                 schemaCorrelator.instance('people', {compact: 'false'}, ctx, result, function() {
                     done();
                 });
+            });
+
+            after(function() {
+                baseUrlStub.restore();
             });
 
             it('should correlate `Content-Type` header', function(){

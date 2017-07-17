@@ -7,13 +7,13 @@ var LJSRequest = require('../../../lib/http/ljs-request');
 
 
 describe('locationHeaderCorrelator', function() {
-    var ctx, fullUrl, result, nextSpy;
+    var fullUrl = 'http://api.example.org/api/test';
+    var ctx, fullUrlStub, result, nextSpy;
 
     describe('when result was a default id', function(){
         describe('when url not end switch /', function(){
             beforeEach(function() {
-                fullUrl = 'http://api.example.org/api/test';
-                this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
+                fullUrlStub = this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
 
                 result = {
                     id: '123',
@@ -38,11 +38,13 @@ describe('locationHeaderCorrelator', function() {
                 locationHeaderCorrelator(ctx, result, nextSpy);
             });
 
+            afterEach(function() {
+                fullUrlStub.restore();
+            });
 
             it('should call `next` parameter', function(){
                 expect(nextSpy).to.be.called;
             });
-
 
             it('should correlate `Location` header', function(){
                 expect(ctx.res.set).to.have.been.calledWith('Location', 'http://api.example.org/api/test/123');
@@ -55,8 +57,7 @@ describe('locationHeaderCorrelator', function() {
 
         describe('when url end switch /', function(){
             before(function() {
-                fullUrl = 'http://api.example.org/api/test/';
-                this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
+                fullUrlStub = this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
                 ctx = {
                     req: {
                         app: null
@@ -79,6 +80,10 @@ describe('locationHeaderCorrelator', function() {
                 nextSpy = this.sinon.spy();
 
                 locationHeaderCorrelator(ctx, result, nextSpy);
+            });
+
+            after(function() {
+                fullUrlStub.restore();
             });
 
             it('should correlate `Location` header', function(){
@@ -93,8 +98,7 @@ describe('locationHeaderCorrelator', function() {
 
     describe('when result was a custom id', function(){
         before(function() {
-            fullUrl = 'http://api.example.org/api/test';
-            this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
+            fullUrlStub = this.sinon.stub(LJSRequest.prototype, 'fullUrl').returns(fullUrl);
 
             ctx = {
                 req: {
@@ -106,7 +110,7 @@ describe('locationHeaderCorrelator', function() {
                 }
             };
 
-            result =  {
+            result = {
                 name: '321',
                 constructor: {
                     getIdName: function() {
@@ -118,6 +122,10 @@ describe('locationHeaderCorrelator', function() {
             nextSpy = this.sinon.spy();
 
             locationHeaderCorrelator(ctx, result, nextSpy);
+        });
+
+        after(function() {
+            fullUrlStub.restore();
         });
 
         it('should correlate `Location` header', function(){

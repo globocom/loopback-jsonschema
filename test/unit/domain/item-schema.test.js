@@ -164,10 +164,7 @@ describe('ItemSchema', function() {
                 { rel: 'friends', href: '/people/{id}/friends' },
             ]);
         });
-
-
     });
-
 
     describe('#url', function() {
         beforeEach(function() {
@@ -218,7 +215,7 @@ describe('ItemSchema', function() {
 
         beforeEach(function() {
             noopHook = function noopHook() {};
-            this.sinon.stub(ItemSchema, 'remoteHookInitializers', [noopHook]);
+            this.sinon.stub(ItemSchema, 'remoteHookInitializers').value([noopHook]);
         });
 
         describe('when hooks is an Array of functions', function(){
@@ -484,9 +481,8 @@ describe('ItemSchema', function() {
                 });
             });
         });
-
-
     });
+
     describe('#preLoadModels', function(){
         var attachModelStub, itemSchemaFindStub;
         var model1, model2;
@@ -527,6 +523,10 @@ describe('ItemSchema', function() {
                 });
             });
 
+            after(function () {
+                itemSchemaFindStub.restore();
+            });
+
             it('calls ItemSchema.find', function(){
                 expect(itemSchemaFindStub).to.have.been.calledWith({});
             });
@@ -540,7 +540,6 @@ describe('ItemSchema', function() {
                 expect(itemSchemaConstructModelStub2).to.have.been.called;
             });
 
-
             it('calls ItemSchema.attachModel', function(){
                 expect(attachModelStub).to.have.been.calledWith(model1);
                 expect(attachModelStub).to.have.been.calledWith(model2);
@@ -551,7 +550,6 @@ describe('ItemSchema', function() {
                 expect(itemSchemaRegisterModel2Called).to.be.true;
             });
         });
-
 
         describe('when database failed', function(){
             var receivedErr;
