@@ -8,3 +8,5 @@ node_js:
 notifications:
   email:
     - backstage1@corp.globo.com
+  slack:
+    secure: HerVthx+d5fELXWoUjmK896uPPbkKCyFKjtYiSn3h88UbECPrAwRltZhuxD7t+NGt4fcCD/aiEdem5cBTKTNZxPCNAjvBZMx7REnk0QeHL9QPardS1BA1a+o02ne25vJcd7indc7UqscUmfvEvFugXEhiHaf8Nf3e0OYk5oCx0I=
