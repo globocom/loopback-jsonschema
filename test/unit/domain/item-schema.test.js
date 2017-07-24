@@ -285,6 +285,9 @@ describe('ItemSchema', function() {
                     myRequired: {
                         type: 'string',
                         required: true
+                    },
+                    myArrayType: {
+                        type: ['string', 'object']
                     }
                 }
             });
