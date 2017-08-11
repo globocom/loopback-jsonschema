@@ -90,6 +90,8 @@ loopbackJsonSchema.indexes = require('./lib/domain/indexes');
 loopbackJsonSchema.schemaLinkRewriter = require('./lib/http/schema-link-rewriter');
 loopbackJsonSchema.schemaCorrelator = require('./lib/http/schema-correlator');
 loopbackJsonSchema.locationHeaderCorrelator = require('./lib/http/location-header-correlator');
+loopbackJsonSchema.RegistryModels = require('./lib/domain/registry-models');
+
 loopbackJsonSchema.Relations = Relations;
 loopbackJsonSchema.ItemSchema = ItemSchema;
 loopbackJsonSchema.Links = require('./lib/domain/links');
