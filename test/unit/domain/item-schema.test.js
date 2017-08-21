@@ -580,7 +580,123 @@ describe('ItemSchema', function() {
                 expect(receivedErr).not.be.undefined;
             });
         });
+    });
 
+    describe.only('#santizeForDatabase', function() {
+        var itemSchema;
+        var schema = {
+            collectionName: 'people',
+            relations: {
+                things: {
+                    collectionName: "things",
+                    type: "belongsTo",
+                    foreignKey: "peopleId"
+                }
+            }
+        };
+
+        describe('when no $schema is defined', function() {
+            beforeEach(function() {
+                itemSchema = ItemSchema(schema);
+                itemSchema.santizeForDatabase();
+            });
+
+            it('should use draft-04 on it', function() {
+                expect(itemSchema['%24schema']).to.eql('http://json-schema.org/draft-04/hyper-schema#');
+            });
+        });
+
+        describe('when $schema is defined', function() {
+            beforeEach(function() {
+                schema['$schema'] = 'http://json-schema.org/draft-03/hyper-schema#';
+
+                itemSchema = ItemSchema(schema);
+                itemSchema.santizeForDatabase();
+            });
+
+            it('should use what was defined on it', function() {
+                expect(itemSchema['%24schema']).to.eql('http://json-schema.org/draft-03/hyper-schema#');
+            });
+        });
+
+        describe('when dealing with links', function() {
+            beforeEach(function() {
+                itemSchema = ItemSchema(schema);
+            });
+
+            it('should include custom links', function() {
+                itemSchema.links = [{ rel: 'custom', href: '/custom' }];
+                itemSchema.santizeForDatabase();
+
+                expect(itemSchema.links).to.eql([
+                    { rel: 'custom', href: '/custom' }
+                ]);
+            });
+
+            it('should not include custom links that try to override default links', function() {
+                itemSchema.links = [{ rel: 'self', href: '/custom' }];
+                itemSchema.santizeForDatabase();
+
+                expect(itemSchema.links).to.eql([]);
+            });
+        });
+
+        describe('when sanitizing', function() {
+            beforeEach(function() {
+                schema['$schema'] = 'http://json-schema.org/draft-03/hyper-schema#';
+                schema.indexes = {
+                    "file_width_index": {
+                        "keys": {
+                            "file.width": 1,
+                            "file.height": 1,
+                        },
+                        "options": {
+                            "unique": true
+                        }
+                    }
+                };
+                schema.collectionLinks = [{
+                    rel: 'custom',
+                    href: '/custom',
+                    schema: {
+                        properties: {
+                            'dot.value': {
+                                type: 'object'
+                            }
+                        }
+                    }
+                }];
+                schema.links = [{
+                    rel: 'custom',
+                    href: '/custom',
+                    schema: {
+                        properties: {
+                            'dot.value': {
+                                type: 'object'
+                            }
+                        }
+                    }
+                }];
+                itemSchema = ItemSchema(schema);
+                itemSchema.santizeForDatabase();
+            });
+
+            it('should convert indexes', function() {
+                expect(itemSchema.indexes.file_width_index.keys).to.eql({ 'file%2Ewidth': 1, 'file%2Eheight': 1 });
+            });
+
+            it('should convert $schema', function() {
+                expect(itemSchema).to.have.property('%24schema');
+            });
+
+            it('should convert collectionLinks', function() {
+                expect(itemSchema.links[0].schema.properties).to.eql({'dot%2Evalue': {type: 'object'}});
+            });
+
+            it('should convert links', function() {
+                expect(itemSchema.collectionLinks[0].schema.properties).to.eql({'dot%2Evalue': {type: 'object'}});
+            });
+        });
     });
 
     describe('.validate(\'relations\')', function(){
