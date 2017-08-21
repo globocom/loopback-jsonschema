@@ -41,8 +41,8 @@
     "loopback": "2.x",
     "mocha": "1.x",
     "mocha-sinon": "",
-    "sinon": "",
-    "sinon-chai": "",
+    "sinon": "^2.1.0",
+    "sinon-chai": "2.x",
     "supertest": ""
   }
 }
