@@ -582,7 +582,7 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe.only('#santizeForDatabase', function() {
+    describe.only('#sanitizeForDatabase', function() {
         var itemSchema;
         var schema = {
             collectionName: 'people',
@@ -598,7 +598,7 @@ describe('ItemSchema', function() {
         describe('when no $schema is defined', function() {
             beforeEach(function() {
                 itemSchema = ItemSchema(schema);
-                itemSchema.santizeForDatabase();
+                itemSchema.sanitizeForDatabase();
             });
 
             it('should use draft-04 on it', function() {
@@ -611,7 +611,7 @@ describe('ItemSchema', function() {
                 schema['$schema'] = 'http://json-schema.org/draft-03/hyper-schema#';
 
                 itemSchema = ItemSchema(schema);
-                itemSchema.santizeForDatabase();
+                itemSchema.sanitizeForDatabase();
             });
 
             it('should use what was defined on it', function() {
@@ -626,7 +626,7 @@ describe('ItemSchema', function() {
 
             it('should include custom links', function() {
                 itemSchema.links = [{ rel: 'custom', href: '/custom' }];
-                itemSchema.santizeForDatabase();
+                itemSchema.sanitizeForDatabase();
 
                 expect(itemSchema.links).to.eql([
                     { rel: 'custom', href: '/custom' }
@@ -635,7 +635,7 @@ describe('ItemSchema', function() {
 
             it('should not include custom links that try to override default links', function() {
                 itemSchema.links = [{ rel: 'self', href: '/custom' }];
-                itemSchema.santizeForDatabase();
+                itemSchema.sanitizeForDatabase();
 
                 expect(itemSchema.links).to.eql([]);
             });
@@ -678,7 +678,7 @@ describe('ItemSchema', function() {
                     }
                 }];
                 itemSchema = ItemSchema(schema);
-                itemSchema.santizeForDatabase();
+                itemSchema.sanitizeForDatabase();
             });
 
             it('should convert indexes', function() {
