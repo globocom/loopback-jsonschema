@@ -582,7 +582,7 @@ describe('ItemSchema', function() {
         });
     });
 
-    describe.only('#sanitizeForDatabase', function() {
+    describe('#sanitizeForDatabase', function() {
         var itemSchema;
         var schema = {
             collectionName: 'people',
