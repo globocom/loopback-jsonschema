@@ -32,15 +32,21 @@ describe('RegistryModels', function() {
 
   describe('#appendModelV2', function() {
     var model = {collectionName: 'my-collection', tenantId: 'my-tenant'};
+    var otherModel = {collectionName: 'my-collection', tenantId: 'other-tenant'};
 
     beforeEach(function() {
       registryModels.appendModelV2('my-collection', 'my-tenant', model);
+      registryModels.appendModelV2('my-collection', 'other-tenant', otherModel);
     });
 
     it('should add model to V2 map', function() {
       expect(registryModels.v2Models.hasOwnProperty('my-collection')).to.be.true;
+
       expect(registryModels.v2Models['my-collection'].hasOwnProperty('my-tenant')).to.be.true;
       expect(registryModels.v2Models['my-collection']['my-tenant']).to.eql(model);
+
+      expect(registryModels.v2Models['my-collection'].hasOwnProperty('other-tenant')).to.be.true;
+      expect(registryModels.v2Models['my-collection']['other-tenant']).to.eql(otherModel);
     });
 
     it('should not overwrite an existing V2 map item', function() {
