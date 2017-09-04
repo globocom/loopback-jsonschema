@@ -54,4 +54,25 @@ describe('RegistryModels', function() {
       expect(registryModels.v2Models['my-collection']['my-tenant']).to.eql(model);
     });
   });
+
+  describe('#stats', function () {
+    it('should export summary about all items in registry', function() {
+      registryModels.reset();
+      registryModels.appendModelV1('my-collection', { collectionName: 'my-collection' });
+      registryModels.appendModelV2('my-tenant', 'my-collection', { collectionName: 'my-collection' });
+      expect(registryModels.stats()).to.be.eql({
+        v1: [
+          'my-collection'
+        ],
+        v2: [
+              {
+                collectionName: 'my-tenant',
+                tenants: [
+                  'my-collection'
+                ],
+              },
+        ]
+      });
+    });
+  });
 });

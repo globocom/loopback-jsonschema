@@ -14,6 +14,7 @@ var locationHeaderCorrelator = require('./lib/http/location-header-correlator');
 var jsonSchemaRoutes = require('./lib/http/json-schema-routes');
 var ItemSchemaHooks = require('./lib/http/item-schema-hooks');
 var schemaCorrelator = require('./lib/http/schema-correlator');
+var RegistryModels = require('./lib/domain/registry-models');
 
 var loopbackJsonSchema = module.exports = {};
 loopbackJsonSchema.init = function(app, customConfig) {
@@ -55,7 +56,7 @@ loopbackJsonSchema.init = function(app, customConfig) {
 
     var db = dataSource(app);
     ItemSchema.attachTo(db);
-
+    new RegistryModels().appendModelV1(ItemSchema.modelName, ItemSchema);
     app.model(ItemSchema);
     ItemSchemaHooks.initialize();
 
