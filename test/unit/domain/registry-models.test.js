@@ -24,9 +24,10 @@ describe('RegistryModels', function() {
       expect(registryModels.v1Models['my-collection']).to.eql(model);
     });
 
-    it('should not overwrite an existing V1 map item', function() {
-      registryModels.appendModelV1('my-collection', {collectionName: 'new-collection'});
-      expect(registryModels.v1Models['my-collection']).to.eql(model);
+    it('should overwrite an existing V1 map item', function() {
+      var newModel = { collectionName: 'new-collection' };
+      registryModels.appendModelV1('my-collection', newModel);
+      expect(registryModels.v1Models['my-collection']).to.eql(newModel);
     });
   });
 
