@@ -53,6 +53,9 @@ describe('modelPropertiesConverter', function() {
                         href: '/bar'
                     }
                 ],
+                versionIndexes: {
+                    'file_width_index': {'file.width': 1}
+                }
             });
 
             this.jsonSchemaWithKeys = new ItemSchema({
@@ -67,6 +70,17 @@ describe('modelPropertiesConverter', function() {
                             "unique": true
                         }
                     }
+                },
+                "versionIndexes": {
+                  "file_width_index": {
+                        "keys": {
+                            "file.width": 1,
+                            "file.height": 1,
+                        },
+                        "options": {
+                            "unique": true
+                        }
+                  }
                 }
             });
 
@@ -109,6 +123,27 @@ describe('modelPropertiesConverter', function() {
             it('should convert indexes with dotted keys to %2E', function() {
                 modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
                 var keys = this.jsonSchemaWithKeys.indexes['file_width_index'].keys;
+                expect(keys['file%2Ewidth']).to.exist;
+                expect(keys['file.width']).to.not.exist;
+            });
+
+            it('should convert versionIndexes with dot to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                var parentNode = this.jsonSchema.versionIndexes['file_width_index'];
+                expect(parentNode['file%2Ewidth']).to.exist;
+                expect(parentNode['file.width']).to.not.exist;
+            });
+
+            it('should convert versionIndexes with dotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
+                var keys = this.jsonSchemaWithKeys.versionIndexes['file_width_index'].keys;
+                expect(keys['file%2Ewidth']).to.exist;
+                expect(keys['file.width']).to.not.exist;
+            });
+
+            it('should convert versionIndexes with dotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
+                var keys = this.jsonSchemaWithKeys.versionIndexes['file_width_index'].keys;
                 expect(keys['file%2Ewidth']).to.exist;
                 expect(keys['file.width']).to.not.exist;
             });
@@ -164,6 +199,24 @@ describe('modelPropertiesConverter', function() {
 
             it('should restore indexes with %2E\'d keys  to dot', function() {
                 var opts = this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
+            });
+
+             it('should restore versionIndexes with %2E to dot', function() {
+                var opts =  this.jsonSchema['versionIndexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
+            });
+
+            it('should restore versionIndexes with %2E to dot', function() {
+                var opts = this.jsonSchema['versionIndexes']['file_width_index'];
+                expect(opts['file%2Ewidth']).to.not.exist;
+                expect(opts['file.width']).to.exist;
+            });
+
+            it('should restore versionIndexes with %2E\'d keys  to dot', function() {
+                var opts = this.jsonSchema['versionIndexes']['file_width_index'];
                 expect(opts['file%2Ewidth']).to.not.exist;
                 expect(opts['file.width']).to.exist;
             });
