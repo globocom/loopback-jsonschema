@@ -5,7 +5,7 @@ Adds JSON Schema support to [LoopBack](https://github.com/strongloop/loopback).
 ## Installing
 
 ```
-npm install loopback-jsonschema
+npm install @globocom/loopback-jsonschema
 ```
 
 ## Setup
