@@ -234,6 +234,24 @@ describe('readOnlyDefaultValuesHandler', function() {
                     }
                 });
             });
+
+            it("should apply default value for nested child object", function() {
+              traverse(ctx).set(["req", "body"], {
+                name: "wilson"
+              });
+              traverse(ctx).set(["req", "method"], "PUT")
+
+              ctx.instance = {
+                  contact: {
+                      status: 'inative'
+                  },
+              }
+
+              var body = readOnlyDefaultValuesHandler(ctx);
+              expect(body).to.be.eql({
+                name: "wilson"
+              });
+            });
         });
 
         describe('when default value is not applied', function() {
@@ -295,6 +313,8 @@ describe('readOnlyDefaultValuesHandler', function() {
                 traverse(ctx).set(['req', 'body'], {
                     name: 'wilson'
                 });
+
+                ctx.instance = { status: 'inative' };
             });
 
             it('should not apply default value', function() {
