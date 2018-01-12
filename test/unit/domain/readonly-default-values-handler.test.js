@@ -239,13 +239,8 @@ describe('readOnlyDefaultValuesHandler', function() {
               traverse(ctx).set(["req", "body"], {
                 name: "wilson"
               });
-              traverse(ctx).set(["req", "method"], "PUT")
-
-              ctx.instance = {
-                  contact: {
-                      status: 'inative'
-                  },
-              }
+              traverse(ctx).set(["req", "method"], "PUT");
+              traverse(ctx).set(["instance", "__data", "contact", "status"], "inative");
 
               var body = readOnlyDefaultValuesHandler(ctx);
               expect(body).to.be.eql({
@@ -314,7 +309,9 @@ describe('readOnlyDefaultValuesHandler', function() {
                     name: 'wilson'
                 });
 
-                ctx.instance = { status: 'inative' };
+                traverse(ctx).set(['instance', '__data'], {
+                    status: 'inative',
+                });
             });
 
             it('should not apply default value', function() {
