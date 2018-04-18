@@ -17,7 +17,10 @@ describe('modelPropertiesConverter', function() {
             this.jsonSchema = new ItemSchema({
                 collectionName: 'test',
                 indexes: {
-                    'file_width_index': {'file.width': 1}
+                    'file_width_index': {
+                        'file.width': 1,
+                        'file.resource.size': 1
+                    }
                 },
                 collectionLinks: [
                     {
@@ -54,7 +57,10 @@ describe('modelPropertiesConverter', function() {
                     }
                 ],
                 versionIndexes: {
-                    'file_width_index': {'file.width': 1}
+                    'file_width_index': {
+                        'file.width': 1,
+                        'file.resource.size': 1
+                    }
                 }
             });
 
@@ -65,6 +71,7 @@ describe('modelPropertiesConverter', function() {
                         "keys": {
                             "file.width": 1,
                             "file.height": 1,
+                            "file.resource.size": 1
                         },
                         "options": {
                             "unique": true
@@ -76,6 +83,7 @@ describe('modelPropertiesConverter', function() {
                         "keys": {
                             "file.width": 1,
                             "file.height": 1,
+                            "file.resource.size": 1
                         },
                         "options": {
                             "unique": true
@@ -127,6 +135,20 @@ describe('modelPropertiesConverter', function() {
                 expect(keys['file.width']).to.not.exist;
             });
 
+            it('should convert indexes with more than one dotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
+                var keys = this.jsonSchemaWithKeys.indexes['file_width_index'].keys;
+                expect(keys['file%2Eresource%2Esize']).to.exist;
+                expect(keys['file.resource.size']).to.not.exist;
+            });
+
+            it('should convert indexes with more than one dot to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                var parentNode = this.jsonSchema.indexes['file_width_index'];
+                expect(parentNode['file%2Eresource%2Esize']).to.exist;
+                expect(parentNode['file.resource.size']).to.not.exist;
+            });
+
             it('should convert versionIndexes with dot to %2E', function() {
                 modelPropertiesConverter.convert(this.jsonSchema);
                 var parentNode = this.jsonSchema.versionIndexes['file_width_index'];
@@ -134,11 +156,11 @@ describe('modelPropertiesConverter', function() {
                 expect(parentNode['file.width']).to.not.exist;
             });
 
-            it('should convert versionIndexes with dotted keys to %2E', function() {
-                modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
-                var keys = this.jsonSchemaWithKeys.versionIndexes['file_width_index'].keys;
-                expect(keys['file%2Ewidth']).to.exist;
-                expect(keys['file.width']).to.not.exist;
+            it('should convert versionIndexes with more than one dot to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchema);
+                var parentNode = this.jsonSchema.versionIndexes['file_width_index'];
+                expect(parentNode['file%2Eresource%2Esize']).to.exist;
+                expect(parentNode['file.resource.size']).to.not.exist;
             });
 
             it('should convert versionIndexes with dotted keys to %2E', function() {
@@ -146,6 +168,13 @@ describe('modelPropertiesConverter', function() {
                 var keys = this.jsonSchemaWithKeys.versionIndexes['file_width_index'].keys;
                 expect(keys['file%2Ewidth']).to.exist;
                 expect(keys['file.width']).to.not.exist;
+            });
+
+            it('should convert versionIndexes with more than onedotted keys to %2E', function() {
+                modelPropertiesConverter.convert(this.jsonSchemaWithKeys);
+                var keys = this.jsonSchemaWithKeys.versionIndexes['file_width_index'].keys;
+                expect(keys['file%2Eresource%2Esize']).to.exist;
+                expect(keys['file.resource.size']).to.not.exist;
             });
 
             it('should convert collectionLinks schema with dotted keys to %2E', function() {
@@ -203,6 +232,18 @@ describe('modelPropertiesConverter', function() {
                 expect(opts['file.width']).to.exist;
             });
 
+            it('should restore indexes with more than one %2E to dot', function() {
+                var opts = this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Eresource%2Esize']).to.not.exist;
+                expect(opts['file.resource.size']).to.exist;
+            });
+
+            it('should restore versionIndexes with more than one %2E to dot', function() {
+                var opts = this.jsonSchema['indexes']['file_width_index'];
+                expect(opts['file%2Eresource%2Esize']).to.not.exist;
+                expect(opts['file.resource.size']).to.exist;
+            });
+
              it('should restore versionIndexes with %2E to dot', function() {
                 var opts =  this.jsonSchema['versionIndexes']['file_width_index'];
                 expect(opts['file%2Ewidth']).to.not.exist;
@@ -213,6 +254,12 @@ describe('modelPropertiesConverter', function() {
                 var opts = this.jsonSchema['versionIndexes']['file_width_index'];
                 expect(opts['file%2Ewidth']).to.not.exist;
                 expect(opts['file.width']).to.exist;
+            });
+
+            it('should restore versionIndexes with more than one %2E to dot', function() {
+                var opts = this.jsonSchema['versionIndexes']['file_width_index'];
+                expect(opts['file%2Eresource%2Esize']).to.not.exist;
+                expect(opts['file.resource.size']).to.exist;
             });
 
             it('should restore versionIndexes with %2E\'d keys  to dot', function() {
