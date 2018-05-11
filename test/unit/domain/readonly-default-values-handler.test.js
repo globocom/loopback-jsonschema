@@ -196,7 +196,8 @@ describe('readOnlyDefaultValuesHandler', function() {
                         type: 'object',
                         properties: {
                             age: {type: 'number'},
-                            status: {default: 'active', type: 'string'}
+                            status: {default: 'active', type: 'string'},
+                            alien: {default: false, type: 'boolean'}
                         }
                     }
                 });
@@ -215,7 +216,8 @@ describe('readOnlyDefaultValuesHandler', function() {
                     name: 'wilson',
                     contact: {
                         status: 'active',
-                        age: 12
+                        alien: false,
+                        age: 12,
                     }
                 });
             });
@@ -230,7 +232,8 @@ describe('readOnlyDefaultValuesHandler', function() {
                 expect(body).to.be.eql({
                     name: 'wilson',
                     contact: {
-                        status: 'active'
+                        status: 'active',
+                        alien: false
                     }
                 });
             });
@@ -352,6 +355,21 @@ describe('readOnlyDefaultValuesHandler', function() {
             expect(body).to.be.eql({
                 name: 'wilson',
                 status: 'active'
+            });
+        });
+
+        it('should replace current value with false default value', function () {
+            traverse(ctx).set(['method', 'ctor', 'definition', 'rawProperties'], {
+                name: { type: 'string' },
+                status: { readOnly: true, type: 'boolean', default: false }
+            });
+
+            traverse(ctx).set(['req', 'body'], { name: 'wilson', status: true });
+
+            var body = readOnlyDefaultValuesHandler(ctx);
+            expect(body).to.be.eql({
+                name: 'wilson',
+                status: false
             });
         });
 
