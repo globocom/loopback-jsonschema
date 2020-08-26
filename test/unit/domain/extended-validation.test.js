@@ -148,6 +148,75 @@ describe('ItemSchema extended validation', function() {
         });
     });
 
+    describe('when no properties or relations are declared', function() {
+        var itemSchema;
 
+        beforeEach(function(done) {
+            var schema = {
+                collectionName: "reserved-properties"
+            }
 
+            itemSchema = new ItemSchema(schema);
+
+            done();
+        });
+
+        it('should be executed without errors', function() {
+            errors = extendedValidation(itemSchema);
+            expect(errors.length).to.eql(0);
+        });
+    });
+
+    describe('when no properties are declared', function() {
+        var itemSchema;
+
+        beforeEach(function(done) {
+            var schema = {
+                collectionName: "reserved-properties",
+                relations: {
+                    clashRelation: {
+                        collectionName: "no-clash",
+                        type: "belongsToMe",
+                        foreignKey: "noClash"
+                    }
+                }
+            }
+
+            itemSchema = new ItemSchema(schema);
+
+            done();
+        });
+
+        it('should be executed without errors', function() {
+            errors = extendedValidation(itemSchema);
+            expect(errors.length).to.eql(0);
+        });
+    });
+
+    describe('when no properties are declared', function() {
+        var itemSchema;
+
+        beforeEach(function(done) {
+            var schema = {
+                collectionName: "reserved-properties",
+                properties: {
+                    name: {
+                        type: "string"
+                    },
+                    clash: {
+                        type: "string"
+                    }
+                }
+            }
+
+            itemSchema = new ItemSchema(schema);
+
+            done();
+        });
+
+        it('should be executed without errors', function() {
+            errors = extendedValidation(itemSchema);
+            expect(errors.length).to.eql(0);
+        });
+    });
 });
