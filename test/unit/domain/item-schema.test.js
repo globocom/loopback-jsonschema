@@ -649,6 +649,7 @@ describe('ItemSchema', function() {
                         "keys": {
                             "file.width": 1,
                             "file.height": 1,
+                            "placeholder": 1
                         },
                         "options": {
                             "unique": true
@@ -682,7 +683,7 @@ describe('ItemSchema', function() {
             });
 
             it('should convert indexes', function() {
-                expect(itemSchema.indexes.file_width_index.keys).to.eql({ 'file%2Ewidth': 1, 'file%2Eheight': 1 });
+                expect(itemSchema.indexes.file_width_index.keys).to.eql({ 'file%2Ewidth': 1, 'file%2Eheight': 1, 'placeholder': 1 });
             });
 
             it('should convert $schema', function() {
@@ -695,6 +696,12 @@ describe('ItemSchema', function() {
 
             it('should convert links', function() {
                 expect(itemSchema.collectionLinks[0].schema.properties).to.eql({'dot%2Evalue': {type: 'object'}});
+            });
+
+            it('should preserve keys order', function() {
+                var expectedOrder = ['file%2Ewidth', 'file%2Eheight', 'placeholder'];
+                var order = Object.keys(itemSchema.indexes.file_width_index.keys)
+                expect(order).to.eql(expectedOrder)
             });
         });
     });
