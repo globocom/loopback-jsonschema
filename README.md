@@ -1,6 +1,7 @@
 # Loopback JSON Schema [![Build Status](https://travis-ci.org/backstage/loopback-jsonschema.png?branch=master)](https://travis-ci.org/backstage/loopback-jsonschema)
 
-Adds JSON Schema support to [LoopBack](https://github.com/strongloop/loopback).
+DEPRECATED. This project does not receive active maintenance.
+
 
 ## Installing
 
