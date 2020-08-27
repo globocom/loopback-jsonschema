@@ -704,6 +704,54 @@ describe('ItemSchema', function() {
                 expect(order).to.eql(expectedOrder)
             });
         });
+
+        describe('when sanitizing keys in ordered list', function() {
+            beforeEach(function() {
+                schema['$schema'] = 'http://json-schema.org/draft-03/hyper-schema#';
+                schema.indexes = {
+                    "file_width_index": {
+                        "orderedKeys": [
+                            {"file.width": 1},
+                            {"file.height": 1},
+                            {"placeholder": 1},
+                            {"placeholder.onelevel": 1},
+                            {"placeholder.onelevel.onemorelevel": 1},
+                            {"somethingelse": -1}
+                        ],
+                        "options": {
+                            "unique": true
+                        }
+                    }
+                };
+                itemSchema = ItemSchema(schema);
+                itemSchema.sanitizeForDatabase();
+            });
+
+            it('should convert indexes', function() {
+                expect(itemSchema.indexes.file_width_index.keys).to.eql({
+                    'file%2Ewidth': 1,
+                    'file%2Eheight': 1,
+                    'placeholder': 1, 
+                    'placeholder%2Eonelevel': 1,
+                    'placeholder%2Eonelevel%2Eonemorelevel': 1,
+                    'somethingelse': -1
+                });
+            });
+
+            it('should preserve keys order', function() {
+                var expectedOrder = [
+                    'file%2Ewidth',
+                    'file%2Eheight',
+                    'placeholder',
+                    'placeholder%2Eonelevel',
+                    'placeholder%2Eonelevel%2Eonemorelevel',
+                    'somethingelse'
+                ];
+                var order = Object.keys(itemSchema.indexes.file_width_index.keys)
+                expect(order).to.eql(expectedOrder)
+            });
+
+        });
     });
 
     describe('.validate(\'relations\')', function(){
