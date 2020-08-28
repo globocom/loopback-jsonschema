@@ -24,7 +24,7 @@
     "fast-url-parser": "^1.1.3",
     "json-path": "",
     "jsvgcom": "4.2.6",
-    "lodash": "3.x",
+    "lodash": "4.x",
     "q": "1.x",
     "stack-trace": "",
     "traverse": "",
