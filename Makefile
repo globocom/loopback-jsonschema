@@ -45,7 +45,3 @@ bump_%_artifactory_version:
 
 
 bump_%_version: bump_%_artifactory_version
-	npm version $*
-	git push origin master
-	git push origin --tags
-	npm publish --registry https://registry.npmjs.org/
