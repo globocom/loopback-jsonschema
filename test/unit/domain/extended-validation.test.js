@@ -84,7 +84,7 @@ describe('ItemSchema extended validation', function() {
             done();
         });
 
-        it('should be detected', function() {
+        it('should not be detected', function() {
             errors = extendedValidation(itemSchema);
 
             expect(errors.length).to.eql(0);
