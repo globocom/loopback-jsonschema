@@ -38,13 +38,13 @@ debug:
 
 # info on setting up artifactory https://artifactory.globoi.com/static/repo_pkg.html
 bump_%_artifactory_version:
-	npm version $*
+	-npm version $* --allow-same-version
 	git push origin master
 	git push origin --tags
 	npm publish --registry https://artifactory.globoi.com/artifactory/api/npm/npm-local
 
 
-bump_%_version:
+bump_%_version: bump_%_artifactory_version
 	npm version $*
 	git push origin master
 	git push origin --tags
