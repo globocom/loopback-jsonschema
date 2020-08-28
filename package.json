@@ -1,6 +1,6 @@
 {
   "name": "@globocom/loopback-jsonschema",
-  "version": "5.0.15",
+  "version": "5.0.16",
   "description": "JSON Schema support for Loopback",
   "main": "index.js",
   "scripts": {
